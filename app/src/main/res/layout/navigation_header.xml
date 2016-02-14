@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:layout_height="180dp">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/header_image_view"
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:actualImageScaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="180dp" />
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/header_image"
+        ripple:mrl_rippleColor="@color/colorPrimary"
+        ripple:mrl_rippleRoundedCorners="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+    <RelativeLayout
+        android:background="#85000000"
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+    </RelativeLayout>
+    </com.balysv.materialripple.MaterialRippleLayout>
+        <TextView
+            android:id="@+id/header_titletext"
+            android:layout_marginLeft="24dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/header_singertext"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_marginLeft="24dp"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/header_singertext" />
+
+
+
+    <android.support.v7.widget.CardView
+            android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="8dp"
+            app:cardCornerRadius="2dp"
+            app:cardBackgroundColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+        <ProgressBar
+            android:id="@+id/header_progress"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:max="100"
+            android:secondaryProgress="70"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/progressbar_color"/>
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp">
+            <com.balysv.materialripple.MaterialRippleLayout
+                ripple:mrl_rippleColor="@color/colorPrimary"
+                ripple:mrl_rippleRoundedCorners="5dp"
+                android:id="@+id/header_prev"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_gravity="center"
+                fresco:placeholderImage="@mipmap/ic_skip_previous_black_24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_marginRight="16dp"
+                fab:fab_shadowRadius="1dp"
+                android:layout_gravity="center"
+                android:id="@+id/header_fab"
+                fab:fab_shadowXOffset="0dp"
+                fab:fab_shadowYOffset="2dp"
+                fab:fab_shadowColor="#44000000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_play_arrow_black_18dp"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@color/colorAccent">
+            </com.github.clans.fab.FloatingActionButton>
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/header_next"
+                ripple:mrl_rippleColor="@color/colorPrimary"
+                ripple:mrl_rippleRoundedCorners="5dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+        <com.facebook.drawee.view.SimpleDraweeView
+            fresco:placeholderImage="@mipmap/ic_skip_next_black_24dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+</com.zhy.android.percent.support.PercentRelativeLayout>

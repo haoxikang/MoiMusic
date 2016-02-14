@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.moimusic.MainActivity" >
+    <item android:id="@+id/action_settings"
+        android:title="@string/logIn"
+        android:icon="@mipmap/noimage"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/underPlayList"
+        android:orderInCategory="100"
+        android:icon="@mipmap/ic_queue_music_white_24dp"
+        android:title="歌单"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@mipmap/ic_search_white_24dp"
+        android:orderInCategory="100"
+        android:title="@string/abc_search_hint"
+        app:showAsAction="always" />
+
+</menu>

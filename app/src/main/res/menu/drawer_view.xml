@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/usercenter"
+            android:icon="@mipmap/ic_account_circle_grey600_24dp"
+            android:title="个人中心" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:checked="true"
+            android:checkable="true"
+            android:icon="@mipmap/ic_home_grey600_24dp"
+            android:title="首页" />
+        <item
+            android:id="@+id/history"
+            android:checkable="true"
+            android:icon="@mipmap/ic_restore_grey600_24dp"
+            android:title="历史记录" />
+        <item
+            android:id="@+id/follow"
+            android:checkable="true"
+            android:icon="@mipmap/ic_favorite_grey600_24dp"
+            android:title="关注" />
+        <item
+            android:id="@+id/musiclist"
+            android:checkable="true"
+            android:icon="@mipmap/ic_my_library_music_grey600_24dp"
+            android:title="我的歌单" />
+    </group>
+
+    <group
+        android:checkableBehavior="none">
+        <item android:title="系统">
+            <menu>
+        <item
+            android:id="@+id/seting"
+            android:icon="@mipmap/ic_settings_applications_grey600_24dp"
+            android:title="设置" />
+        <item
+            android:id="@+id/exit"
+            android:icon="@mipmap/ic_exit_to_app_grey600_24dp"
+            android:title="退出应用" />
+            </menu>
+        </item>
+    </group>
+</menu>
