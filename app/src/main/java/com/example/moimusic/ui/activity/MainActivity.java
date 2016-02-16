@@ -277,16 +277,19 @@ public class MainActivity extends BaseActivity implements IMainView {
         switch (item.getItemId()) {
             case R.id.action_search: {
                 showSearchView();
-                return true;
+                break;
             }
             case R.id.underPlayList:{
                 presenter.ShowMusicList();
+                break;
             }
-            default:
-                return super.onOptionsItemSelected(item);
+            case R.id.action_log:{
+                presenter.logButtonClick();
+                break;
+            }
+
         }
-
-
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -344,6 +347,11 @@ public class MainActivity extends BaseActivity implements IMainView {
         HeadProgressBar.setProgress(current);
     }
 
+    @Override
+    public void startNextActivity(Class<?> cls) {
+        startActivity(new Intent(this,cls));
+    }
+
     public void switchContent(Fragment from, Fragment to) {
         if (isFragment != to) {
             isFragment = to;
@@ -373,6 +381,7 @@ public class MainActivity extends BaseActivity implements IMainView {
 //
 //        return super.onKeyDown(keyCode, event);
 //    }
+
 private void showSearchView() {
     mSuggestionsList.clear();
     mSuggestionsList.add(new SearchItem("Google"));

@@ -10,7 +10,7 @@ android {
     }
     defaultConfig {
         applicationId "com.example.moimusic"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -45,5 +45,12 @@ dependencies {compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.github.clans:fab:1.6.2'
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'com.github.vajro:MaterialDesignLibrary:1.6'
     compile project(':searchview')
+}
+repositories {
+    mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
 }

@@ -23,6 +23,7 @@ import com.example.moimusic.mvp.model.entity.EvenReCall;
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.play.PlayListSingleton;
+import com.example.moimusic.ui.activity.LogActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.app.BottomSheetDialog;
 
@@ -121,7 +122,9 @@ public class MainActivityPresenter extends BasePresenterImpl{
         getMusicList();
 
     }
-
+    public void logButtonClick(){
+mView.startNextActivity(LogActivity.class);
+    }
     public void ShowMusicList() {
          BottomSheetDialog mDialog = new BottomSheetDialog(context);
             View view = LayoutInflater.from(context).inflate(R.layout.under_music_list,null);
@@ -149,7 +152,6 @@ public class MainActivityPresenter extends BasePresenterImpl{
 
             @Override
             public void onItemLongClick(View view, int position) {
-
             }
         });
             recyclerView.setLayoutManager(new LinearLayoutManager(context));

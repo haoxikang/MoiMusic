@@ -4,7 +4,7 @@
         <item
             android:id="@+id/usercenter"
             android:icon="@mipmap/ic_account_circle_grey600_24dp"
-            android:title="个人中心" />
+            android:title="@string/user_center" />
     </group>
     <group android:checkableBehavior="single">
         <item
@@ -12,22 +12,22 @@
             android:checked="true"
             android:checkable="true"
             android:icon="@mipmap/ic_home_grey600_24dp"
-            android:title="首页" />
+            android:title="@string/home_page" />
         <item
             android:id="@+id/history"
             android:checkable="true"
             android:icon="@mipmap/ic_restore_grey600_24dp"
-            android:title="历史记录" />
+            android:title="@string/history" />
         <item
             android:id="@+id/follow"
             android:checkable="true"
             android:icon="@mipmap/ic_favorite_grey600_24dp"
-            android:title="关注" />
+            android:title="@string/follow" />
         <item
             android:id="@+id/musiclist"
             android:checkable="true"
             android:icon="@mipmap/ic_my_library_music_grey600_24dp"
-            android:title="我的歌单" />
+            android:title="@string/my_music_list" />
     </group>
 
     <group

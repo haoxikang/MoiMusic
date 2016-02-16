@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<com.zhy.android.percent.support.PercentFrameLayout
+    android:background="@color/colorPrimary"
+    app:layout_heightPercent="35%h"
+    app:layout_widthPercent="100%w"
+    android:layout_width="0dp"
+    android:layout_height="0dp">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/login_simple_view"
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:actualImageScaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <TextView
+        android:textColor="@color/white"
+        android:layout_margin="32dp"
+        android:textStyle="bold"
+        android:textSize="45sp"
+        android:text="Hello"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom" />
+</com.zhy.android.percent.support.PercentFrameLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_heightPercent="8%h"
+        android:layout_gravity="center_horizontal">
+        <RelativeLayout
+            android:layout_marginRight="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:id="@+id/linearLayout">
+            <RelativeLayout
+                android:id="@+id/signin_line"
+                android:background="@color/colorPrimary"
+                android:layout_width="64dp"
+                android:layout_height="3dp">
+            </RelativeLayout>
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/log_in_bk"
+                ripple:mrl_rippleColor="@color/greywhite"
+                ripple:mrl_rippleRoundedCorners="5dp"
+                ripple:mrl_rippleDuration="250"
+                ripple:mrl_rippleFadeDuration="75"
+                ripple:mrl_rippleDelayClick="false"
+                android:layout_width="64dp"
+                android:layout_height="38dp">
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/signin_text"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:text="@string/logIn"
+                    android:layout_width="64dp"
+                    android:layout_height="38dp"/>
+            </com.balysv.materialripple.MaterialRippleLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginLeft="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_toRightOf="@+id/linearLayout"
+            android:layout_toEndOf="@+id/linearLayout">
+            <RelativeLayout
+                android:id="@+id/signup_line"
+                android:layout_width="64dp"
+                android:layout_height="3dp">
+            </RelativeLayout>
+            <com.balysv.materialripple.MaterialRippleLayout
+                ripple:mrl_rippleDelayClick="false"
+                ripple:mrl_rippleDuration="250"
+                android:id="@+id/log_up_bk"
+                ripple:mrl_rippleFadeDuration="75"
+                ripple:mrl_rippleColor="@color/greywhite"
+                ripple:mrl_rippleRoundedCorners="2dp"
+                android:layout_width="64dp"
+                android:layout_height="38dp">
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/signup_text"
+                    android:textColor="@color/greywhite"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:text="@string/logup"
+                    android:layout_width="64dp"
+                    android:layout_height="38dp"     />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/log_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+</com.zhy.android.percent.support.PercentLinearLayout>
