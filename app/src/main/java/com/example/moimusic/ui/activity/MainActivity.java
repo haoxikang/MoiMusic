@@ -44,9 +44,9 @@ import com.github.clans.fab.FloatingActionButton;
 import com.lapism.searchview.adapter.SearchAdapter;
 import com.lapism.searchview.adapter.SearchItem;
 import com.lapism.searchview.history.SearchHistoryTable;
+import com.lapism.searchview.view.SearchCodes;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.lapism.searchview.view.SearchView;
-import com.rey.material.app.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         db = new SearchHistoryTable(this);
         mSuggestionsList = new ArrayList<>();
         List<SearchItem> mResultsList = new ArrayList<>();
-        mSearchAdapter= new SearchAdapter(this, mResultsList, mSuggestionsList, SearchView.THEME_LIGHT);
+        mSearchAdapter= new SearchAdapter(this, mResultsList, mSuggestionsList, SearchCodes.THEME_LIGHT);
 //        fm = getSupportFragmentManager();
 //        Fragment fragment = fm.findFragmentById(R.id.frameLayout);
 //        if (fragment == null) {
@@ -153,9 +153,9 @@ public class MainActivity extends BaseActivity implements IMainView {
         if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT){
             searchView.setPadding(0,getStatusBarHeight(),0,0);
         }
-        searchView.setVersion(SearchView.VERSION_MENU_ITEM);
-        searchView.setStyle(SearchView.STYLE_CLASSIC);
-        searchView.setTheme(SearchView.THEME_LIGHT);
+        searchView.setVersion(SearchCodes.VERSION_MENU_ITEM);
+        searchView.setStyle(SearchCodes.STYLE_MENU_ITEM_CLASSIC);
+        searchView.setTheme(SearchCodes.THEME_LIGHT);
         searchView.setDivider(false);
         searchView.setHint("搜索");
         searchView.setHintSize(getResources().getDimension(R.dimen.search_text_medium));
@@ -218,7 +218,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                  return true;
              });
         mSearchAdapter.setOnItemClickListener((view, position) -> {
-            searchView.closeSearchView(false);
+            searchView.hide(true);
             TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
             CharSequence text = textView.getText();
             db.addItem(new SearchItem(text));
@@ -227,7 +227,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchView.closeSearchView(false);
+                searchView.hide(true);
                 db.addItem(new SearchItem(query));
                 Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
                 return false;
@@ -352,6 +352,11 @@ public class MainActivity extends BaseActivity implements IMainView {
         startActivity(new Intent(this,cls));
     }
 
+    @Override
+    public void ShowSnackbar(String s) {
+        Snackbar.make(searchView, s, Snackbar.LENGTH_SHORT).show();
+    }
+
     public void switchContent(Fragment from, Fragment to) {
         if (isFragment != to) {
             isFragment = to;
@@ -387,12 +392,12 @@ private void showSearchView() {
     mSuggestionsList.add(new SearchItem("Google"));
     mSuggestionsList.add(new SearchItem("Android"));
     mSuggestionsList.addAll(db.getAllItems());
-    searchView.openSearchView(true);
+    searchView.show(true);
 }
     @Override
     public void onBackPressed() {
         if (searchView.isSearchOpen() && searchView.isSearchOpen()) {
-            searchView.closeSearchView(true);
+            searchView.hide(true);
         }else {
             moveTaskToBack(true);
             super.onBackPressed();

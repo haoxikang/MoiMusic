@@ -6,6 +6,7 @@ import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.play.PlayListSingleton;
+import com.example.moimusic.utils.ErrorList;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class MusicBiz extends DataBiz {
 
                     @Override
                     public void onError(int i, String s) {
-                        subscriber.onError(new Throwable(i + ""));
+                        subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
                     }
                 });
             });

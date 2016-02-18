@@ -23,4 +23,15 @@
     <string name="get_verification_code">获取验证码</string>
     <string name="verification_code">短信验证码</string>
     <string name="show_password">显示密码</string>
+    <string name="send_msg_succ">短信发送成功</string>
+    <string name="re_send">重新发送</string>
+    <string name="re_send_s">秒后重新发送</string>
+    <string name="log_up_succ">注册成功</string>
+    <string name="log_in_succ">登录成功</string>
+    <string name="please_input_right_message">请输入正确的信息</string>
+    <string name="errorPhone">手机号格式错误</string>
+    <string name="inputRightPassword">请输入6-20位密码</string>
+    <string name="OK">确定</string>
+    <string name="frendlyhint">温馨提示</string>
+    <string name="frendlyhint_content">如果忘记密码，请在注册页面用手机号重新注册，我们会保留该手机号对应账户的所有内容</string>
 </resources>

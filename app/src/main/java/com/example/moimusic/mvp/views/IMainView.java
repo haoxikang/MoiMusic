@@ -12,4 +12,5 @@ public interface IMainView {
     void setPlayButton(boolean ispause);
     void setProgressbar(int current,int all );
     void startNextActivity(Class<?> cls);
+    void ShowSnackbar(String s);
 }

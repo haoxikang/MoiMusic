@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.MusicList;
+import com.example.moimusic.utils.ErrorList;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +35,7 @@ public class MusicListBiz  extends DataBiz{
 
                 @Override
                 public void onError(int i, String s) {
-                    subscriber.onError(new Throwable(i+""));
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
                 }
             });
         });

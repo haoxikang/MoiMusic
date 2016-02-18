@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentRelativeLayout
-
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ScrollView
+
+
+<com.zhy.android.percent.support.PercentRelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.NestedScrollView
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <com.zhy.android.percent.support.PercentRelativeLayout
-        android:layout_marginLeft="48dp"
-        android:layout_marginRight="48dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -25,6 +30,7 @@
         android:layout_height="wrap_content">
 
     <EditText
+        android:maxLength="11"
         android:inputType="phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -80,14 +86,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
-
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/progress"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:pv_autostart="true"
+            app:pv_circular="true"
+            app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
+            app:pv_progressMode="indeterminate"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
     </com.zhy.android.percent.support.PercentRelativeLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</com.zhy.android.percent.support.PercentRelativeLayout>
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/sign_up_float"
         android:src="@mipmap/ic_done_white_24dp"
-        android:layout_margin="32dp"
+        android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-</com.zhy.android.percent.support.PercentRelativeLayout>
+        android:layout_gravity="bottom"
+ />
+</android.support.design.widget.CoordinatorLayout>

@@ -122,6 +122,10 @@ public class MainActivityPresenter extends BasePresenterImpl{
         getMusicList();
 
     }
+    public void onEventMainThread(String s){
+        mView.ShowSnackbar(s);
+
+    }
     public void logButtonClick(){
 mView.startNextActivity(LogActivity.class);
     }
@@ -170,7 +174,6 @@ mView.startNextActivity(LogActivity.class);
     }
     public void initUnderMusicList(){
         if (playListSingleton.LoadList()!=null){
-            Log.d("TAG",playListSingleton.LoadList().get(0).toString());
             if (playListSingleton.getMusicList().size()==0){
                 playListSingleton.setMusicList(playListSingleton.LoadList());
                 playListSingleton.setCurrentPosition(0);
@@ -178,8 +181,11 @@ mView.startNextActivity(LogActivity.class);
             if (playListSingleton.loadCurrent()!=null&&!playListSingleton.loadCurrent().equals("")){
                 playListSingleton.setCurrentPosition(Integer.parseInt(playListSingleton.loadCurrent()));
             }
-            mView.updataPlayView();
-            mView.setPlayViewEnable(true);
+            if (playListSingleton.getMusicList().size()!=0){
+                mView.updataPlayView();
+                mView.setPlayViewEnable(true);
+            }
+
         }
     }
 

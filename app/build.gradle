@@ -24,7 +24,8 @@ android {
 }
 
 
-dependencies {compile fileTree(include: ['*.jar'], dir: 'libs')
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
@@ -40,13 +41,12 @@ dependencies {compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.facebook.fresco:fresco:0.8.1+'
     compile files('libs/Bmob_Push_V0.6beta_20150408.jar')
     compile 'com.zhy:percent-support-extends:1.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.github.rey5137:material:1.2.2'
     compile 'com.github.clans:fab:1.6.2'
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.github.vajro:MaterialDesignLibrary:1.6'
-    compile project(':searchview')
+    compile 'com.lapism:searchview:2.0.3'
 }
 repositories {
     mavenCentral()
