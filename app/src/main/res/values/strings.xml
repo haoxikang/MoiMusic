@@ -34,4 +34,6 @@
     <string name="OK">确定</string>
     <string name="frendlyhint">温馨提示</string>
     <string name="frendlyhint_content">如果忘记密码，请在注册页面用手机号重新注册，我们会保留该手机号对应账户的所有内容</string>
+    <string name="list_like">收藏的歌单</string>
+    <string name="list_create">创建的歌单</string>
 </resources>

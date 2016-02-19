@@ -27,7 +27,7 @@
             android:id="@+id/musiclist"
             android:checkable="true"
             android:icon="@mipmap/ic_my_library_music_grey600_24dp"
-            android:title="@string/my_music_list" />
+            android:title="@string/music_list" />
     </group>
 
     <group

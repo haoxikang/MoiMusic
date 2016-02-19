@@ -1,5 +1,7 @@
 package com.example.moimusic.mvp.views;
 
+import android.content.Intent;
+
 import com.example.moimusic.mvp.model.entity.EvenReCall;
 import com.example.moimusic.ui.activity.LogActivity;
 
@@ -11,6 +13,6 @@ public interface IMainView {
     void updataPlayView();
     void setPlayButton(boolean ispause);
     void setProgressbar(int current,int all );
-    void startNextActivity(Class<?> cls);
+    void startNextActivity(Intent intent);
     void ShowSnackbar(String s);
 }

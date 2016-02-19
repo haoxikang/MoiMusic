@@ -8,6 +8,7 @@ import com.example.moimusic.reject.components.DaggerAppComponent;
 import com.example.moimusic.reject.models.ApiServiceModule;
 import com.example.moimusic.reject.models.AppModule;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.tencent.bugly.crashreport.CrashReport;
 
 
 /**
@@ -31,6 +32,7 @@ public class AppApplication extends Application {
                 .build();
         context = getApplicationContext();
         Fresco.initialize(context);
+        CrashReport.initCrashReport(getApplicationContext(), "900019960", false);
     }
 
     public AppComponent getAppComponent() {

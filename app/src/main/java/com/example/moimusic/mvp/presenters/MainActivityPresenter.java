@@ -1,6 +1,7 @@
 package com.example.moimusic.mvp.presenters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,11 +25,13 @@ import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.ui.activity.LogActivity;
+import com.example.moimusic.ui.activity.UserCenterActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.app.BottomSheetDialog;
 
 import java.io.IOException;
 
+import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -127,7 +130,14 @@ public class MainActivityPresenter extends BasePresenterImpl{
 
     }
     public void logButtonClick(){
-mView.startNextActivity(LogActivity.class);
+        if (BmobUser.getCurrentUser(context,MoiUser.class)!=null){
+            Intent intent = new Intent(context,UserCenterActivity.class);
+            intent.putExtra("userID",BmobUser.getCurrentUser(context,MoiUser.class).getObjectId());
+            mView.startNextActivity(intent);
+        }else {
+            mView.startNextActivity(new Intent(context,LogActivity.class));
+        }
+
     }
     public void ShowMusicList() {
          BottomSheetDialog mDialog = new BottomSheetDialog(context);

@@ -9,4 +9,5 @@
     <color name="greybk">#eeeeee</color>
     <color name="greywhite">#aaaaaa</color>
     <color name="titeleColor">#de000000</color>
+    <color name="userCenterStatus">#3b2c43</color>
 </resources>

@@ -79,7 +79,7 @@ public class UserBiz extends  DataBiz{
     }
     public Observable<MoiUser> LogIn(String[] s){
          Observable<MoiUser> observable = Observable.create(subscriber -> {
-             BmobUser.loginByAccount(context, s[0], s[1], new LogInListener<MoiUser>() {
+             MoiUser.loginByAccount(context, s[0], s[1], new LogInListener<MoiUser>() {
                  @Override
                  public void done(MoiUser moiUser, BmobException e) {
                      if(moiUser!=null){

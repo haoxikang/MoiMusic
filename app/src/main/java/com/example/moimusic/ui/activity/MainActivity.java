@@ -47,6 +47,7 @@ import com.lapism.searchview.history.SearchHistoryTable;
 import com.lapism.searchview.view.SearchCodes;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.lapism.searchview.view.SearchView;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,6 @@ public class MainActivity extends BaseActivity implements IMainView {
     private SearchHistoryTable db;
     private FragmentFollow fragmentFollow;
     private FragmentHistory fragmentHistory;
-    private FragmentMusicList fragmentMusicList;
     private MainFragment mainFragment;
     private Fragment isFragment; //当前fragment
 
@@ -172,6 +172,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                  mDrawerLayout.closeDrawers();
                  switch (menuItem.getItemId()){
                      case R.id.usercenter:{
+                         presenter.logButtonClick();
                          break;
                      }
                      case R.id.home:{
@@ -191,11 +192,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                          break;
                      }
                      case R.id.musiclist:{
-                         if(fragmentMusicList==null) {
-                             fragmentMusicList = new FragmentMusicList();
-                         }
-                         switchContent(isFragment,fragmentMusicList);
-                         getSupportActionBar().setTitle(menuItem.getTitle());
+                         presenter.logButtonClick();
                          break;
                      }
                      case R.id.follow:{
@@ -348,8 +345,8 @@ public class MainActivity extends BaseActivity implements IMainView {
     }
 
     @Override
-    public void startNextActivity(Class<?> cls) {
-        startActivity(new Intent(this,cls));
+    public void startNextActivity(Intent intent) {
+        startActivity(intent);
     }
 
     @Override

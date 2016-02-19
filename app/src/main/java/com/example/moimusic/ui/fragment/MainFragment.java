@@ -51,6 +51,7 @@ public class MainFragment extends Fragment {
         tabs.addTab(tabs.newTab().setText(titles.get(0)));
         tabs.addTab(tabs.newTab().setText(titles.get(1)));
         tabs.addTab(tabs.newTab().setText(titles.get(2)));
+        tabs.addTab(tabs.newTab().setText(titles.get(3)));
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new FragmentGroom());
         fragments.add(new FragmentAniMusic());
