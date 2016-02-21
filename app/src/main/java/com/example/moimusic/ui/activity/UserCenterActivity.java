@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -43,7 +45,7 @@ public class UserCenterActivity extends BaseActivity implements IUserCenterActiv
     private ViewPager viewPager;
     private TabLayout tabs;
     private SimpleDraweeView simpleDraweeView;
-    private TextView textName;
+    private TextView textName,tvLike,textFollowed;
     @Inject
     UserCenterActivityPresenter userCenterActivityPresenter;
 
@@ -76,7 +78,8 @@ userCenterActivityPresenter.attach(this,this);
         viewPager.setOffscreenPageLimit(3);
         simpleDraweeView = (SimpleDraweeView)findViewById(R.id.userImage);
         textName = (TextView)findViewById(R.id.user_center_name);
-
+        tvLike = (TextView)findViewById(R.id.like_text);
+        textFollowed = (TextView)findViewById(R.id.followed_text);
     }
     private void setupViewPager() {
         if (userCenterActivityPresenter.isCurrentUser()){
@@ -128,7 +131,7 @@ startActivity(intent);
     }
 
     @Override
-    public void updataView(MoiUser moiUser) {
+    public void updataView(MoiUser moiUser,int like,int followed) {
         Log.d("TAG","在个人中心打印个人类:"+moiUser.getMobilePhoneNumber());
         if (moiUser.getImageUri()!=null&&!moiUser.getImageUri().equals("")){
             simpleDraweeView.setImageURI(Uri.parse(moiUser.getImageUri()));
@@ -138,5 +141,24 @@ startActivity(intent);
        }else {
            textName.setText("未设置用户名");
        }
+        if (followed>99){
+            textFollowed.setText("粉丝：99+");
+        }else {
+            textFollowed.setText("粉丝："+followed);
+        }
+        if (like>99){
+            tvLike.setText("关注：99+");
+        }else {
+            tvLike.setText("关注："+like);
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (userCenterActivityPresenter!=null){
+            userCenterActivityPresenter.onDestroy();
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.example.moimusic.mvp.views;
 import android.content.Intent;
 
 import com.example.moimusic.mvp.model.entity.EvenReCall;
+import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.ui.activity.LogActivity;
 
 /**

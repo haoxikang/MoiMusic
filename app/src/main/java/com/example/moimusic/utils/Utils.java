@@ -27,4 +27,15 @@ public  class Utils {
             return false;
         }
     }
+    public static String fitNum(int i){ //把数字超过10000的 变成万
+        String s = "";
+        if (i>=10000){
+            double d = (double) i/10000;
+            String result = String .format("%.2f",d);
+            s = result+"万";
+        }else {
+            s=i+"";
+        }
+        return s;
+    }
 }

@@ -50,7 +50,7 @@ dependencies {
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.github.vajro:MaterialDesignLibrary:1.6'
-    compile 'com.lapism:searchview:2.0.3'
+    compile 'com.lapism:searchview:2.0.4'
     compile 'com.tencent.bugly:crashreport:latest.release'
 }
 repositories {

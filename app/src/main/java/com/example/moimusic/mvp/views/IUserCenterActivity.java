@@ -11,5 +11,5 @@ public interface IUserCenterActivity {
     Intent GetIntent();
     void finishActivity();
     void ToNextActivity(Intent intent);
-    void updataView(MoiUser  moiUser);
+    void updataView(MoiUser  moiUser,int like,int followed);
 }

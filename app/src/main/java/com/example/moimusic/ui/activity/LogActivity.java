@@ -127,4 +127,13 @@ viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             signUpText.setTextColor(this.getResources().getColor(R.color.greywhite));
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter!=null){
+            presenter.onDestroy();
+        }
+
+    }
 }

@@ -4,7 +4,7 @@
     tools:context="com.example.moimusic.MainActivity" >
     <item android:id="@+id/action_log"
         android:title="@string/logIn"
-        android:icon="@mipmap/noimage"
+        android:icon="@mipmap/ic_person_outline_white_24dp"
         android:orderInCategory="100"
         app:showAsAction="always" />
     <item

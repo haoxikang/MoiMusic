@@ -28,6 +28,7 @@ import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
 import com.example.moimusic.Servers.PlayService;
 import com.example.moimusic.mvp.model.entity.EvenReCall;
+import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.presenters.MainActivityPresenter;
 import com.example.moimusic.mvp.views.IMainView;
@@ -37,6 +38,7 @@ import com.example.moimusic.reject.components.DaggerMainActivityComponent;
 import com.example.moimusic.reject.models.MainActivityModule;
 import com.example.moimusic.ui.fragment.FragmentFollow;
 import com.example.moimusic.ui.fragment.FragmentHistory;
+import com.example.moimusic.ui.fragment.FragmentMsg;
 import com.example.moimusic.ui.fragment.FragmentMusicList;
 import com.example.moimusic.ui.fragment.MainFragment;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -73,6 +75,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     private FragmentFollow fragmentFollow;
     private FragmentHistory fragmentHistory;
     private MainFragment mainFragment;
+    private FragmentMsg fragmentMsg;
     private Fragment isFragment; //当前fragment
 
     private SearchAdapter mSearchAdapter;
@@ -156,10 +159,12 @@ public class MainActivity extends BaseActivity implements IMainView {
         searchView.setVersion(SearchCodes.VERSION_MENU_ITEM);
         searchView.setStyle(SearchCodes.STYLE_MENU_ITEM_CLASSIC);
         searchView.setTheme(SearchCodes.THEME_LIGHT);
+        searchView.setVoice(false);
         searchView.setDivider(false);
         searchView.setHint("搜索");
         searchView.setHintSize(getResources().getDimension(R.dimen.search_text_medium));
         searchView.setAnimationDuration(360);
+
         setPlayViewEnable(false);
         searchView.setAdapter(mSearchAdapter);
     }
@@ -191,8 +196,12 @@ public class MainActivity extends BaseActivity implements IMainView {
                          getSupportActionBar().setTitle(menuItem.getTitle());
                          break;
                      }
-                     case R.id.musiclist:{
-                         presenter.logButtonClick();
+                     case R.id.msg:{
+                         if(fragmentMsg==null) {
+                             fragmentMsg = new FragmentMsg();
+                         }
+                         switchContent(isFragment,fragmentMsg);
+                         getSupportActionBar().setTitle(menuItem.getTitle());
                          break;
                      }
                      case R.id.follow:{
@@ -262,7 +271,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
+
         return true;
     }
 
@@ -353,6 +362,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     public void ShowSnackbar(String s) {
         Snackbar.make(searchView, s, Snackbar.LENGTH_SHORT).show();
     }
+
 
     public void switchContent(Fragment from, Fragment to) {
         if (isFragment != to) {

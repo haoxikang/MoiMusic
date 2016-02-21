@@ -59,16 +59,6 @@ public class MainActivityPresenter extends BasePresenterImpl{
 
     }
 
-    public void getCollegeList(){
-     MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-     musicListBiz.getCollegeMusic(user).subscribeOn(Schedulers.io())
-             .observeOn(AndroidSchedulers.mainThread())
-             .subscribe(musicLists -> {
-                 Log.d("TAG",musicLists.get(0).toString());
-             },throwable -> {
-                 Log.d("TAGerror",throwable.getMessage());
-             });
- }
     public void getMusicList(){
         MusicBiz musicBiz   = factory.createBiz(MusicBiz.class);
         mSubscriptions.add(musicBiz.getMusics().subscribeOn(Schedulers.io())
@@ -199,4 +189,9 @@ public class MainActivityPresenter extends BasePresenterImpl{
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

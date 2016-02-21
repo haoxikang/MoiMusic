@@ -36,4 +36,7 @@
     <string name="frendlyhint_content">如果忘记密码，请在注册页面用手机号重新注册，我们会保留该手机号对应账户的所有内容</string>
     <string name="list_like">收藏的歌单</string>
     <string name="list_create">创建的歌单</string>
+    <string name="no_data">没有数据</string>
+    <string name="unknow_error">未知错误</string>
+    <string name="message">消息</string>
 </resources>

@@ -24,10 +24,10 @@
             android:icon="@mipmap/ic_favorite_grey600_24dp"
             android:title="@string/follow" />
         <item
-            android:id="@+id/musiclist"
+            android:id="@+id/msg"
             android:checkable="true"
-            android:icon="@mipmap/ic_my_library_music_grey600_24dp"
-            android:title="@string/music_list" />
+            android:icon="@mipmap/ic_message_grey600_24dp"
+            android:title="@string/message" />
     </group>
 
     <group
