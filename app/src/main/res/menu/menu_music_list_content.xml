@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.moimusic.MainActivity" >
+    <item android:id="@+id/release"
+        android:title="@string/ReleaseTheSong"
+        android:icon="@mipmap/ic_open_in_browser_white_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/edit"
+        android:orderInCategory="100"
+        android:icon="@mipmap/ic_create_white_24dp"
+        android:title="@string/EditTheList"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/favorite"
+        android:icon="@mipmap/ic_favorite_outline_white_24dp"
+        android:orderInCategory="100"
+        android:title="@string/CollageTheList"
+        app:showAsAction="always" />
+
+</menu>

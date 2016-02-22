@@ -16,7 +16,7 @@ android {
         versionName "1.0"
         ndk {
             //设置支持的SO库架构
-            abiFilters 'armeabi' , 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
     buildTypes {
@@ -31,9 +31,10 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    apt 'com.google.dagger:dagger-compiler:2.0'
+    compile files('libs/Bmob_Push_V0.6beta_20150408.jar')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
-    apt 'com.google.dagger:dagger-compiler:2.0'
     compile 'com.google.dagger:dagger:2.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
@@ -42,8 +43,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-    compile 'com.facebook.fresco:fresco:0.8.1+'
-    compile files('libs/Bmob_Push_V0.6beta_20150408.jar')
+    compile 'com.facebook.fresco:fresco:0.9.0+'
     compile 'com.zhy:percent-support-extends:1.1.1'
     compile 'com.github.rey5137:material:1.2.2'
     compile 'com.github.clans:fab:1.6.2'
@@ -52,6 +52,7 @@ dependencies {
     compile 'com.github.vajro:MaterialDesignLibrary:1.6'
     compile 'com.lapism:searchview:2.0.4'
     compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.android.support:support-v4:23.1.1'
 }
 repositories {
     mavenCentral()

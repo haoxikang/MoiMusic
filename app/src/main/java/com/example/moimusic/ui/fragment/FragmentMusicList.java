@@ -1,5 +1,6 @@
 package com.example.moimusic.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -142,6 +143,11 @@ private void initClick(){
     @Override
     public void showSnackBar(String s) {
         Snackbar.make(recyclerView, s, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void StartActivty(Intent intent) {
+        startActivity(intent);
     }
 
     @Override

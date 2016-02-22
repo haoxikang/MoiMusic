@@ -1,7 +1,11 @@
 package com.example.moimusic.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +15,23 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
 import com.example.moimusic.mvp.model.entity.MusicList;
+import com.example.moimusic.ui.activity.ActivityMusicList;
 import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by qqq34 on 2016/2/20.
  */
 public class MusicListViewAdapter extends RecyclerView.Adapter<MusicListViewAdapter.MyViewHolder> {
     private List<MusicList> musicLists ;
-    public MusicListViewAdapter(List<MusicList> musicLists) {
+    private Context context;
+    public MusicListViewAdapter(List<MusicList> musicLists,Context context) {
        this. musicLists = musicLists;
+        this.context = context;
     }
     public interface OnItemClickLitener
     {
@@ -45,21 +54,11 @@ public class MusicListViewAdapter extends RecyclerView.Adapter<MusicListViewAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
-        if (mOnItemClickLitener != null) {
             holder.materialRippleLayout.setOnClickListener(v -> {
-                int pos = holder.getLayoutPosition();
-                mOnItemClickLitener.onItemClick(holder.materialRippleLayout, pos);
-            });
-
-            holder.materialRippleLayout.setOnLongClickListener(v -> {
-                int pos = holder.getLayoutPosition();
-                mOnItemClickLitener.onItemLongClick(holder.materialRippleLayout, pos);
-                return false;
-            });
-
-
-        }
+                Intent intent = new Intent(context, ActivityMusicList.class);
+                intent.putExtra("musiclistid",musicLists.get(position).getObjectId());
+                context.startActivity(intent);
+        });
         if (musicLists.get(position).getName()!=null){
             holder.tv.setText(musicLists.get(position).getName());
         }else {
@@ -86,13 +85,14 @@ public class MusicListViewAdapter extends RecyclerView.Adapter<MusicListViewAdap
 
     class MyViewHolder extends RecyclerView.ViewHolder
     {
-
+CardView cardView;
         TextView tv,tvNum;
         SimpleDraweeView simpleDraweeView;
         MaterialRippleLayout materialRippleLayout;
         public MyViewHolder(View view)
         {
             super(view);
+            cardView = (CardView)view.findViewById(R.id.cardView);
             tv = (TextView) view.findViewById(R.id.music_list_view_title_text);
             tvNum = (TextView) view.findViewById(R.id.music_list_view_number);
             simpleDraweeView = (SimpleDraweeView)view.findViewById(R.id.music_list_view_image);

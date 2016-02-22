@@ -39,7 +39,7 @@ public class FragmentFavouriteMusicListPresenter extends BasePresenterImpl {
                 .subscribe(musicLists -> {
                     if (page == 1) {
                         fragmentFavouriteMusicListView.hideSwipe(false);
-                        musicListViewAdapter = new MusicListViewAdapter(musicLists);
+                        musicListViewAdapter = new MusicListViewAdapter(musicLists,context);
                         fragmentFavouriteMusicListView.setAdapter(musicListViewAdapter);
 
                     } else if (musicListViewAdapter != null) {

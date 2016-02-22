@@ -39,4 +39,10 @@
     <string name="no_data">没有数据</string>
     <string name="unknow_error">未知错误</string>
     <string name="message">消息</string>
+    <string name="ReleaseTheSong">发布歌单</string>
+    <string name="CollageTheList">收藏歌单</string>
+    <string name="EditTheList">编辑歌单</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
