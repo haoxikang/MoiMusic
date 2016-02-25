@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 import de.greenrobot.event.EventBus;
 
-public class PlayService extends Service implements MediaPlayer.OnErrorListener,MediaPlayer.OnPreparedListener{
+public class PlayService extends Service implements MediaPlayer.OnErrorListener,MediaPlayer.OnPreparedListener,MediaPlayer.OnCompletionListener{
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private PlayListSingleton playListSingleton;
@@ -66,7 +66,7 @@ ex.shutdown();
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(this);
         mediaPlayer.setOnErrorListener(this);
-
+        mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         ex.execute(statusRunnable);
@@ -157,41 +157,39 @@ ex.shutdown();
             }
         }
     }
-    AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-        public void onAudioFocusChange(int focusChange) {
-            /**
-             * AUDIOFOCUS_GAIN：获得音频焦点。
-             * AUDIOFOCUS_LOSS：失去音频焦点，并且会持续很长时间。这是我们需要停止MediaPlayer的播放。
-             * AUDIOFOCUS_LOSS_TRANSIENT
-             * ：失去音频焦点，但并不会持续很长时间，需要暂停MediaPlayer的播放，等待重新获得音频焦点。
-             * AUDIOFOCUS_REQUEST_GRANTED 永久获取媒体焦点（播放音乐）
-             * AUDIOFOCUS_GAIN_TRANSIENT 暂时获取焦点 适用于短暂的音频
-             * AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK Duck我们应用跟其他应用共用焦点
-             * 我们播放的时候其他音频会降低音量
-             */
-            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-                // Toast.makeText(context, "AUDIOFOCUS_LOSS_TRANSIENT",
-                // Toast.LENGTH_LONG).show();
-                stop();
-
-            }  else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                // Toast.makeText(context, "AUDIOFOCUS_LOSS", Toast.LENGTH_LONG)
-                // .show();
-                // audioManager.abandonAudioFocus(afChangeListener);
-                stop();
-            }
-            // else if (focusChange == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
-            // {
-            // logger.i("AUDIOFOCUS_REQUEST_GRANTED");
-            // Toast.makeText(context, "AUDIOFOCUS_REQUEST_GRANTED",
+    AudioManager.OnAudioFocusChangeListener afChangeListener = focusChange -> {
+        /**
+         * AUDIOFOCUS_GAIN：获得音频焦点。
+         * AUDIOFOCUS_LOSS：失去音频焦点，并且会持续很长时间。这是我们需要停止MediaPlayer的播放。
+         * AUDIOFOCUS_LOSS_TRANSIENT
+         * ：失去音频焦点，但并不会持续很长时间，需要暂停MediaPlayer的播放，等待重新获得音频焦点。
+         * AUDIOFOCUS_REQUEST_GRANTED 永久获取媒体焦点（播放音乐）
+         * AUDIOFOCUS_GAIN_TRANSIENT 暂时获取焦点 适用于短暂的音频
+         * AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK Duck我们应用跟其他应用共用焦点
+         * 我们播放的时候其他音频会降低音量
+         */
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+            // Toast.makeText(context, "AUDIOFOCUS_LOSS_TRANSIENT",
             // Toast.LENGTH_LONG).show();
-            // play();
-            //
-            // }
-            else {
-                // Toast.makeText(context, "focusChange:" + focusChange,
-                // Toast.LENGTH_LONG).show();
-            }
+           stop();
+
+        }  else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            // Toast.makeText(context, "AUDIOFOCUS_LOSS", Toast.LENGTH_LONG)
+            // .show();
+            // audioManager.abandonAudioFocus(afChangeListener);
+           stop();
+        }
+        // else if (focusChange == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+        // {
+        // logger.i("AUDIOFOCUS_REQUEST_GRANTED");
+        // Toast.makeText(context, "AUDIOFOCUS_REQUEST_GRANTED",
+        // Toast.LENGTH_LONG).show();
+        // play();
+        //
+        // }
+        else {
+            // Toast.makeText(context, "focusChange:" + focusChange,
+            // Toast.LENGTH_LONG).show();
         }
     };
 
@@ -237,6 +235,14 @@ ex.shutdown();
             }
         }
     };
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        playListSingleton.isPlay= false;
+        playListSingleton.isUnderPlay=false;
+        next();
+    }
+
     private class MyThread extends Thread {
         public void run() {
             evenReCall.setMusicSize(mediaPlayer.getDuration());

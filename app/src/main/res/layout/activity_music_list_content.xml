@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/coordinator"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.design.widget.AppBarLayout
+        app:elevation="0dp"
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="220dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:fitsSystemWindows="true">
         <android.support.design.widget.CollapsingToolbarLayout
@@ -15,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
             <RelativeLayout
                 android:fitsSystemWindows="true"
@@ -23,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/coverImage"
                     fresco:placeholderImageScaleType="centerCrop"
                     fresco:actualImageScaleType="centerCrop"
                     android:layout_width="match_parent"
@@ -40,14 +43,14 @@
                     android:id="@+id/userImage"
                     fresco:placeholderImageScaleType="centerCrop"
                     fresco:actualImageScaleType="centerCrop"
-                    fresco:placeholderImage="@mipmap/user_image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
                 <LinearLayout
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="24dp"
                     android:layout_alignBottom="@+id/userImage"
                     android:layout_toRightOf="@+id/userImage"
                     android:layout_toEndOf="@+id/userImage"
@@ -55,13 +58,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:textSize="28sp"
-                        android:text="Bdiaif sajif ddfa"
+                        android:layout_marginBottom="8dp"
+                        android:singleLine="true"
+                        android:id="@+id/textTitle"
+                        android:textSize="24sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
-                        android:textSize="24sp"
-                        android:text="adin sdhio"
+                        android:singleLine="true"
+                        android:id="@+id/textUser"
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -78,26 +84,44 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
     <RelativeLayout
-        android:id="@+id/center_area"
+
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TableLayout
+        <RelativeLayout
+            android:id="@+id/center_area"
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="42dp">
+        </RelativeLayout>
+
+        <android.support.design.widget.TabLayout
+            app:tabIndicatorColor="@color/white"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="#aaffffff"
             android:id="@+id/tabs"
+            android:layout_gravity="bottom"
             android:layout_width="wrap_content"
-            android:layout_height="40dp">
-        </TableLayout>
-        <android.support.v4.view.ViewPager
+            android:layout_height="42dp"/>
+
+        <FrameLayout
             android:layout_below="@+id/tabs"
+            android:background="@mipmap/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"></FrameLayout>
+        <android.support.v4.view.ViewPager
+            android:layout_below="@+id/center_area"
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </RelativeLayout>
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/actionButon"
         android:src="@mipmap/ic_play_arrow_white_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        app:borderWidth="0dp"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
 </android.support.design.widget.CoordinatorLayout>

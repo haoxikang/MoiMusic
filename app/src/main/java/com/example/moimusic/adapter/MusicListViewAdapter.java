@@ -1,8 +1,11 @@
 package com.example.moimusic.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,10 +31,10 @@ import de.greenrobot.event.EventBus;
  */
 public class MusicListViewAdapter extends RecyclerView.Adapter<MusicListViewAdapter.MyViewHolder> {
     private List<MusicList> musicLists ;
-    private Context context;
-    public MusicListViewAdapter(List<MusicList> musicLists,Context context) {
+    private FragmentActivity activity;
+    public MusicListViewAdapter(List<MusicList> musicLists,FragmentActivity activity) {
        this. musicLists = musicLists;
-        this.context = context;
+        this.activity = activity;
     }
     public interface OnItemClickLitener
     {
@@ -55,9 +58,9 @@ public class MusicListViewAdapter extends RecyclerView.Adapter<MusicListViewAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
             holder.materialRippleLayout.setOnClickListener(v -> {
-                Intent intent = new Intent(context, ActivityMusicList.class);
+                Intent intent = new Intent(activity, ActivityMusicList.class);
                 intent.putExtra("musiclistid",musicLists.get(position).getObjectId());
-                context.startActivity(intent);
+                    activity.startActivity(intent);
         });
         if (musicLists.get(position).getName()!=null){
             holder.tv.setText(musicLists.get(position).getName());

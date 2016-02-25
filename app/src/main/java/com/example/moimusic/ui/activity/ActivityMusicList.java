@@ -1,27 +1,79 @@
 package com.example.moimusic.ui.activity;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.moimusic.R;
+import com.example.moimusic.adapter.FragmentAdapter;
+import com.example.moimusic.mvp.model.entity.MusicList;
+import com.example.moimusic.mvp.presenters.ActivityMusicListPresenter;
+import com.example.moimusic.mvp.views.IMusicListView;
 import com.example.moimusic.reject.components.AppComponent;
+import com.example.moimusic.reject.components.DaggerActivityMusicListComponent;
+import com.example.moimusic.reject.components.DaggerMainActivityComponent;
+import com.example.moimusic.reject.models.ActivityMusicListModule;
+import com.example.moimusic.reject.models.MainActivityModule;
+import com.example.moimusic.ui.fragment.FragmentMuiscListReplys;
+import com.example.moimusic.ui.fragment.MusicListContentFragment;
+import com.facebook.binaryresource.FileBinaryResource;
+import com.facebook.cache.common.SimpleCacheKey;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.controller.ControllerListener;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.DraweeView;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.image.ImageInfo;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by qqq34 on 2016/2/22.
  */
-public class ActivityMusicList extends BaseActivity {
+public class ActivityMusicList extends BaseActivity implements IMusicListView{
     private Toolbar mToolbar;
+    private ViewPager viewPager;
+    private TabLayout tabs;
+    private SimpleDraweeView UserView,CoverView;
+    private TextView textName,textuser;
+    private RelativeLayout back;
+    private FloatingActionButton floatingActionButton;
+    @Inject
+    ActivityMusicListPresenter presenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_music_list_content);
-        Log.d("TAG","点击了歌单"+getIntent().getStringExtra("musiclistid"));
+        presenter.attach(this,this);
         initView();
+        initClick();
+        presenter.onCreate();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,15 +101,94 @@ public class ActivityMusicList extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private void initClick(){
+        mToolbar.setNavigationOnClickListener(v -> presenter.finishActivity());
+        floatingActionButton.setOnClickListener(v -> presenter.floatClick());
+        UserView.setOnClickListener(v ->presenter.ImageViewClicked() );
+    }
     private void initView(){
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        viewPager = (ViewPager)findViewById(R.id.viewpager);
+        tabs = (TabLayout)findViewById(R.id.tabs);
+        setupViewPager();
+        viewPager.setOffscreenPageLimit(3);
+        UserView = (SimpleDraweeView)findViewById(R.id.userImage);
+        UserView.setEnabled(false);
+        CoverView = (SimpleDraweeView)findViewById(R.id.coverImage);
+        textName = (TextView)findViewById(R.id.textTitle);
+        textuser = (TextView)findViewById(R.id.textUser);
+        back = (RelativeLayout)findViewById(R.id.center_area);
+        floatingActionButton=(FloatingActionButton)findViewById(R.id.actionButon);
+        floatingActionButton.setEnabled(false);
     }
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
+        DaggerActivityMusicListComponent.builder()
+                .appComponent(appComponent)
+                .activityMusicListModule(new ActivityMusicListModule(this))
+                .build()
+                //这里的inject 会把 MainActivity 所有标注了注解的成员 给动态实例化了
+                .inject(this);
+    }
+    private void setupViewPager() {
+            List<String> titles = new ArrayList<>();
+            titles.add(getResources().getString(R.string.music));
+            titles.add(getResources().getString(R.string.reply));
+            tabs.addTab(tabs.newTab().setText(titles.get(0)));
+            tabs.addTab(tabs.newTab().setText(titles.get(1)));
+            List<Fragment> fragments = new ArrayList<>();
+            fragments.add(MusicListContentFragment.newInstance(presenter.getId()));
+            fragments.add(FragmentMuiscListReplys.newInstance(presenter.getId()));
+            FragmentAdapter adapter =
+                    new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+            viewPager.setAdapter(adapter);
+            tabs.setupWithViewPager(viewPager);
+            tabs.setTabsFromPagerAdapter(adapter);
 
+
+
+    }
+
+
+    @Override
+    public Intent GetIntent() {
+        return getIntent();
+    }
+
+    @Override
+    public void showView(MusicList musicList) {
+        UserView.setEnabled(true);
+        if (musicList.getListImageUri()!=null&&!musicList.getListImageUri().equals("")){
+
+            CoverView.setImageURI(Uri.parse(musicList.getListImageUri()));
+
+        }
+
+        if (musicList.getName()!=null){
+            textName.setText(musicList.getName());
+        }
+        if (musicList.getMoiUser().getImageUri()!=null&&!musicList.getMoiUser().getImageUri().equals("")){
+            UserView.setImageURI(Uri.parse(musicList.getMoiUser().getImageUri()));
+        }
+        if (musicList.getMoiUser().getName()!=null) {
+            textuser.setText(musicList.getMoiUser().getName());
+        }
+    }
+
+    @Override
+    public void SetPlayButtonEnable(boolean isEnable) {
+        floatingActionButton.setEnabled(isEnable);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter!=null){
+            presenter.onDestroy();
+        }
     }
 }

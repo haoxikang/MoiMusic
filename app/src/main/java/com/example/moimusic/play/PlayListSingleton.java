@@ -72,6 +72,13 @@ public enum  PlayListSingleton implements Serializable {
             musicList=aPlaySequence.initList(musicList);
         }
     }
+    public String getCurrentMusicId(){
+        if (musicList.size()!=0){
+            return   musicList.get(currentPosition).getObjectId();
+        }else {
+            return null;
+        }
+    }
     public String getCurrentMusic(){
         if (musicList.size()!=0){
           return   musicList.get(currentPosition).getMusicUri();

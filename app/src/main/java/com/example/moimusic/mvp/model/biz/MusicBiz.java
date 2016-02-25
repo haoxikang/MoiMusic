@@ -11,6 +11,7 @@ import com.example.moimusic.utils.ErrorList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.listener.FindListener;
 import rx.Observable;
 
@@ -39,5 +40,33 @@ public class MusicBiz extends DataBiz {
             return observable;
         }
 
+    public Observable<List<Music>> getMusic(String id){
+        Observable<List<Music>> observable = Observable.create(subscriber -> {
+            BmobQuery<Music> query = new BmobQuery<Music>();
+            MusicList musicList = new MusicList();
+            musicList.setObjectId(id);
+//likes是Post表中的字段，用来存储所有喜欢该帖子的用户
+            query.addWhereRelatedTo("Music", new BmobPointer(musicList));
+            query.findObjects(context, new FindListener<Music>() {
+                @Override
+                public void onSuccess(List<Music> list) {
 
+                    Log.d("TAG", "成功" + list.size());
+                    if (list.size()==0){
+                        subscriber.onError(new Throwable("没有歌曲"));
+                    }else {
+                        subscriber.onNext(list);
+                        subscriber.onCompleted();
+                    }
+
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
+        });
+        return observable;
+    }
 }

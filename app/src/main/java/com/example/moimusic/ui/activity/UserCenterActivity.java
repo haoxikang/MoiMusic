@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -152,6 +153,11 @@ startActivity(intent);
             tvLike.setText("关注："+like);
         }
 
+    }
+
+    @Override
+    public void ShowSnackBar(String s) {
+        Snackbar.make(viewPager,s,Snackbar.LENGTH_SHORT);
     }
 
     @Override

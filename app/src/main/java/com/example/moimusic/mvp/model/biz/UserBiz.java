@@ -1,19 +1,17 @@
 package com.example.moimusic.mvp.model.biz;
 
-import android.util.Log;
+
 
 import com.example.moimusic.mvp.model.entity.MoiUser;
-import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.utils.ErrorList;
 
-import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
+
+import cn.bmob.v3.listener.GetListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -89,6 +87,23 @@ public class UserBiz extends  DataBiz{
                      }
                  }
              });
+        });
+        return observable;
+    }
+    public Observable<MoiUser> getUser(String id){
+        Observable<MoiUser> observable = Observable.create(subscriber -> {
+            BmobQuery<MoiUser> query = new BmobQuery<MoiUser>();
+            query.getObject(context, id, new GetListener<MoiUser>() {
+                @Override
+                public void onSuccess(MoiUser moiUser) {
+                    subscriber.onNext(moiUser);
+                }
+
+                @Override
+                public void onFailure(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
         });
         return observable;
     }

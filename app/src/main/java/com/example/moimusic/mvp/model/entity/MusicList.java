@@ -13,6 +13,8 @@ public class MusicList extends BmobObject{
     private Integer CollegeNum;
     private Integer PlayNum;
     private String ListImageUri;
+    private MoiUser createUser;
+
 
     @Override
     public String toString() {
@@ -22,9 +24,17 @@ public class MusicList extends BmobObject{
                 ", isRelease=" + isRelease +
                 ", CollegeNum=" + CollegeNum +
                 ", PlayNum=" + PlayNum +
-                ", ShareTime="  +
                 ", ListImageUri='" + ListImageUri + '\'' +
+                ", moiUser=" + createUser +
                 '}';
+    }
+
+    public MoiUser getMoiUser() {
+        return createUser;
+    }
+
+    public void setMoiUser(MoiUser moiUser) {
+        this.createUser = moiUser;
     }
 
     public String getName() {

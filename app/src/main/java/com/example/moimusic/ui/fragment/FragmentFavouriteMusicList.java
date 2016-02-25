@@ -32,7 +32,7 @@ public class FragmentFavouriteMusicList extends BaseFragment implements Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter.attach(this,getContext());
+        presenter.attach(this,getActivity());
     }
 
     @Nullable
@@ -111,6 +111,7 @@ public class FragmentFavouriteMusicList extends BaseFragment implements Fragment
 
     private void initView(View v) {
         recyclerView = (RecyclerView) v.findViewById(R.id.my_music_recyclerView);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.music_list_swipe);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
         presenter.getMusicLists();

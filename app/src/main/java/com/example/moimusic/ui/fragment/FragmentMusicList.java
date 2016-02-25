@@ -44,7 +44,7 @@ public class FragmentMusicList extends BaseFragment implements FragmentMusicList
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String id = getArguments().getString(EXTRA_USER_ID);
-        presenter.attach(this,id,getContext());
+        presenter.attach(this,id,getActivity());
     }
 
     @Override
@@ -67,6 +67,7 @@ public class FragmentMusicList extends BaseFragment implements FragmentMusicList
 
     private void initView(View v) {
         recyclerView = (RecyclerView) v.findViewById(R.id.my_music_recyclerView);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.music_list_swipe);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
         presenter.getMusicLists();

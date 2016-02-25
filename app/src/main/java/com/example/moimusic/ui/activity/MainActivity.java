@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         tintManager.setStatusBarTintEnabled(true);
 
         if (android.os.Build.VERSION.SDK_INT == 19) {
-            tintManager.setStatusBarTintColor(0x802896a6);
+            tintManager.setStatusBarTintColor(0x801c9dd0);
         } else {
             tintManager.setStatusBarTintColor(0x002896a6);
         }

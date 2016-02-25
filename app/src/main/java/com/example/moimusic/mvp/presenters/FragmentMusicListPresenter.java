@@ -2,6 +2,7 @@ package com.example.moimusic.mvp.presenters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -33,26 +34,26 @@ public class FragmentMusicListPresenter extends BasePresenterImpl {
     private MusicListViewAdapter musicListViewAdapter;
     private int page = 1;
     private  String id;
-    private Context context;
+    private FragmentActivity fragmentActivity;
     public FragmentMusicListPresenter(ApiService apiService) {
         factory = new DataBizFactory();
     }
 
-    public void attach(FragmentMusicListView fragmentMusicListView,String id,Context context) {
+    public void attach(FragmentMusicListView fragmentMusicListView,String id,FragmentActivity fragmentActivity) {
         this.fragmentMusicListView = fragmentMusicListView;
         this.id=id;
-        this.context = context;
+        this.fragmentActivity = fragmentActivity;
     }
 
     public void getMusicLists() {
 
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-        mSubscriptions.add(musicListBiz.getMyMusic(page,id.equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())).subscribeOn(Schedulers.io())
+        mSubscriptions.add(musicListBiz.getMyMusic(page,id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId()),id ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(musicLists -> {
                     if (page == 1) {
                         fragmentMusicListView.hideSwipe(false);
-                        musicListViewAdapter = new MusicListViewAdapter(musicLists,context);
+                        musicListViewAdapter = new MusicListViewAdapter(musicLists,fragmentActivity);
                         fragmentMusicListView.setAdapter(musicListViewAdapter);
 
                     } else if (page!=1) {

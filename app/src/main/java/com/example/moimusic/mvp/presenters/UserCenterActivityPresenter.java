@@ -8,6 +8,7 @@ import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
 import com.example.moimusic.mvp.model.ApiService;
 import com.example.moimusic.mvp.model.biz.FollowBiz;
+import com.example.moimusic.mvp.model.biz.UserBiz;
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.mvp.views.IUserCenterActivity;
@@ -57,14 +58,23 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
         Intent intent= mView.GetIntent();
         String s = intent.getStringExtra("userID");
         FollowBiz followBiz = factory.createBiz(FollowBiz.class);
+        UserBiz userBiz = factory.createBiz(UserBiz.class);
         mSubscriptions.add(followBiz.getFollowData(s).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
         .subscribe(ints -> {
             if (s.equals(BmobUser.getCurrentUser(context,MoiUser.class).getObjectId())){
                 mView.updataView( BmobUser.getCurrentUser(context,MoiUser.class),ints[0],ints[1]);
             }else {
-                mView.updataView(BmobUser.getCurrentUser(context,MoiUser.class),0,0);  //去网上查询
+                mSubscriptions.add(userBiz.getUser(s).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(moiUser -> {
+                    mView.updataView(moiUser,ints[0],ints[1]);
+                },throwable -> {
+                    mView.ShowSnackBar(throwable.getMessage());
+                }));
             }
+        },throwable1 -> {
+            mView.ShowSnackBar(throwable1.getMessage());
         }));
 
 

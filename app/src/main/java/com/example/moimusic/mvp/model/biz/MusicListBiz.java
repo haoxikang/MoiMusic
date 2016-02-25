@@ -16,28 +16,30 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.GetListener;
 import rx.Observable;
 
 /**
  * Created by qqq34 on 2016/1/29.
  */
-public class MusicListBiz  extends DataBiz{
+public class MusicListBiz extends DataBiz {
 
-    public Observable<List<MusicList>> getMyMusic(int page,boolean isMe) {
-        MoiUser moiUser = BmobUser.getCurrentUser(context,MoiUser.class);
+    public Observable<List<MusicList>> getMyMusic(int page, boolean isMe,String id) {
+        MoiUser moiUser = new MoiUser();
+        moiUser.setObjectId(id);
         Observable<List<MusicList>> observable = Observable.create(subscriber -> {
             BmobQuery<MusicList> query = new BmobQuery<>();
             query.addWhereRelatedTo("myMusicList", new BmobPointer(moiUser));
-            if (!isMe){
-                query.addWhereEqualTo("isRelease",true);
+            if (!isMe) {
+                query.addWhereEqualTo("isRelease", true);
             }
             query.setLimit(10);
-            query .setSkip((page-1)*10);
+            query.setSkip((page - 1) * 10);
             query.findObjects(context, new FindListener<MusicList>() {
                 @Override
                 public void onSuccess(List<MusicList> list) {
-                    Log.d("TAG","成功");
-                    if (list.size()==0){
+                    Log.d("TAG", "成功");
+                    if (list.size() == 0) {
                         subscriber.onError(new Throwable(context.getResources().getString(R.string.no_data)));
                     }
                     subscriber.onNext(list);
@@ -51,18 +53,19 @@ public class MusicListBiz  extends DataBiz{
         });
         return observable;
     }
+
     public Observable<List<MusicList>> getCollegeMusic(int page) {
-        MoiUser moiUser = BmobUser.getCurrentUser(context,MoiUser.class);
+        MoiUser moiUser = BmobUser.getCurrentUser(context, MoiUser.class);
         Observable<List<MusicList>> observable = Observable.create(subscriber -> {
             BmobQuery<MusicList> query = new BmobQuery<>();
             query.addWhereRelatedTo("College", new BmobPointer(moiUser));
             query.setLimit(10);
-            query .setSkip((page-1)*10);
+            query.setSkip((page - 1) * 10);
             query.findObjects(context, new FindListener<MusicList>() {
                 @Override
                 public void onSuccess(List<MusicList> list) {
-                    Log.d("TAG","成功");
-                    if (list.size()==0){
+                    Log.d("TAG", "成功");
+                    if (list.size() == 0) {
                         subscriber.onError(new Throwable(context.getResources().getString(R.string.no_data)));
                     }
                     subscriber.onNext(list);
@@ -70,6 +73,30 @@ public class MusicListBiz  extends DataBiz{
 
                 @Override
                 public void onError(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
+        });
+        return observable;
+    }
+
+    public Observable<MusicList> getMusicList(String id) {
+        Observable<MusicList> observable = Observable.create(subscriber -> {
+            BmobQuery<MusicList> query = new BmobQuery<>();
+            query.include("createUser");
+            query.getObject(context, id, new GetListener<MusicList>() {
+                @Override
+                public void onSuccess(MusicList musicList) {
+                    if (musicList!=null){
+                        subscriber.onNext(musicList);
+                    }else {
+                        subscriber.onError(new Throwable("位置错误"));
+                    }
+
+                }
+
+                @Override
+                public void onFailure(int i, String s) {
                     subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
                 }
             });

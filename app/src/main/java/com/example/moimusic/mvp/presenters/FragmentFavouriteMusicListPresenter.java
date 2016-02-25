@@ -1,6 +1,8 @@
 package com.example.moimusic.mvp.presenters;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import com.example.moimusic.adapter.MusicListViewAdapter;
 import com.example.moimusic.factorys.DataBizFactory;
@@ -22,14 +24,14 @@ public class FragmentFavouriteMusicListPresenter extends BasePresenterImpl {
     private Factory factory;
     private FragmentFavouriteMusicListView fragmentFavouriteMusicListView;
     private MusicListViewAdapter musicListViewAdapter;
-    private Context context;
+    private FragmentActivity fragmentActivity;
     private int page = 1;
     public FragmentFavouriteMusicListPresenter(ApiService apiService) {
         factory = new DataBizFactory();
     }
-    public void attach(FragmentFavouriteMusicListView fragmentFavouriteMusicListView, Context context) {
+    public void attach(FragmentFavouriteMusicListView fragmentFavouriteMusicListView, FragmentActivity fragmentActivity) {
         this.fragmentFavouriteMusicListView = fragmentFavouriteMusicListView;
-        this.context = context;
+        this.fragmentActivity = fragmentActivity;
     }
     public void getMusicLists() {
 
@@ -39,7 +41,7 @@ public class FragmentFavouriteMusicListPresenter extends BasePresenterImpl {
                 .subscribe(musicLists -> {
                     if (page == 1) {
                         fragmentFavouriteMusicListView.hideSwipe(false);
-                        musicListViewAdapter = new MusicListViewAdapter(musicLists,context);
+                        musicListViewAdapter = new MusicListViewAdapter(musicLists,fragmentActivity);
                         fragmentFavouriteMusicListView.setAdapter(musicListViewAdapter);
 
                     } else if (musicListViewAdapter != null) {

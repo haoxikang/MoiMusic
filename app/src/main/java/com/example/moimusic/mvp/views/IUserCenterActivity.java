@@ -12,4 +12,5 @@ public interface IUserCenterActivity {
     void finishActivity();
     void ToNextActivity(Intent intent);
     void updataView(MoiUser  moiUser,int like,int followed);
+    void ShowSnackBar(String s);
 }
