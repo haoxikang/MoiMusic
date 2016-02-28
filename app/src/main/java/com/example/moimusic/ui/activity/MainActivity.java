@@ -170,6 +170,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     }
 
     public void initClick() {
+        imageButton.setOnClickListener(v1 ->startNextActivity(new Intent(this,ActivityPlayNow.class)) );
         playFloat.setOnClickListener(v -> presenter.musicPlay());
         nextButton.setOnClickListener(v -> presenter.nextMusic());
         prevButton.setOnClickListener(v -> presenter.prevMusic());

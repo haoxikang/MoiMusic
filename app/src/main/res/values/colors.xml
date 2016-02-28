@@ -11,4 +11,6 @@
     <color name="titeleColor">#de000000</color>
     <color name="userCenterStatus">#3b2c43</color>
     <color name="black">#000000</color>
+    <color name="playBack">#55555555</color>
+    <color name="musicBk">#ecf1f2</color>
 </resources>

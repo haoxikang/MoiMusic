@@ -1,5 +1,7 @@
 package com.example.moimusic.adapter;
 
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.example.moimusic.mvp.model.entity.EvenMusicListContentAdapterCall;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.play.PlayListSingleton;
+import com.example.moimusic.ui.activity.ActivityPlayNow;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -30,9 +33,10 @@ import de.greenrobot.event.EventBus;
 public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListContentViewAdapter.MyViewHolder> {
 
     List<Music> musicList;
-
-    public MusicListContentViewAdapter(List<Music> musicList) {
+    FragmentActivity fragmentActivity;
+    public MusicListContentViewAdapter(List<Music> musicList, FragmentActivity fragmentActivity) {
         this.musicList = musicList;
+        this.fragmentActivity = fragmentActivity;
         EventBus.getDefault().register(this);
     }
 
@@ -66,6 +70,7 @@ public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListC
             evenCall.setCurrentOrder(EvenCall.PLAY);
             EventBus.getDefault().post(evenCall);
             notifyDataSetChanged();
+            fragmentActivity.startActivity(new Intent(fragmentActivity, ActivityPlayNow.class));
         });
         holder.simpleDraweeView.setOnClickListener(v -> {
             Log.d("点击", "点击了simpleDraweeView");

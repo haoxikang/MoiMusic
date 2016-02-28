@@ -1,5 +1,7 @@
 package com.example.moimusic.mvp.presenters;
 
+import android.support.v4.app.FragmentActivity;
+
 import com.example.moimusic.adapter.MusicListContentViewAdapter;
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
@@ -20,14 +22,15 @@ public class MusicListContentFragmentPresenter extends BasePresenterImpl {
     private Factory factory;
     private String id;
     private IMusicListContentFragmentView view;
-
+    private FragmentActivity fragmentActivity;
     public MusicListContentFragmentPresenter(ApiService apiService) {
         factory = new DataBizFactory();
     }
 
-    public void attach(String id,IMusicListContentFragmentView view) {
+    public void attach(String id,IMusicListContentFragmentView view,FragmentActivity fragmentActivity) {
         this.id = id;
         this.view =view;
+        this.fragmentActivity =fragmentActivity;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class MusicListContentFragmentPresenter extends BasePresenterImpl {
         mSubscriptions.add(musicBiz.getMusic(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(musicList -> {
-                    MusicListContentViewAdapter musicListContentViewAdapter = new MusicListContentViewAdapter(musicList);
+                    MusicListContentViewAdapter musicListContentViewAdapter = new MusicListContentViewAdapter(musicList,fragmentActivity);
                     view.ShowList(musicListContentViewAdapter);
                     EvenActivityMusicListCall evenActivityMusicListCall = new EvenActivityMusicListCall(true,musicList);
                     EventBus.getDefault().post(evenActivityMusicListCall);

@@ -30,7 +30,7 @@ public class MusicListContentFragment extends BaseFragment implements IMusicList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String id = getArguments().getString(EXTRA_LIST_ID);
-        presenter.attach(id,this);
+        presenter.attach(id,this,getActivity());
     }
 
     @Override

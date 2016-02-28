@@ -57,6 +57,9 @@ public class FragmentMuiscListReplysPresenter extends BasePresenterImpl {
                 }
             page++;
         },throwable -> {
+            if (throwable.getMessage().toString().equals("没有评论")){
+                view.setViewEnable(true);
+            }
             view.ShowSnackBar(throwable.getMessage());
         }));
     }
