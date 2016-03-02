@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import com.example.moimusic.R;
 import com.example.moimusic.adapter.MusicListContentViewAdapter;
 import com.example.moimusic.adapter.MusicListReplyAdapter;
+import com.example.moimusic.factorys.Factory;
+import com.example.moimusic.mvp.model.biz.IReplysData;
 import com.example.moimusic.mvp.presenters.FragmentMuiscListReplysPresenter;
 import com.example.moimusic.mvp.views.FragmentMuiscListReplysView;
 import com.example.moimusic.play.PlayListSingleton;
@@ -33,20 +36,28 @@ import javax.inject.Inject;
 /**
  * Created by qqq34 on 2016/2/22.
  */
-public class FragmentMuiscListReplys extends BaseFragment implements FragmentMuiscListReplysView{
-    public static final String EXTRA_LIST_ID ="com.example.moimusic.listid";
-@Inject
+public class FragmentMuiscListReplys extends BaseFragment implements FragmentMuiscListReplysView {
+    public static final String EXTRA_LIST_ID = "com.example.moimusic.listid";
+    @Inject
     FragmentMuiscListReplysPresenter presenter;
     private RecyclerView recyclerView;
     private EditText editText;
     private SimpleDraweeView simpleDraweeView;
     private ProgressView progressView;
+    private IReplysData data;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String id = getArguments().getString(EXTRA_LIST_ID);
-        presenter.attach(id,this,getActivity());
+        if (data != null) {
+            presenter.attach(id, this, getActivity(), data);
+        }
+
+    }
+
+    public void setData(IReplysData data) {
+        this.data = data;
     }
 
     @Override
@@ -67,28 +78,30 @@ public class FragmentMuiscListReplys extends BaseFragment implements FragmentMui
         presenter.onCreate();
         return v;
     }
-private void initView(View v){
-    recyclerView = (RecyclerView)v.findViewById(R.id.recyclerView);
-    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    editText = (EditText) v.findViewById(R.id.saySomething);
-    editText.setEnabled(false);
-    simpleDraweeView = (SimpleDraweeView)v.findViewById(R.id.sendview);
-    simpleDraweeView.setEnabled(false);
-    progressView = (ProgressView)v.findViewById(R.id.progress);
-    progressView.setVisibility(View.INVISIBLE);
-}
-    private void initClick(){
+
+    private void initView(View v) {
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        editText = (EditText) v.findViewById(R.id.saySomething);
+        editText.setEnabled(false);
+        simpleDraweeView = (SimpleDraweeView) v.findViewById(R.id.sendview);
+        simpleDraweeView.setEnabled(false);
+        progressView = (ProgressView) v.findViewById(R.id.progress);
+        progressView.setVisibility(View.INVISIBLE);
+    }
+
+    private void initClick() {
         simpleDraweeView.setOnClickListener(v -> {
             if (!TextUtils.isEmpty(editText.getText()))
-            presenter.sendComment(editText.getText().toString());
+                presenter.sendComment(editText.getText().toString());
         });
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             //用来标记是否正在向最后一个滑动，既是否向右滑动或向下滑动
             boolean isSlidingToLast = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                LinearLayoutManager manager = (LinearLayoutManager)recyclerView.getLayoutManager();
+                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 // 当不滚动时
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //获取最后一个完全显示的ItemPosition
@@ -96,7 +109,7 @@ private void initView(View v){
                     int totalItemCount = manager.getItemCount();
 
                     // 判断是否滚动到底部，并且是向右滚动
-                    if (lastVisibleItem == (totalItemCount -1) && isSlidingToLast) {
+                    if (lastVisibleItem == (totalItemCount - 1) && isSlidingToLast) {
                         //加载更多功能的代码
                         presenter.onCreate();
                     }
@@ -108,10 +121,10 @@ private void initView(View v){
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 //dx用来判断横向滑动方向，dy用来判断纵向滑动方向
-                if(dy> 0){
+                if (dy > 0) {
                     //大于0表示，正在向右滚动
                     isSlidingToLast = true;
-                }else{
+                } else {
                     //小于等于0 表示停止或向左滚动
                     isSlidingToLast = false;
                 }
@@ -119,18 +132,21 @@ private void initView(View v){
             }
         });
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (presenter!=null){
+        if (presenter != null) {
             presenter.onDestroy();
         }
     }
-    public static FragmentMuiscListReplys newInstance(String id) {
+
+    public static FragmentMuiscListReplys newInstance(IReplysData data, String id) {
         Bundle args = new Bundle();
         args.putString(EXTRA_LIST_ID, id);
         FragmentMuiscListReplys fragment = new FragmentMuiscListReplys();
         fragment.setArguments(args);
+        fragment.setData(data);
         return fragment;
     }
 
@@ -144,14 +160,14 @@ private void initView(View v){
 
     @Override
     public void ShowSnackBar(String s) {
-        Snackbar.make(recyclerView,s,Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(recyclerView, s, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void setViewEnable(boolean isEnable) {
-        if (isEnable){
+        if (isEnable) {
             progressView.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             progressView.setVisibility(View.VISIBLE);
         }
         recyclerView.setEnabled(isEnable);
@@ -163,6 +179,7 @@ private void initView(View v){
     public void updataList() {
         editText.setText("");
         presenter.setPage(1);
+
         presenter.onCreate();
     }
 }

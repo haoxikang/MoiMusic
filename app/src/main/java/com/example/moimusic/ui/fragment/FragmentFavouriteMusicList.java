@@ -49,6 +49,13 @@ public class FragmentFavouriteMusicList extends BaseFragment implements Fragment
             presenter.getMusicLists();
 
         });
+
+    }
+
+    @Override
+    public void setAdapter(MusicListViewAdapter adapter) {
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
             //用来标记是否正在向最后一个滑动，既是否向右滑动或向下滑动
             boolean isSlidingToLast = false;
@@ -88,12 +95,6 @@ public class FragmentFavouriteMusicList extends BaseFragment implements Fragment
 
             }
         });
-    }
-
-    @Override
-    public void setAdapter(MusicListViewAdapter adapter) {
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
     }
 
     @Override

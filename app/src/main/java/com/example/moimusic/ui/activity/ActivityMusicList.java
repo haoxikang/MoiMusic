@@ -13,6 +13,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -27,6 +28,9 @@ import android.widget.TextView;
 
 import com.example.moimusic.R;
 import com.example.moimusic.adapter.FragmentAdapter;
+import com.example.moimusic.factorys.DataBizFactory;
+import com.example.moimusic.mvp.model.biz.MusicListReplysBiz;
+import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.mvp.presenters.ActivityMusicListPresenter;
 import com.example.moimusic.mvp.views.IMusicListView;
@@ -114,8 +118,6 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         tabs = (TabLayout)findViewById(R.id.tabs);
-        setupViewPager();
-        viewPager.setOffscreenPageLimit(3);
         UserView = (SimpleDraweeView)findViewById(R.id.userImage);
         UserView.setEnabled(false);
         CoverView = (SimpleDraweeView)findViewById(R.id.coverImage);
@@ -124,6 +126,7 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView{
         back = (RelativeLayout)findViewById(R.id.center_area);
         floatingActionButton=(FloatingActionButton)findViewById(R.id.actionButon);
         floatingActionButton.setEnabled(false);
+
     }
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -134,15 +137,16 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView{
                 //这里的inject 会把 MainActivity 所有标注了注解的成员 给动态实例化了
                 .inject(this);
     }
-    private void setupViewPager() {
+    @Override
+     public void setupViewPager(List<Music> musicList) {
             List<String> titles = new ArrayList<>();
             titles.add(getResources().getString(R.string.music));
             titles.add(getResources().getString(R.string.reply));
             tabs.addTab(tabs.newTab().setText(titles.get(0)));
             tabs.addTab(tabs.newTab().setText(titles.get(1)));
             List<Fragment> fragments = new ArrayList<>();
-            fragments.add(MusicListContentFragment.newInstance(presenter.getId()));
-            fragments.add(FragmentMuiscListReplys.newInstance(presenter.getId()));
+            fragments.add(MusicListContentFragment.newInstance(musicList,"ActivityMusicList"));
+            fragments.add(FragmentMuiscListReplys.newInstance(new DataBizFactory().createBiz(MusicListReplysBiz.class) ,presenter.getId()));
             FragmentAdapter adapter =
                     new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
             viewPager.setAdapter(adapter);
@@ -151,6 +155,11 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView{
 
 
 
+    }
+
+    @Override
+    public void ShowSnackBar(String s) {
+        Snackbar.make(tabs,s,Snackbar.LENGTH_SHORT).show();
     }
 
 
@@ -191,4 +200,5 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView{
             presenter.onDestroy();
         }
     }
+
 }

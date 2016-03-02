@@ -106,6 +106,10 @@ public class MainActivityPresenter extends BasePresenterImpl{
     }
    public void onEventMainThread(EvenReCall evenReCall){
        mView.updataPlayView();
+       if (evenReCall.getMusicSize()!=0){
+           playListSingleton.setAll(evenReCall.getMusicSize());
+           playListSingleton.setNow(evenReCall.getCurrent());
+       }
        if (evenReCall.getCurrent()!=0&&evenReCall.getMusicSize()!=0){
            mView.setProgressbar(evenReCall.getCurrent(),evenReCall.getMusicSize());
        }

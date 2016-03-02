@@ -5,7 +5,7 @@ import cn.bmob.v3.BmobObject;
 /**
  * Created by qqq34 on 2016/2/25.
  */
-public class MusicListReply extends BmobObject {
+public class MusicListReply extends BmobObject implements IReply{
     private MoiUser userId;
     private MusicList musicListId;
     private MusicListReply parentId;
@@ -45,6 +45,11 @@ public class MusicListReply extends BmobObject {
 
     public void setParentId(MusicListReply parentId) {
         this.parentId = parentId;
+    }
+
+    @Override
+    public MoiUser getUser() {
+        return userId;
     }
 
     public String getContent() {

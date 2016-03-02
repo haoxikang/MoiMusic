@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -37,6 +38,13 @@
                     app:layout_widthPercent="100%w"
                     fresco:actualImageScaleType="centerCrop"
                     fresco:placeholderImageScaleType="centerCrop" />
+                <RelativeLayout
+                    android:background="#55000000"
+                    app:layout_heightPercent="55%h"
+                    app:layout_widthPercent="100%w"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp">
+                </RelativeLayout>
 
                 <com.zhy.android.percent.support.PercentRelativeLayout
                     android:layout_width="0dp"
@@ -54,16 +62,18 @@
                         app:layout_widthPercent="100%w">
 
                         <TextView
+                            android:id="@+id/nowText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="1:22"
+                            android:text=""
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
                         <com.rey.material.widget.Slider
+                            android:id="@+id/slider"
                             style="@style/Material.Widget.Slider"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -72,15 +82,16 @@
                             android:gravity="center"
                             app:sl_maxValue="100"
                             app:sl_minValue="0"
-                            app:sl_value="50" />
+                            app:sl_value="0" />
 
                         <TextView
+                            android:id="@+id/allText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="4:27"
+                            android:text=""
                             android:textColor="@color/black"
                             android:textSize="12sp" />
                     </com.zhy.android.percent.support.PercentLinearLayout>
@@ -101,6 +112,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/musicName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="The Woft Is Free"
@@ -109,6 +121,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/musicSinger"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
@@ -132,31 +145,51 @@
                         android:layout_height="0dp"
                         app:layout_heightPercent="40%h"
                         app:layout_widthPercent="100%w">
-                        <ImageView
-                            android:tint   = "@color/colorAccent"
-                            android:layout_marginLeft="16dp"
-                            android:src="@mipmap/ic_repeat_black_36dp"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            ripple:mrl_rippleColor="@color/black"
+                            ripple:mrl_rippleRoundedCorners="5dp"
+                            android:id="@+id/rippleLoop"
+                            android:layout_gravity="center"
                             android:layout_centerVertical="true"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
-                            android:id="@+id/imageView" />
-                        <LinearLayout
+                            android:layout_marginLeft="16dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp">
+                            <ImageView
+                                android:layout_gravity="center"
+                                android:tint   = "@color/colorAccent"
+                                android:src="@mipmap/ic_repeat_black_36dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:id="@+id/imageView" />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                        <com.zhy.android.percent.support.PercentLinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true">
-                            <ImageView
-                                android:src="@mipmap/ic_skip_previous_black_36dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent" />
+                            <com.balysv.materialripple.MaterialRippleLayout
+                                android:layout_gravity="center"
+                                android:id="@+id/ripplePre"
+                                ripple:mrl_rippleColor="@color/black"
+                                ripple:mrl_rippleRoundedCorners="5dp"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp">
+                                <ImageView
+                                    android:layout_gravity="center"
+                                    android:src="@mipmap/ic_skip_previous_black_36dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp" />
+                            </com.balysv.materialripple.MaterialRippleLayout>
+
                             <com.github.clans.fab.FloatingActionButton
-                                android:layout_marginLeft="32dp"
-                                android:layout_marginRight="32dp"
+                                android:layout_marginLeft="24dp"
+                                android:layout_marginRight="24dp"
                                 fab:fab_shadowRadius="0dp"
                                 android:layout_gravity="center"
-                                android:id="@+id/header_fab"
+                                android:id="@+id/play_fab"
                                 fab:fab_shadowXOffset="0dp"
                                 fab:fab_shadowYOffset="0dp"
                                 fab:fab_shadowColor="#00000000"
@@ -165,19 +198,40 @@
                                 android:src="@mipmap/ic_play_arrow_white_36dp"
                                 fab:fab_colorNormal="@color/colorAccent">
                             </com.github.clans.fab.FloatingActionButton>
-                            <ImageView
-                                android:src="@mipmap/ic_skip_next_black_36dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent" />
-                        </LinearLayout>
-                        <ImageView
-                            android:layout_marginRight="16dp"
-                            android:src="@mipmap/ic_shuffle_black_36dp"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
+                            <com.balysv.materialripple.MaterialRippleLayout
+                                android:layout_gravity="center"
+                                android:id="@+id/rippleNext"
+                                ripple:mrl_rippleColor="@color/black"
+                                ripple:mrl_rippleRoundedCorners="5dp"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp">
+                                <ImageView
+                                    android:layout_gravity="center"
+                                    android:src="@mipmap/ic_skip_next_black_36dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp" />
+                            </com.balysv.materialripple.MaterialRippleLayout>
+
+                        </com.zhy.android.percent.support.PercentLinearLayout>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:id="@+id/rippleMix"
                             android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true" />
+                            android:layout_alignParentEnd="true"
+                            ripple:mrl_rippleColor="@color/black"
+                            ripple:mrl_rippleRoundedCorners="5dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="16dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp">
+                            <ImageView
+                                android:layout_gravity="center"
+                                android:src="@mipmap/ic_shuffle_black_36dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
                     </RelativeLayout>
                 </com.zhy.android.percent.support.PercentRelativeLayout>
             </com.zhy.android.percent.support.PercentRelativeLayout>
@@ -196,33 +250,56 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+        <com.zhy.android.percent.support.PercentRelativeLayout
             android:id="@+id/tabs"
             android:background="@color/musicBk"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/musiclist"
+            android:layout_height="50dp">
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/rippleList"
+                ripple:mrl_rippleColor="@color/black"
+                ripple:mrl_rippleRoundedCorners="5dp"
                 android:layout_marginLeft="16dp"
-                android:tint   = "@color/black"
-                android:src="@mipmap/ic_queue_music_white_24dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                app:layout_heightPercent="100%h"
+                app:layout_widthPercent="100%h"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            <ImageView
+                android:layout_alignParentStart="true"
+                android:layout_width="0dp"
+                android:layout_height="0dp">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:id="@+id/musiclist"
+                    android:tint   = "@color/colorAccent"
+                    android:src="@mipmap/ic_queue_music_white_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </com.balysv.materialripple.MaterialRippleLayout>
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/rippleReplys"
                 android:layout_marginRight="16dp"
-                android:tint   = "@color/black"
-                android:src="@mipmap/ic_message_grey600_24dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
+                android:layout_alignParentEnd="true"
+                ripple:mrl_rippleColor="@color/black"
+                ripple:mrl_rippleRoundedCorners="5dp"
+                app:layout_heightPercent="100%h"
+                app:layout_widthPercent="100%h"
+                android:layout_width="0dp"
+                android:layout_height="0dp">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:id="@+id/musicReplys"
+
+                    android:tint   = "@color/black"
+                    android:src="@mipmap/ic_message_grey600_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+        </com.zhy.android.percent.support.PercentRelativeLayout>
         <FrameLayout
             android:layout_below="@+id/tabs"
             android:background="@mipmap/shadow"

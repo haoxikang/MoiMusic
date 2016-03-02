@@ -3,9 +3,11 @@ package com.example.moimusic.mvp.presenters;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.moimusic.adapter.MusicListContentViewAdapter;
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
 import com.example.moimusic.mvp.model.ApiService;
+import com.example.moimusic.mvp.model.biz.MusicBiz;
 import com.example.moimusic.mvp.model.biz.MusicListBiz;
 import com.example.moimusic.mvp.model.entity.EvenActivityMusicListCall;
 import com.example.moimusic.mvp.model.entity.EvenCall;
@@ -47,6 +49,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
     public void onCreate() {
         super.onCreate();
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
+        MusicBiz musicBiz = factory.createBiz(MusicBiz.class);
         if (id!=null&&!id.equals("")){
             mSubscriptions.add( musicListBiz.getMusicList(id).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -54,6 +57,15 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                 List = musicList;
                 iMusicListView.showView(musicList);
             }));
+            mSubscriptions.add(musicBiz.getMusic(id).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(musicList -> {
+                        iMusicListView.setupViewPager(musicList);
+                        EvenActivityMusicListCall evenActivityMusicListCall = new EvenActivityMusicListCall(true,musicList);
+                        EventBus.getDefault().post(evenActivityMusicListCall);
+                    },throwable -> {
+                        iMusicListView.ShowSnackBar(throwable.getMessage());
+                    }));
         }
 
     }

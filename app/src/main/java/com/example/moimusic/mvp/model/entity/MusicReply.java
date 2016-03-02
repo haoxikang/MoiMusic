@@ -5,7 +5,7 @@ import cn.bmob.v3.BmobObject;
 /**
  * Created by qqq34 on 2016/1/27.
  */
-public class MusicReply extends BmobObject{
+public class MusicReply extends BmobObject implements IReply{
     private MusicReply ParentReplyId;
     private MoiUser User;
     private Music Music;

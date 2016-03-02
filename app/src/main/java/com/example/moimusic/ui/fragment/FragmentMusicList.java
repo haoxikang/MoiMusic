@@ -79,45 +79,7 @@ private void initClick(){
         presenter.getMusicLists();
 
     });
-    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
-        //用来标记是否正在向最后一个滑动，既是否向右滑动或向下滑动
-        boolean isSlidingToLast = false;
 
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager)recyclerView.getLayoutManager();
-            // 当不滚动时
-            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                int count = recyclerView.getAdapter().getItemCount();
-                //获取最后一个完全显示的ItemPosition
-                int[] lastItems = new int[2];
-                int[] lastVisibleItem = manager.findLastCompletelyVisibleItemPositions(lastItems);
-                int totalItemCount = manager.getItemCount();
-                int lastItem = Math.max(lastItems[0], lastItems[1]);
-
-                // 判断是否滚动到底部，并且是向右滚动
-                if (lastItem == (count -1) && isSlidingToLast) {
-                    //加载更多功能的代码
-                    presenter.getMusicLists();
-                }
-            }
-
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            //dx用来判断横向滑动方向，dy用来判断纵向滑动方向
-            if(dy> 0){
-                //大于0表示，正在向右滚动
-                isSlidingToLast = true;
-            }else{
-                //小于等于0 表示停止或向左滚动
-                isSlidingToLast = false;
-            }
-
-        }
-    });
 }
     public static FragmentMusicList newInstance(String id) {
         Bundle args = new Bundle();
@@ -131,6 +93,45 @@ private void initClick(){
     public void setAdapter(MusicListViewAdapter adapter) {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            //用来标记是否正在向最后一个滑动，既是否向右滑动或向下滑动
+            boolean isSlidingToLast = false;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager)recyclerView.getLayoutManager();
+                // 当不滚动时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    int count = recyclerView.getAdapter().getItemCount();
+                    //获取最后一个完全显示的ItemPosition
+                    int[] lastItems = new int[2];
+                    int[] lastVisibleItem = manager.findLastCompletelyVisibleItemPositions(lastItems);
+                    int totalItemCount = manager.getItemCount();
+                    int lastItem = Math.max(lastItems[0], lastItems[1]);
+
+                    // 判断是否滚动到底部，并且是向右滚动
+                    if (lastItem == (count -1) && isSlidingToLast) {
+                        //加载更多功能的代码
+                        presenter.getMusicLists();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //dx用来判断横向滑动方向，dy用来判断纵向滑动方向
+                if(dy> 0){
+                    //大于0表示，正在向右滚动
+                    isSlidingToLast = true;
+                }else{
+                    //小于等于0 表示停止或向左滚动
+                    isSlidingToLast = false;
+                }
+
+            }
+        });
     }
 
     @Override

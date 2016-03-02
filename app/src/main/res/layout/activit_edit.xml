@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="280dp">
+    <android.support.v7.widget.Toolbar
+        android:fitsSystemWindows="true"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.Toolbar>
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/userImage"
+        fresco:placeholderImage="@mipmap/user_image"
+        fresco:roundAsCircle="true"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+    <com.gc.materialdesign.views.ButtonFlat
+        android:layout_marginTop="8dp"
+        android:id="@+id/editImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:text="修改头像"
+        android:layout_below="@+id/userImage"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:fitsSystemWindows="true"
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/userName"
+                android:hint="@string/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:maxLength="12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/userIntroduce"
+                android:hint="@string/userIntroduce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:maxLength="30"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.rey.material.widget.RadioButton
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/boyRB"
+                    android:layout_marginRight="32dp"
+                    android:gravity="center"
+                    style="@style/Material.Drawable.RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/boy"/>
+                <com.rey.material.widget.RadioButton
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/girlRB"
+                    android:gravity="center"
+                    style="@style/Material.Drawable.RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/girl"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

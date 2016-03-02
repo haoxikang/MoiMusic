@@ -33,10 +33,20 @@ import de.greenrobot.event.EventBus;
 public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListContentViewAdapter.MyViewHolder> {
 
     List<Music> musicList;
-    FragmentActivity fragmentActivity;
-    public MusicListContentViewAdapter(List<Music> musicList, FragmentActivity fragmentActivity) {
+    public interface OnItemClickLitener
+    {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view , int position);
+    }
+
+    private OnItemClickLitener mOnItemClickLitener;
+
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
+    {
+        this.mOnItemClickLitener = mOnItemClickLitener;
+    }
+    public MusicListContentViewAdapter(List<Music> musicList) {
         this.musicList = musicList;
-        this.fragmentActivity = fragmentActivity;
         EventBus.getDefault().register(this);
     }
 
@@ -63,18 +73,18 @@ public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListC
         if (musicList.get(position).getSinger() != null) {
             holder.tvsub.setText(musicList.get(position).getSinger());
         }
-        holder.materialRippleLayout.setOnClickListener(v -> {
-            PlayListSingleton.INSTANCE.setMusicList(musicList);
-            PlayListSingleton.INSTANCE.setCurrentPosition(position);
-            EvenCall evenCall = new EvenCall();
-            evenCall.setCurrentOrder(EvenCall.PLAY);
-            EventBus.getDefault().post(evenCall);
-            notifyDataSetChanged();
-            fragmentActivity.startActivity(new Intent(fragmentActivity, ActivityPlayNow.class));
-        });
-        holder.simpleDraweeView.setOnClickListener(v -> {
-            Log.d("点击", "点击了simpleDraweeView");
-        });
+        if (mOnItemClickLitener!=null){
+            holder.materialRippleLayout.setOnClickListener(v -> {
+                int pos = holder.getLayoutPosition();
+                mOnItemClickLitener.onItemClick(holder.itemView, pos);
+            });
+            holder.materialRippleLayout.setOnLongClickListener(v -> {
+                int pos = holder.getLayoutPosition();
+                mOnItemClickLitener.onItemClick(holder.itemView, pos);
+                return false;
+            });
+        }
+
     }
 
     @Override

@@ -9,7 +9,17 @@ public class EvenCall {
     public final static int PRE = 2;
     public final static int PAUSE = 3;
     public final static int START=4;
+    public final static int SEEKTO=5;
     private int currentOrder;
+    private int current;
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(int current) {
+        this.current = current;
+    }
 
     public int getCurrentOrder() {
         return currentOrder;

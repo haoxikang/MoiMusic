@@ -12,6 +12,7 @@ import com.example.moimusic.mvp.model.biz.UserBiz;
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.mvp.views.IUserCenterActivity;
+import com.example.moimusic.ui.activity.EditActivity;
 import com.example.moimusic.ui.activity.LogActivity;
 
 import cn.bmob.v3.BmobUser;
@@ -78,5 +79,10 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
         }));
 
 
+    }
+    public void startEditActivity(){
+        Intent intent = new Intent(context, EditActivity.class);
+        intent.putExtra("isCurrent",isCurrentUser());
+        mView.ToNextActivity(intent);
     }
 }

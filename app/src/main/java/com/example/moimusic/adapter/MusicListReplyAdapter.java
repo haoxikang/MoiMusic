@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
+import com.example.moimusic.mvp.model.entity.IReply;
 import com.example.moimusic.mvp.model.entity.MusicListReply;
 import com.example.moimusic.ui.activity.LogActivity;
 import com.example.moimusic.ui.activity.UserCenterActivity;
@@ -23,10 +24,11 @@ import java.util.List;
 /**
  * Created by qqq34 on 2016/2/25.
  */
-public class MusicListReplyAdapter extends RecyclerView.Adapter<MusicListReplyAdapter.MyViewHolder>{
-    private List<MusicListReply> list;
+public class MusicListReplyAdapter extends RecyclerView.Adapter<MusicListReplyAdapter.MyViewHolder> {
+    private List<IReply> list;
     private FragmentActivity fragmentActivity;
-    public MusicListReplyAdapter( List<MusicListReply> list,FragmentActivity fragmentActivity) {
+
+    public MusicListReplyAdapter(List<IReply> list, FragmentActivity fragmentActivity) {
         this.list = list;
         this.fragmentActivity = fragmentActivity;
     }
@@ -41,21 +43,22 @@ public class MusicListReplyAdapter extends RecyclerView.Adapter<MusicListReplyAd
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        if (list.get(position).getUserId().getImageUri()!=null&&!list.get(position).getUserId().getImageUri().equals("")){
-            holder.simpleDraweeView.setImageURI(Uri.parse(list.get(position).getUserId().getImageUri()));
-            holder.simpleDraweeView.setOnClickListener(v -> {
-                Intent intent = new Intent(fragmentActivity, UserCenterActivity.class);
-                intent.putExtra("userID",list.get(position).getUserId().getObjectId());
-                fragmentActivity.startActivity(intent);
-            });
+        if (list.get(position).getUser().getImageUri() != null && !list.get(position).getUser().getImageUri().equals("")) {
+            holder.simpleDraweeView.setImageURI(Uri.parse(list.get(position).getUser().getImageUri()));
+
         }
-        if (list.get(position).getUserId().getName()!=null){
-            holder.name.setText(list.get(position).getUserId().getName());
+        holder.simpleDraweeView.setOnClickListener(v -> {
+            Intent intent = new Intent(fragmentActivity, UserCenterActivity.class);
+            intent.putExtra("userID", list.get(position).getUser().getObjectId());
+            fragmentActivity.startActivity(intent);
+        });
+        if (list.get(position).getUser().getName() != null) {
+            holder.name.setText(list.get(position).getUser().getName());
         }
-        if (list.get(position).getCreatedAt()!=null){
+        if (list.get(position).getCreatedAt() != null) {
             holder.time.setText(list.get(position).getCreatedAt());
         }
-        if (list.get(position).getContent()!=null){
+        if (list.get(position).getContent() != null) {
             holder.content.setText(list.get(position).getContent());
         }
 
@@ -65,22 +68,27 @@ public class MusicListReplyAdapter extends RecyclerView.Adapter<MusicListReplyAd
     public int getItemCount() {
         return list.size();
     }
-public void addData( List<MusicListReply> list){
-    this.list.addAll(list);
-    notifyDataSetChanged();
-}
-    class MyViewHolder extends RecyclerView.ViewHolder
-    {
 
-        TextView name,time,content;
+    public void addData(List<IReply> list) {
+        this.list.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void ClearData() {
+        list.clear();
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
+
+        TextView name, time, content;
         SimpleDraweeView simpleDraweeView;
-        public MyViewHolder(View view)
-        {
+
+        public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             time = (TextView) view.findViewById(R.id.time);
             content = (TextView) view.findViewById(R.id.content);
-            simpleDraweeView = (SimpleDraweeView)view.findViewById(R.id.userImage);
+            simpleDraweeView = (SimpleDraweeView) view.findViewById(R.id.userImage);
         }
     }
 }

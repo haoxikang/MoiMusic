@@ -38,4 +38,14 @@ public  class Utils {
         }
         return s;
     }
+    public static String getTime(int s){
+        int m = s/1000;
+        int f = m/60;
+        int miao = m%60;
+        String M = miao+"";
+        if (miao<10){
+            M = "0"+miao;
+        }
+        return f+":"+M;
+    }
 }

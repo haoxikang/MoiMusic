@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.example.moimusic.mvp.model.entity.EvenCall;
+import com.example.moimusic.mvp.model.entity.EvenMusicListContentAdapterCall;
 import com.example.moimusic.mvp.model.entity.EvenReCall;
 import com.example.moimusic.play.PlayListSingleton;
 
@@ -25,6 +26,7 @@ public class PlayService extends Service implements MediaPlayer.OnErrorListener,
     private PlayListSingleton playListSingleton;
     private ExecutorService ex = Executors.newSingleThreadExecutor();
     private EvenReCall evenReCall;
+
     public PlayService() {
     }
     @Override
@@ -104,10 +106,12 @@ ex.shutdown();
     private void next(){
         playListSingleton.next();
         play();
+        EventBus.getDefault().post(new EvenMusicListContentAdapterCall());
     }
     private void prev(){
         playListSingleton.previous();
         play();
+        EventBus.getDefault().post(new EvenMusicListContentAdapterCall());
     }
     private void start(){
         if (mediaPlayer!=null&&!mediaPlayer.isPlaying()&&playListSingleton.isPlay){
@@ -117,6 +121,7 @@ ex.shutdown();
         }else if (!playListSingleton.isPlay){
             play();
         }
+        EventBus.getDefault().post(new EvenMusicListContentAdapterCall());
     }
     public void stop() {
         if (mediaPlayer != null) {
@@ -128,6 +133,13 @@ ex.shutdown();
             playListSingleton.isUnderPlay=false;
             EventBus.getDefault().post(new EvenReCall());
         }
+        EventBus.getDefault().post(new EvenMusicListContentAdapterCall());
+    }
+    public void seekTo(int current){
+        if (mediaPlayer!=null){
+            mediaPlayer.seekTo(current*mediaPlayer.getDuration()/100);
+        }
+        EventBus.getDefault().post(new EvenMusicListContentAdapterCall());
     }
     public void stopService(){
         stopSelf();
@@ -155,8 +167,13 @@ ex.shutdown();
                 prev();
                 break;
             }
+            case EvenCall.SEEKTO:{
+                seekTo(event.getCurrent());
+                break;
+            }
         }
     }
+
     AudioManager.OnAudioFocusChangeListener afChangeListener = focusChange -> {
         /**
          * AUDIOFOCUS_GAIN：获得音频焦点。

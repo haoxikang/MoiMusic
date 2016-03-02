@@ -57,6 +57,7 @@ public class UserCenterActivity extends BaseActivity implements IUserCenterActiv
         setContentView(R.layout.activity_user_center);
         initData();
         initView();
+        initClick();
         userCenterActivityPresenter.setView();
     }
 
@@ -81,6 +82,9 @@ userCenterActivityPresenter.attach(this,this);
         textName = (TextView)findViewById(R.id.user_center_name);
         tvLike = (TextView)findViewById(R.id.like_text);
         textFollowed = (TextView)findViewById(R.id.followed_text);
+    }
+    private void initClick(){
+        simpleDraweeView.setOnClickListener(v -> userCenterActivityPresenter.startEditActivity());
     }
     private void setupViewPager() {
         if (userCenterActivityPresenter.isCurrentUser()){

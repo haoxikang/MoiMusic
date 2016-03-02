@@ -3,6 +3,7 @@ package com.example.moimusic.mvp.presenters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.moimusic.AppApplication;
@@ -11,14 +12,22 @@ import com.example.moimusic.adapter.MusicListReplyAdapter;
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
 import com.example.moimusic.mvp.model.ApiService;
+import com.example.moimusic.mvp.model.biz.IReplysData;
 import com.example.moimusic.mvp.model.biz.MusicListReplysBiz;
+import com.example.moimusic.mvp.model.entity.EvenActivityMusicListCall;
+import com.example.moimusic.mvp.model.entity.EvenMusicListChangeCall;
+import com.example.moimusic.mvp.model.entity.IReply;
 import com.example.moimusic.mvp.model.entity.MoiUser;
+import com.example.moimusic.mvp.model.entity.MusicListReply;
 import com.example.moimusic.mvp.views.FragmentMuiscListReplysView;
 import com.example.moimusic.ui.activity.LogActivity;
 import com.example.moimusic.ui.fragment.FragmentMuiscListReplys;
 import com.rey.material.app.Dialog;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobUser;
+import de.greenrobot.event.EventBus;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -32,27 +41,32 @@ public class FragmentMuiscListReplysPresenter extends BasePresenterImpl {
     private int page = 1;
     private MusicListReplyAdapter adapter;
     private FragmentActivity activity;
+    private IReplysData iReplysData;
     public FragmentMuiscListReplysPresenter(ApiService apiService) {
         factory = new DataBizFactory();
     }
-    public void attach(String id,FragmentMuiscListReplysView view,FragmentActivity activity){
+    public void attach(String id,FragmentMuiscListReplysView view,FragmentActivity activity,IReplysData data){
         this.view = view;
         this.id=id;
         this.activity = activity;
+        this.iReplysData=data;
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        MusicListReplysBiz biz = factory.createBiz(MusicListReplysBiz.class);
-        mSubscriptions.add(biz.getReplys(page,id).subscribeOn(Schedulers.io())
+        mSubscriptions.add(iReplysData.getReplys(page,id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(musicListReplies -> {
+        .subscribe(iReplies -> {
                 if (page==1){
-                     adapter = new MusicListReplyAdapter(musicListReplies,activity);
+                     adapter = new MusicListReplyAdapter(iReplies,activity);
                     view.ShowList(adapter);
-                }else if (adapter!=null){
-                    adapter.addData(musicListReplies);
+                }else{
+                    if (adapter!=null)
+                    {
+                        adapter.addData(iReplies);
+                    }
 
                 }
             page++;
@@ -60,8 +74,8 @@ public class FragmentMuiscListReplysPresenter extends BasePresenterImpl {
             if (throwable.getMessage().toString().equals("没有评论")){
                 view.setViewEnable(true);
             }
-            view.ShowSnackBar(throwable.getMessage());
-        }));
+                }
+        ));
     }
     public void sendComment(String s){
         MoiUser moiUser = BmobUser.getCurrentUser(AppApplication.context,MoiUser.class);
@@ -82,19 +96,34 @@ public class FragmentMuiscListReplysPresenter extends BasePresenterImpl {
             mDialog.show();
         }else {
             view.setViewEnable(false);
-            MusicListReplysBiz biz = factory.createBiz(MusicListReplysBiz.class);
-            mSubscriptions.add(biz.sendComment(s,id).subscribeOn(Schedulers.io())
+            mSubscriptions.add(iReplysData.sendComment(s,id).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
             .subscribe(s1 -> {
+
+            },throwable ->  {
+                view.setViewEnable(true);
+                view.ShowSnackBar(throwable.getMessage());
+            },()->{
                 view.setViewEnable(true);
                 view.ShowSnackBar(activity.getResources().getString(R.string.sendSuccess));
+                if (adapter!=null){
+                    adapter.ClearData();
+                }
                 view.updataList();
-            },throwable -> {
-                view.ShowSnackBar(throwable.getMessage());
             }));
         }
     }
     public void setPage(int i){
         page=i;
+    }
+    public void onEventMainThread(EvenMusicListChangeCall evenMusicListChangeCall){
+        Log.d("Tag","收到消息！！！！！");
+        if (adapter!=null){
+            adapter.ClearData();
+            adapter.notifyDataSetChanged();
+        }
+        setPage(1);
+        id=evenMusicListChangeCall.getMusicId();
+        onCreate();
     }
 }

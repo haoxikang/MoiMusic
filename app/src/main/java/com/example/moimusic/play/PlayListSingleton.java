@@ -31,6 +31,24 @@ public enum  PlayListSingleton implements Serializable {
     public boolean isPlay=false; //是否已经开始播放（暂停也算播放）
     public boolean isUnderPlay =false ; //是否放出了声音（暂停 为false）
 
+    private int now;
+    private int all;
+
+    public int getAll() {
+        return all;
+    }
+
+    public void setAll(int all) {
+        this.all = all;
+    }
+
+    public int getNow() {
+        return now;
+    }
+
+    public void setNow(int now) {
+        this.now = now;
+    }
     public void initPlayList( ){
         this.musicList = new ArrayList<>();
         this.currentPosition= 0;
@@ -82,6 +100,13 @@ public enum  PlayListSingleton implements Serializable {
     public String getCurrentMusic(){
         if (musicList.size()!=0){
           return   musicList.get(currentPosition).getMusicUri();
+        }else {
+            return null;
+        }
+    }
+    public Music getCurrent(){
+        if (musicList.size()!=0){
+            return   musicList.get(currentPosition);
         }else {
             return null;
         }
