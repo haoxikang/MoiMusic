@@ -9,6 +9,7 @@ import com.bmob.BTPFileResponse;
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadListener;
 import com.example.moimusic.mvp.model.entity.MoiUser;
+import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.utils.ErrorList;
 
 
@@ -19,6 +20,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 
 import cn.bmob.v3.listener.DeleteListener;
@@ -214,6 +216,28 @@ public class UserBiz extends  DataBiz{
             }
 
 
+        });
+        return observable;
+    }
+    public Observable<MoiUser> CollegeList(String id){
+        Observable<MoiUser> observable = Observable.create(subscriber -> {
+MoiUser moiUser = BmobUser.getCurrentUser(context,MoiUser.class);
+            MusicList musicList = new MusicList();
+            musicList.setObjectId(id);
+            BmobRelation relation = new BmobRelation();
+            relation.add(musicList);
+            moiUser.setCollege(relation);
+            moiUser.update(context, new UpdateListener() {
+                @Override
+                public void onSuccess() {
+                    subscriber.onNext(moiUser);
+                }
+
+                @Override
+                public void onFailure(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
         });
         return observable;
     }

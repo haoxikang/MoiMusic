@@ -55,11 +55,17 @@ public class MusicListBiz extends DataBiz {
         return observable;
     }
 
-    public Observable<List<MusicList>> getCollegeMusic(int page) {
+    public Observable<List<MusicList>> getCollegeMusic(int page,boolean isAnimal) {
         MoiUser moiUser = BmobUser.getCurrentUser(context, MoiUser.class);
         Observable<List<MusicList>> observable = Observable.create(subscriber -> {
             BmobQuery<MusicList> query = new BmobQuery<>();
             query.addWhereRelatedTo("College", new BmobPointer(moiUser));
+            query.order("-createdAt");
+            if (isAnimal){
+                query.addWhereEqualTo("isAnimal", true);
+            }else {
+                query.addWhereEqualTo("isAnimal", false);
+            }
             query.setLimit(10);
             query.setSkip((page - 1) * 10);
             query.findObjects(context, new FindListener<MusicList>() {

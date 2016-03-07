@@ -13,6 +13,7 @@ public class MusicList extends BmobObject{
     private Integer CollegeNum;
     private Integer PlayNum;
     private String ListImageUri;
+    private boolean isAnimal;
     private MoiUser createUser;
 
 
@@ -27,6 +28,14 @@ public class MusicList extends BmobObject{
                 ", ListImageUri='" + ListImageUri + '\'' +
                 ", moiUser=" + createUser +
                 '}';
+    }
+
+    public boolean isAnimal() {
+        return isAnimal;
+    }
+
+    public void setAnimal(boolean animal) {
+        isAnimal = animal;
     }
 
     public MoiUser getMoiUser() {

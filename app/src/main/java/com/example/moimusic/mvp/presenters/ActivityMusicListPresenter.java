@@ -2,7 +2,10 @@ package com.example.moimusic.mvp.presenters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.view.MenuItem;
 
+import com.example.moimusic.R;
 import com.example.moimusic.adapter.MusicListContentViewAdapter;
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
@@ -10,18 +13,22 @@ import com.example.moimusic.mvp.model.ApiService;
 import com.example.moimusic.mvp.model.biz.IncreaseBiz;
 import com.example.moimusic.mvp.model.biz.MusicBiz;
 import com.example.moimusic.mvp.model.biz.MusicListBiz;
+import com.example.moimusic.mvp.model.biz.UserBiz;
 import com.example.moimusic.mvp.model.entity.EvenActivityMusicListCall;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenMusicListContentAdapterCall;
+import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.mvp.views.IMusicListView;
 import com.example.moimusic.play.PlayListSingleton;
+import com.example.moimusic.ui.activity.ActivityPlayNow;
 import com.example.moimusic.ui.activity.UserCenterActivity;
 
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -34,16 +41,21 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
     private Context context;
     private Factory factory;
     private String id;
-    private List<Music> musicList ;
+    private List<Music> musicList;
     private MusicList List;
+    private boolean isCurrentUser;
+    private boolean isAnimal;
+    private boolean isReleas;
+
     public ActivityMusicListPresenter(ApiService apiService) {
         factory = new DataBizFactory();
     }
-    public void attach(IMusicListView iMusicListView, Context context){
+
+    public void attach(IMusicListView iMusicListView, Context context) {
         EventBus.getDefault().register(this);
         this.iMusicListView = iMusicListView;
-        this.context  =context;
-        id=iMusicListView.GetIntent().getStringExtra("musiclistid");
+        this.context = context;
+        id = iMusicListView.GetIntent().getStringExtra("musiclistid");
     }
 
     @Override
@@ -51,37 +63,48 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
         super.onCreate();
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
         MusicBiz musicBiz = factory.createBiz(MusicBiz.class);
-        if (id!=null&&!id.equals("")){
-            mSubscriptions.add( musicListBiz.getMusicList(id).subscribeOn(Schedulers.io())
+        if (id != null && !id.equals("")) {
+            mSubscriptions.add(musicListBiz.getMusicList(id).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(musicList -> {
-                List = musicList;
-                iMusicListView.showView(musicList);
-            }));
+                    .subscribe(musicList -> {
+                        List = musicList;
+                        iMusicListView.showView(musicList);
+                        isAnimal = musicList.isAnimal();
+                        isReleas = musicList.isRelease();
+                        if (musicList.getMoiUser().getObjectId().equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
+                            isCurrentUser = true;
+                        }
+                    }, throwable1 -> {
+                        iMusicListView.ShowSnackBar(throwable1.getMessage());
+                    }));
             mSubscriptions.add(musicBiz.getMusic(id).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(musicList -> {
                         iMusicListView.setupViewPager(musicList);
                         IncreaseBiz.musicListIncreace(id);
-                        EvenActivityMusicListCall evenActivityMusicListCall = new EvenActivityMusicListCall(true,musicList);
+                        EvenActivityMusicListCall evenActivityMusicListCall = new EvenActivityMusicListCall(true, musicList);
                         EventBus.getDefault().post(evenActivityMusicListCall);
-                    },throwable -> {
+                    }, throwable -> {
                         iMusicListView.ShowSnackBar(throwable.getMessage());
                     }));
         }
 
     }
-    public String getId(){
+
+    public String getId() {
         return id;
     }
-    public void finishActivity(){
+
+    public void finishActivity() {
         iMusicListView.finish();
     }
-    public void onEventMainThread(EvenActivityMusicListCall evenActivityMusicListCall){
-       iMusicListView.SetPlayButtonEnable(evenActivityMusicListCall.isEnable());
-        musicList=evenActivityMusicListCall.getMusicList();
+
+    public void onEventMainThread(EvenActivityMusicListCall evenActivityMusicListCall) {
+        iMusicListView.SetPlayButtonEnable(evenActivityMusicListCall.isEnable());
+        musicList = evenActivityMusicListCall.getMusicList();
     }
-    public void floatClick(){
+
+    public void floatClick() {
         PlayListSingleton.INSTANCE.setMusicList(musicList);
         PlayListSingleton.INSTANCE.setCurrentPosition(0);
         EvenCall evenCall = new EvenCall();
@@ -89,10 +112,53 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
         EventBus.getDefault().post(evenCall);
         EvenMusicListContentAdapterCall call = new EvenMusicListContentAdapterCall();
         EventBus.getDefault().post(call);
+        iMusicListView.startActivity(new Intent(context, ActivityPlayNow.class));
     }
-    public void ImageViewClicked(){
+
+    public void ImageViewClicked() {
         Intent intent = new Intent(context, UserCenterActivity.class);
-        intent.putExtra("userID",List.getMoiUser().getObjectId());
+        intent.putExtra("userID", List.getMoiUser().getObjectId());
         iMusicListView.startActivity(intent);
+    }
+
+    public void menuClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.release: {
+                if (!isAnimal && isCurrentUser && !isReleas) {
+                } else {
+                    Log.d("菜单", isAnimal + "    " + isCurrentUser + "     " + isReleas);
+                    iMusicListView.ShowSnackBar(context.getResources().getString(R.string.thisIsListYouNotRelease));
+                }
+                break;
+            }
+            case R.id.edit: {
+                if (!isAnimal && isCurrentUser) {
+                } else {
+                    iMusicListView.ShowSnackBar(context.getResources().getString(R.string.thisIsListYouNotEdit));
+                }
+                break;
+            }
+            case R.id.favorite: {
+                UserBiz userBiz = factory.createBiz(UserBiz.class);
+                if (!isCurrentUser) {
+                    if (isAnimal) {
+
+                    } else {
+                        mSubscriptions.add(userBiz.CollegeList(id).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(moiUser -> {
+                                    iMusicListView.ShowSnackBar(context.getResources().getString(R.string.CollegeSuccess));
+                                },throwable -> {
+                                    iMusicListView.ShowSnackBar(throwable.getMessage());
+                                }));
+                    }
+                } else {
+                    iMusicListView.ShowSnackBar(context.getResources().getString(R.string.ownListNotCollege));
+                }
+
+                break;
+            }
+
+        }
     }
 }

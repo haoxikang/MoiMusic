@@ -36,7 +36,7 @@ public class FragmentFavouriteMusicListPresenter extends BasePresenterImpl {
     public void getMusicLists() {
 
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-        mSubscriptions.add(musicListBiz.getCollegeMusic(page).subscribeOn(Schedulers.io())
+        mSubscriptions.add(musicListBiz.getCollegeMusic(page,false).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(musicLists -> {
                     if (page == 1) {

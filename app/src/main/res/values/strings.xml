@@ -57,4 +57,8 @@
     <string name="createList">新建歌单</string>
     <string name="cancel">取消</string>
     <string name="noEmp">名字不能为空</string>
+    <string name="thisIsListYouNotRelease">这个歌单你不能发布</string>
+    <string name="thisIsListYouNotEdit">这个歌单你不能修改</string>
+    <string name="ownListNotCollege">不能收藏自己的歌单哟</string>
+    <string name="CollegeSuccess">收藏成功</string>
 </resources>

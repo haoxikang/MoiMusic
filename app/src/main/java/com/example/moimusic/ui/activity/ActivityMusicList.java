@@ -59,75 +59,76 @@ import javax.inject.Inject;
 /**
  * Created by qqq34 on 2016/2/22.
  */
-public class ActivityMusicList extends BaseActivity implements IMusicListView{
+public class ActivityMusicList extends BaseActivity implements IMusicListView {
     private Toolbar mToolbar;
     private ViewPager viewPager;
     private TabLayout tabs;
-    private SimpleDraweeView UserView,CoverView;
-    private TextView textName,textuser;
+    private SimpleDraweeView UserView, CoverView;
+    private TextView textName, textuser;
     private RelativeLayout back;
     private FloatingActionButton floatingActionButton;
+    private MenuItem like, release, edit;
     @Inject
     ActivityMusicListPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_music_list_content);
-        presenter.attach(this,this);
+        presenter.attach(this, this);
         initView();
         initClick();
         presenter.onCreate();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_music_list_content, menu);
-
+        like = menu.findItem(R.id.favorite);
+        edit = menu.findItem(R.id.edit);
+        release = menu.findItem(R.id.release);
+        like.setEnabled(false);
+        edit.setEnabled(false);
+        release.setEnabled(false);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.release: {
-                break;
-            }
-            case R.id.edit:{
-                break;
-            }
-            case R.id.favorite:{
-                break;
-            }
-
-        }
+        presenter.menuClick(item);
         return super.onOptionsItemSelected(item);
     }
-    private void initClick(){
+
+    private void initClick() {
         mToolbar.setNavigationOnClickListener(v -> presenter.finishActivity());
         floatingActionButton.setOnClickListener(v -> presenter.floatClick());
-        UserView.setOnClickListener(v ->presenter.ImageViewClicked() );
+        UserView.setOnClickListener(v -> presenter.ImageViewClicked());
     }
-    private void initView(){
+
+    private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        viewPager = (ViewPager)findViewById(R.id.viewpager);
-        tabs = (TabLayout)findViewById(R.id.tabs);
-        UserView = (SimpleDraweeView)findViewById(R.id.userImage);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabs = (TabLayout) findViewById(R.id.tabs);
+        UserView = (SimpleDraweeView) findViewById(R.id.userImage);
         UserView.setEnabled(false);
-        CoverView = (SimpleDraweeView)findViewById(R.id.coverImage);
-        textName = (TextView)findViewById(R.id.textTitle);
-        textuser = (TextView)findViewById(R.id.textUser);
-        back = (RelativeLayout)findViewById(R.id.center_area);
-        floatingActionButton=(FloatingActionButton)findViewById(R.id.actionButon);
+        CoverView = (SimpleDraweeView) findViewById(R.id.coverImage);
+        textName = (TextView) findViewById(R.id.textTitle);
+        textuser = (TextView) findViewById(R.id.textUser);
+        back = (RelativeLayout) findViewById(R.id.center_area);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.actionButon);
         floatingActionButton.setEnabled(false);
 
     }
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerActivityMusicListComponent.builder()
@@ -137,29 +138,32 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView{
                 //这里的inject 会把 MainActivity 所有标注了注解的成员 给动态实例化了
                 .inject(this);
     }
-    @Override
-     public void setupViewPager(List<Music> musicList) {
-            List<String> titles = new ArrayList<>();
-            titles.add(getResources().getString(R.string.music));
-            titles.add(getResources().getString(R.string.reply));
-            tabs.addTab(tabs.newTab().setText(titles.get(0)));
-            tabs.addTab(tabs.newTab().setText(titles.get(1)));
-            List<Fragment> fragments = new ArrayList<>();
-            fragments.add(MusicListContentFragment.newInstance(musicList,"ActivityMusicList"));
-            fragments.add(FragmentMuiscListReplys.newInstance(new DataBizFactory().createBiz(MusicListReplysBiz.class) ,presenter.getId()));
-            FragmentAdapter adapter =
-                    new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
-            viewPager.setAdapter(adapter);
-            tabs.setupWithViewPager(viewPager);
-            tabs.setTabsFromPagerAdapter(adapter);
 
+    @Override
+    public void setupViewPager(List<Music> musicList) {
+        List<String> titles = new ArrayList<>();
+        titles.add(getResources().getString(R.string.music));
+        titles.add(getResources().getString(R.string.reply));
+        tabs.addTab(tabs.newTab().setText(titles.get(0)));
+        tabs.addTab(tabs.newTab().setText(titles.get(1)));
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(MusicListContentFragment.newInstance(musicList, "ActivityMusicList"));
+        fragments.add(FragmentMuiscListReplys.newInstance(new DataBizFactory().createBiz(MusicListReplysBiz.class), presenter.getId()));
+        FragmentAdapter adapter =
+                new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+        viewPager.setAdapter(adapter);
+        tabs.setupWithViewPager(viewPager);
+        tabs.setTabsFromPagerAdapter(adapter);
+        like.setEnabled(true);
+        edit.setEnabled(true);
+        release.setEnabled(true);
 
 
     }
 
     @Override
     public void ShowSnackBar(String s) {
-        Snackbar.make(tabs,s,Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(tabs, s, Snackbar.LENGTH_SHORT).show();
     }
 
 
@@ -171,19 +175,19 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView{
     @Override
     public void showView(MusicList musicList) {
         UserView.setEnabled(true);
-        if (musicList.getListImageUri()!=null&&!musicList.getListImageUri().equals("")){
+        if (musicList.getListImageUri() != null && !musicList.getListImageUri().equals("")) {
 
             CoverView.setImageURI(Uri.parse(musicList.getListImageUri()));
 
         }
 
-        if (musicList.getName()!=null){
+        if (musicList.getName() != null) {
             textName.setText(musicList.getName());
         }
-        if (musicList.getMoiUser().getImageUri()!=null&&!musicList.getMoiUser().getImageUri().equals("")){
+        if (musicList.getMoiUser().getImageUri() != null && !musicList.getMoiUser().getImageUri().equals("")) {
             UserView.setImageURI(Uri.parse(musicList.getMoiUser().getImageUri()));
         }
-        if (musicList.getMoiUser().getName()!=null) {
+        if (musicList.getMoiUser().getName() != null) {
             textuser.setText(musicList.getMoiUser().getName());
         }
     }
@@ -196,7 +200,7 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (presenter!=null){
+        if (presenter != null) {
             presenter.onDestroy();
         }
     }
