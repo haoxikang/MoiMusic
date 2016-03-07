@@ -8,11 +8,20 @@ import cn.bmob.v3.datatype.BmobRelation;
  */
 public class MoiUser extends BmobUser{
     private BmobRelation College;
+    private BmobRelation myMusicList;
     private String ImageUri;
     private String Introduction;
     private String Sex ;
     private String Age;
     private String Name;
+
+    public BmobRelation getMyMusicList() {
+        return myMusicList;
+    }
+
+    public void setMyMusicList(BmobRelation myMusicList) {
+        this.myMusicList = myMusicList;
+    }
 
     public BmobRelation getCollege() {
         return College;

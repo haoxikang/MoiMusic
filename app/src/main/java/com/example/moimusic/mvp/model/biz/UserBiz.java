@@ -2,20 +2,32 @@ package com.example.moimusic.mvp.model.biz;
 
 
 
+import android.content.Context;
+import android.util.Log;
+
+import com.bmob.BTPFileResponse;
+import com.bmob.BmobProFile;
+import com.bmob.btp.callback.UploadListener;
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.utils.ErrorList;
 
 
+import java.io.File;
+
+import cn.bmob.v3.BmobACL;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 
+import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.GetListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 import rx.Observable;
 
 /**
@@ -42,6 +54,7 @@ public class UserBiz extends  DataBiz{
         Observable<MoiUser> observable = Observable.create(subscriber -> {
             MoiUser user = new MoiUser();
             user.setMobilePhoneNumber(s[0]);//设置手机号码（必填）
+            user.setSex("男");
             user.setPassword(s[2]);                  //设置用户密码
             user.signOrLogin(context, s[1], new SaveListener() {
 
@@ -108,6 +121,101 @@ public class UserBiz extends  DataBiz{
         return observable;
     }
 
+    public Observable<MoiUser> updata(String[]data){
+        Observable<MoiUser> observable = Observable.create(subscriber -> {
+            if (data[3]!=null){
+                Log.d("TAG","照片地址"+data[3]);
+                BmobFile bmobFile = new BmobFile(new File(data[3]));
+                bmobFile.uploadblock(context, new UploadFileListener() {
+                    @Override
+                    public void onSuccess() {
 
+                        BmobFile file = new BmobFile();
+                        file.setUrl(BmobUser.getCurrentUser(context,MoiUser.class).getImageUri());
+                        file.delete(context, new DeleteListener() {
+
+                            @Override
+                            public void onSuccess() {
+                                // TODO Auto-generated method stub
+                                Log.d("TAG","删除成功");
+                            }
+
+                            @Override
+                            public void onFailure(int code, String msg) {
+                                // TODO Auto-generated method stub
+                                Log.d("TAG","删除失败"+code+msg);
+                            }
+                        });
+                        MoiUser moiUser = new MoiUser();
+                        moiUser.setImageUri(bmobFile.getFileUrl(context));
+                        if (data[0]!=null){
+                            moiUser.setName(data[0]);
+                        }
+                        if (data[1]!=null){
+                            moiUser.setIntroduction(data[1]);
+                        }
+                        if (data[2]!=null){
+                            if (data[2].equals(true)){
+                                moiUser.setSex("男");
+                            }else {
+                                moiUser.setSex("女");
+                            }
+                        }
+                        MoiUser moiUser1 = MoiUser.getCurrentUser(context,MoiUser.class);
+                        moiUser.update(context,moiUser1.getObjectId(),new UpdateListener() {
+                            @Override
+                            public void onSuccess() {
+                                // TODO Auto-generated method stub
+                                subscriber.onNext(moiUser);
+                            }
+                            @Override
+                            public void onFailure(int code, String msg) {
+
+                                subscriber.onError(new Throwable(new ErrorList().getErrorMsg(code)));
+                                // TODO Auto-generated method stub
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+                        subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                    }
+                });
+
+            }else {
+                MoiUser moiUser = new MoiUser();
+                if (data[0]!=null){
+                    moiUser.setName(data[0]);
+                }
+                if (data[1]!=null){
+                    moiUser.setIntroduction(data[1]);
+                }
+                if (data[2]!=null){
+                    if (data[2].equals(true)){
+                        moiUser.setSex("男");
+                    }else {
+                        moiUser.setSex("女");
+                    }
+                }
+                MoiUser moiUser1 = MoiUser.getCurrentUser(context,MoiUser.class);
+                moiUser.update(context,moiUser1.getObjectId(),new UpdateListener() {
+                    @Override
+                    public void onSuccess() {
+                        subscriber.onNext(moiUser);
+                        // TODO Auto-generated method stub
+                    }
+                    @Override
+                    public void onFailure(int code, String msg) {
+                        subscriber.onError(new Throwable(new ErrorList().getErrorMsg(code)));
+                        // TODO Auto-generated method stub
+                    }
+                });
+            }
+
+
+        });
+        return observable;
+    }
 }
 

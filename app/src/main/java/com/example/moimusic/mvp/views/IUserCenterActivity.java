@@ -1,6 +1,7 @@
 package com.example.moimusic.mvp.views;
 
 import android.content.Intent;
+import android.net.Uri;
 
 import com.example.moimusic.mvp.model.entity.MoiUser;
 
@@ -13,4 +14,5 @@ public interface IUserCenterActivity {
     void ToNextActivity(Intent intent);
     void updataView(MoiUser  moiUser,int like,int followed);
     void ShowSnackBar(String s);
+    void updataImageAndName(String uri,String name);
 }

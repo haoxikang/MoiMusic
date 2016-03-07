@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -18,8 +19,8 @@
         android:id="@+id/userImage"
         fresco:placeholderImage="@mipmap/user_image"
         fresco:roundAsCircle="true"
-        android:layout_width="68dp"
-        android:layout_height="68dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
     <com.gc.materialdesign.views.ButtonFlat
@@ -28,16 +29,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:text="修改头像"
+        android:text="@string/editImage"
         android:layout_below="@+id/userImage"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
     <android.support.v4.widget.NestedScrollView
         android:fitsSystemWindows="true"
-        android:layout_margin="16dp"
+        android:layout_margin="32dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -53,6 +54,7 @@
                     android:layout_height="wrap_content"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
+                android:layout_below="@+id/userName"
                 android:id="@+id/userIntroduce"
                 android:hint="@string/userIntroduce"
                 android:layout_width="match_parent"
@@ -63,16 +65,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </android.support.design.widget.TextInputLayout>
-            <LinearLayout
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
+            <RadioGroup
+                android:layout_below="@+id/userIntroduce"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <com.rey.material.widget.RadioButton
                     android:textColor="@color/colorAccent"
                     android:id="@+id/boyRB"
-                    android:layout_marginRight="32dp"
+                    android:layout_marginRight="64dp"
                     android:gravity="center"
                     style="@style/Material.Drawable.RadioButton"
                     android:layout_width="wrap_content"
@@ -86,8 +89,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/girl"/>
-            </LinearLayout>
-        </LinearLayout>
+            </RadioGroup>
+            <com.rey.material.widget.ProgressView
+                android:id="@+id/progress"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:pv_autostart="true"
+                app:pv_circular="true"
+                app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
+                app:pv_progressMode="indeterminate"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

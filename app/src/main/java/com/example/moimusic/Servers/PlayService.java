@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.moimusic.mvp.model.biz.IncreaseBiz;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenMusicListContentAdapterCall;
 import com.example.moimusic.mvp.model.entity.EvenReCall;
@@ -230,7 +231,7 @@ ex.shutdown();
             mp.start();
                 playListSingleton.isPlay= true;
                 playListSingleton.isUnderPlay=true;
-
+            IncreaseBiz.musicIncreace(playListSingleton.getCurrentMusicId());
             EventBus.getDefault().post(new EvenReCall());
         } else {
             Log.d("TAG","播放失败可能是没有获取到焦点");  //播放失败

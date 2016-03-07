@@ -38,6 +38,7 @@
 
                 </FrameLayout>
                 <com.facebook.drawee.view.SimpleDraweeView
+                    fresco:placeholderImage="@mipmap/user_image"
                     android:layout_marginLeft="18dp"
                     android:layout_marginBottom="32dp"
                     android:id="@+id/userImage"

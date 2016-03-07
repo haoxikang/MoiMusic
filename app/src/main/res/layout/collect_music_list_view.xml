@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/under_list_ripple"
+            ripple:mrl_rippleColor="@color/colorPrimary"
+            ripple:mrl_rippleRoundedCorners="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:paddingLeft="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="56dp">
+                <com.facebook.drawee.view.SimpleDraweeView
+                    fresco:roundAsCircle="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/view" />
+                <TextView
+                    android:singleLine="true"
+                    android:textColor="@color/titeleColor"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="16sp"
+                    android:id="@+id/list_view_text"
+                    android:text="名字"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/view"
+                    android:layout_toEndOf="@+id/view" />
+
+            </RelativeLayout>
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

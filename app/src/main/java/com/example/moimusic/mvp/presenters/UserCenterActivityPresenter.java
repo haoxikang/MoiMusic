@@ -4,16 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.moimusic.R;
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
 import com.example.moimusic.mvp.model.ApiService;
 import com.example.moimusic.mvp.model.biz.FollowBiz;
 import com.example.moimusic.mvp.model.biz.UserBiz;
+import com.example.moimusic.mvp.model.entity.EvenUserCall;
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.mvp.views.IUserCenterActivity;
 import com.example.moimusic.ui.activity.EditActivity;
 import com.example.moimusic.ui.activity.LogActivity;
+import com.example.moimusic.utils.Utils;
 
 import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
@@ -28,9 +31,11 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
     private IUserCenterActivity mView;
     private Factory factory;
     private Context context;
+    private MoiUser User;
     public UserCenterActivityPresenter(ApiService apiService) {
         factory = new DataBizFactory();
         api =apiService;
+        EventBus.getDefault().register(this);
     }
     public void attach(IUserCenterActivity iView, Context context){
         mView = iView;
@@ -64,11 +69,13 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
                 .observeOn(AndroidSchedulers.mainThread())
         .subscribe(ints -> {
             if (s.equals(BmobUser.getCurrentUser(context,MoiUser.class).getObjectId())){
+                User = BmobUser.getCurrentUser(context,MoiUser.class);
                 mView.updataView( BmobUser.getCurrentUser(context,MoiUser.class),ints[0],ints[1]);
             }else {
                 mSubscriptions.add(userBiz.getUser(s).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(moiUser -> {
+                    User =moiUser;
                     mView.updataView(moiUser,ints[0],ints[1]);
                 },throwable -> {
                     mView.ShowSnackBar(throwable.getMessage());
@@ -83,6 +90,16 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
     public void startEditActivity(){
         Intent intent = new Intent(context, EditActivity.class);
         intent.putExtra("isCurrent",isCurrentUser());
+            intent.putExtra("userImage",User.getImageUri());
+            intent.putExtra("userName",User.getName());
+            intent.putExtra("userIntroduce",User.getIntroduction());
+            intent.putExtra("userSex",User.getSex());
+
+
         mView.ToNextActivity(intent);
+    }
+    public void onEventMainThread(EvenUserCall evenUserCall){
+        mView.ShowSnackBar(context.getResources().getString(R.string.userInfoUpdataSucc));
+        mView.updataImageAndName(BmobUser.getCurrentUser(context,MoiUser.class).getImageUri(),BmobUser.getCurrentUser(context,MoiUser.class).getName());
     }
 }

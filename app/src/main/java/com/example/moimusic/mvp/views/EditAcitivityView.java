@@ -10,7 +10,11 @@ public interface EditAcitivityView {
     void setViewEnable(boolean isEnable);
     Intent getIntent();
     void finish();
+    void setView(String imageUri,String name,String introduce,String Sex);
     void startActivity(Intent intent);
     void startActivityForResult(Intent intent,int res);
     void showImage(Uri uri);
+    void showProgress(boolean isShow);
+    String[] getData();
+    void showSnackBar(String s);
 }

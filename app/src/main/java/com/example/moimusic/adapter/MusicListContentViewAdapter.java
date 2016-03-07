@@ -2,6 +2,7 @@ package com.example.moimusic.adapter;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,7 +21,9 @@ import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.ui.activity.ActivityPlayNow;
+import com.example.moimusic.ui.dialog.ListCollectBuild;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.rey.material.app.DialogFragment;
 
 import java.util.List;
 
@@ -33,20 +36,22 @@ import de.greenrobot.event.EventBus;
 public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListContentViewAdapter.MyViewHolder> {
 
     List<Music> musicList;
-    public interface OnItemClickLitener
-    {
+FragmentActivity activity;
+    public interface OnItemClickLitener {
         void onItemClick(View view, int position);
-        void onItemLongClick(View view , int position);
+
+        void onItemLongClick(View view, int position);
     }
 
     private OnItemClickLitener mOnItemClickLitener;
 
-    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
-    {
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
-    public MusicListContentViewAdapter(List<Music> musicList) {
+
+    public MusicListContentViewAdapter(List<Music> musicList,FragmentActivity activity) {
         this.musicList = musicList;
+        this.activity = activity;
         EventBus.getDefault().register(this);
     }
 
@@ -64,8 +69,8 @@ public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListC
             holder.tv.setTextColor(AppApplication.context.getResources().getColor(R.color.black));
             holder.tv.setText(musicList.get(position).getMusicName());
         }
-        if (PlayListSingleton.INSTANCE.getCurrentMusicId()!=null){
-            if (musicList.get(position).getMusicName() != null&&PlayListSingleton.INSTANCE.getCurrentMusicId().equals(musicList.get(position).getObjectId())){
+        if (PlayListSingleton.INSTANCE.getCurrentMusicId() != null) {
+            if (musicList.get(position).getMusicName() != null && PlayListSingleton.INSTANCE.getCurrentMusicId().equals(musicList.get(position).getObjectId())) {
                 holder.tv.setTextColor(AppApplication.context.getResources().getColor(R.color.colorPrimary));
             }
         }
@@ -73,7 +78,7 @@ public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListC
         if (musicList.get(position).getSinger() != null) {
             holder.tvsub.setText(musicList.get(position).getSinger());
         }
-        if (mOnItemClickLitener!=null){
+        if (mOnItemClickLitener != null) {
             holder.materialRippleLayout.setOnClickListener(v -> {
                 int pos = holder.getLayoutPosition();
                 mOnItemClickLitener.onItemClick(holder.itemView, pos);
@@ -84,7 +89,11 @@ public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListC
                 return false;
             });
         }
-
+        holder.simpleDraweeView.setOnClickListener(v -> {
+            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+            DialogFragment dialogFragment = DialogFragment.newInstance(new ListCollectBuild(musicList.get(position).getObjectId()));
+            dialogFragment.show(fragmentManager,"dididi");
+        });
     }
 
     @Override
@@ -105,7 +114,8 @@ public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListC
             simpleDraweeView = (SimpleDraweeView) view.findViewById(R.id.more);
         }
     }
-    public void onEventMainThread(EvenMusicListContentAdapterCall even){
+
+    public void onEventMainThread(EvenMusicListContentAdapterCall even) {
         notifyDataSetChanged();
     }
 }

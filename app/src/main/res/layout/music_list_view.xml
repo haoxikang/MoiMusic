@@ -30,7 +30,7 @@
 
 
             <TextView
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:layout_below="@+id/music_list_view_ripple"
                 android:id="@+id/music_list_view_title_text"
                 android:layout_margin="4dp"

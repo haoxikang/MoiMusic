@@ -7,6 +7,7 @@ import com.example.moimusic.adapter.MusicListContentViewAdapter;
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
 import com.example.moimusic.mvp.model.ApiService;
+import com.example.moimusic.mvp.model.biz.IncreaseBiz;
 import com.example.moimusic.mvp.model.biz.MusicBiz;
 import com.example.moimusic.mvp.model.biz.MusicListBiz;
 import com.example.moimusic.mvp.model.entity.EvenActivityMusicListCall;
@@ -61,6 +62,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(musicList -> {
                         iMusicListView.setupViewPager(musicList);
+                        IncreaseBiz.musicListIncreace(id);
                         EvenActivityMusicListCall evenActivityMusicListCall = new EvenActivityMusicListCall(true,musicList);
                         EventBus.getDefault().post(evenActivityMusicListCall);
                     },throwable -> {

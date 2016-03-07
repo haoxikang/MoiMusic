@@ -41,7 +41,7 @@
     </com.balysv.materialripple.MaterialRippleLayout>
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/more"
-        fresco:placeholderImage="@mipmap/ic_more_vert_grey600_24dp"
+        fresco:placeholderImage="@mipmap/ic_favorite_grey600_24dp"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"

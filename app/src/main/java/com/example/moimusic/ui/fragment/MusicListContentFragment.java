@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.moimusic.R;
 import com.example.moimusic.adapter.MusicListContentViewAdapter;
+import com.example.moimusic.mvp.model.biz.IncreaseBiz;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenMusicListChangeCall;
 import com.example.moimusic.mvp.model.entity.Music;
@@ -63,7 +64,7 @@ public class MusicListContentFragment extends BaseFragment implements IMusicList
         View v = inflater.inflate(R.layout.fragment_music_list_content, container, false);
         initView(v);
         if (musicList!=null){
-            ShowList(new MusicListContentViewAdapter(musicList));
+            ShowList(new MusicListContentViewAdapter(musicList,getActivity()));
         }
 
         return v;

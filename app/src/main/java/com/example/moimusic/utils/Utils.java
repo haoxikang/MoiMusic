@@ -1,6 +1,16 @@
 package com.example.moimusic.utils;
 
+import android.app.Application;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+
+import com.example.moimusic.AppApplication;
+
+import java.io.File;
 
 /**
  * Created by qqq34 on 2016/2/18.
@@ -48,4 +58,5 @@ public  class Utils {
         }
         return f+":"+M;
     }
+
 }

@@ -39,8 +39,8 @@
                     android:id="@+id/userImage"
                     fresco:placeholderImage="@mipmap/user_image"
                     fresco:roundAsCircle="true"
-                    android:layout_width="68dp"
-                    android:layout_height="68dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true" />
                 <LinearLayout

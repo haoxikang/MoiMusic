@@ -33,6 +33,7 @@ public class MusicListBiz extends DataBiz {
             if (!isMe) {
                 query.addWhereEqualTo("isRelease", true);
             }
+            query.order("-createdAt");
             query.setLimit(10);
             query.setSkip((page - 1) * 10);
             query.findObjects(context, new FindListener<MusicList>() {

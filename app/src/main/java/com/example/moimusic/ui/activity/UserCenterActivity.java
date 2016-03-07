@@ -161,7 +161,19 @@ startActivity(intent);
 
     @Override
     public void ShowSnackBar(String s) {
-        Snackbar.make(viewPager,s,Snackbar.LENGTH_SHORT);
+        Snackbar.make(viewPager,s,Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updataImageAndName(String uri, String name) {
+        if (name!=null&&!name.equals("")){
+            textName.setText(name);
+        }else {
+            textName.setText("未设置用户名");
+        }
+        if (uri!=null){
+            simpleDraweeView.setImageURI(Uri.parse(uri));
+        }
     }
 
     @Override
