@@ -61,4 +61,6 @@
     <string name="thisIsListYouNotEdit">这个歌单你不能修改</string>
     <string name="ownListNotCollege">不能收藏自己的歌单哟</string>
     <string name="CollegeSuccess">收藏成功</string>
+    <string name="followSuccess">关注用户成功啦</string>
+    <string name="unfollowSuccess">已经成功取消关注啦</string>
 </resources>

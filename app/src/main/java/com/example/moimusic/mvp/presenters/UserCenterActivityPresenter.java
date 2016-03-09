@@ -10,6 +10,7 @@ import com.example.moimusic.factorys.Factory;
 import com.example.moimusic.mvp.model.ApiService;
 import com.example.moimusic.mvp.model.biz.FollowBiz;
 import com.example.moimusic.mvp.model.biz.UserBiz;
+import com.example.moimusic.mvp.model.entity.EvenFollowCall;
 import com.example.moimusic.mvp.model.entity.EvenUserCall;
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.views.IMainView;
@@ -32,74 +33,163 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
     private Factory factory;
     private Context context;
     private MoiUser User;
+    private boolean isFollowed;
+    private String followedId;
+    private int[] i;
+
     public UserCenterActivityPresenter(ApiService apiService) {
         factory = new DataBizFactory();
-        api =apiService;
+        api = apiService;
         EventBus.getDefault().register(this);
     }
-    public void attach(IUserCenterActivity iView, Context context){
+
+    public void attach(IUserCenterActivity iView, Context context) {
         mView = iView;
         this.context = context;
 
     }
-    public boolean isCurrentUser(){
-      Intent intent= mView.GetIntent();
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        if (isCurrentUser()) {
+            mView.hideFloatButton(true);
+        }
+        Intent intent = mView.GetIntent();
         String s = intent.getStringExtra("userID");
-        if (s.equals("")||s==null){
+        FollowBiz followBiz = factory.createBiz(FollowBiz.class);
+        mSubscriptions.add(followBiz.isFollowed(s).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s1 -> {
+                    if (s1 == null) {
+
+                        isFollowed = false;
+                        mView.setButtonBK(false);
+                    } else {
+                        followedId = s1;
+                        isFollowed = true;
+                        mView.setButtonBK(true);
+                    }
+                })
+        );
+
+    }
+
+    public boolean isCurrentUser() {
+        Intent intent = mView.GetIntent();
+        String s = intent.getStringExtra("userID");
+        if (s.equals("") || s == null) {
             mView.ToNextActivity(new Intent(context, LogActivity.class));
             mView.finishActivity();
         }
-        Log.d("TAG","id=" +s);
-        if (s.equals(BmobUser.getCurrentUser(context,MoiUser.class).getObjectId()) ){
+        Log.d("TAG", "id=" + s);
+        if (s.equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
             return true;
-        }else
+        } else
             return false;
     }
-    public String getID(){
-        Intent intent= mView.GetIntent();
+
+    public String getID() {
+        Intent intent = mView.GetIntent();
         String s = intent.getStringExtra("userID");
         return s;
     }
-    public void setView(){
-        Intent intent= mView.GetIntent();
+
+    public void setView() {
+        Intent intent = mView.GetIntent();
         String s = intent.getStringExtra("userID");
         FollowBiz followBiz = factory.createBiz(FollowBiz.class);
         UserBiz userBiz = factory.createBiz(UserBiz.class);
         mSubscriptions.add(followBiz.getFollowData(s).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(ints -> {
-            if (s.equals(BmobUser.getCurrentUser(context,MoiUser.class).getObjectId())){
-                User = BmobUser.getCurrentUser(context,MoiUser.class);
-                mView.updataView( BmobUser.getCurrentUser(context,MoiUser.class),ints[0],ints[1]);
-            }else {
-                mSubscriptions.add(userBiz.getUser(s).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(moiUser -> {
-                    User =moiUser;
-                    mView.updataView(moiUser,ints[0],ints[1]);
-                },throwable -> {
-                    mView.ShowSnackBar(throwable.getMessage());
+                .subscribe(ints -> {
+                    if (s.equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
+                        User = BmobUser.getCurrentUser(context, MoiUser.class);
+                        mView.updataView(BmobUser.getCurrentUser(context, MoiUser.class), ints[0], ints[1]);
+                        i = ints;
+                    } else {
+                        mSubscriptions.add(userBiz.getUser(s).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(moiUser -> {
+                                    User = moiUser;
+                                    mView.updataView(moiUser, ints[0], ints[1]);
+                                    i = ints;
+                                }, throwable -> {
+                                    mView.ShowSnackBar(throwable.getMessage());
+                                }));
+                    }
+                }, throwable1 -> {
+                    mView.ShowSnackBar(throwable1.getMessage());
                 }));
-            }
-        },throwable1 -> {
-            mView.ShowSnackBar(throwable1.getMessage());
-        }));
 
 
     }
-    public void startEditActivity(){
+
+    public void startEditActivity() {
         Intent intent = new Intent(context, EditActivity.class);
-        intent.putExtra("isCurrent",isCurrentUser());
-            intent.putExtra("userImage",User.getImageUri());
-            intent.putExtra("userName",User.getName());
-            intent.putExtra("userIntroduce",User.getIntroduction());
-            intent.putExtra("userSex",User.getSex());
+        intent.putExtra("isCurrent", isCurrentUser());
+        intent.putExtra("userImage", User.getImageUri());
+        intent.putExtra("userName", User.getName());
+        intent.putExtra("userIntroduce", User.getIntroduction());
+        intent.putExtra("userSex", User.getSex());
 
 
         mView.ToNextActivity(intent);
     }
-    public void onEventMainThread(EvenUserCall evenUserCall){
+
+    public void onFollowClick() {
+
+        Intent intent = mView.GetIntent();
+        String s = intent.getStringExtra("userID");
+        FollowBiz followBiz = factory.createBiz(FollowBiz.class);
+        if (isFollowed) {
+            mView.setButtonEnable(false);
+            mSubscriptions.add(followBiz.deleteFollow(followedId).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(aBoolean -> {
+                        isFollowed = false;
+                        mView.setButtonBK(false);
+                        mView.ShowSnackBar(context.getResources().getString(R.string.unfollowSuccess));
+                        mView.setButtonEnable(true);
+                        EvenFollowCall evenFollowCall = new EvenFollowCall();
+                        evenFollowCall.setFollow(false);
+                        EventBus.getDefault().post(evenFollowCall);
+                    }, throwable -> {
+                        mView.ShowSnackBar(throwable.getMessage());
+                        mView.setButtonEnable(true);
+                    }));
+        } else {
+            mSubscriptions.add(followBiz.addFollow(s).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(s1 -> {
+                        followedId = s1;
+                        isFollowed = true;
+                        mView.setButtonBK(true);
+                        mView.setButtonEnable(true);
+                        mView.ShowSnackBar(context.getResources().getString(R.string.followSuccess));
+                        EvenFollowCall evenFollowCall = new EvenFollowCall();
+                        evenFollowCall.setFollow(true);
+                        EventBus.getDefault().post(evenFollowCall);
+                    }, throwable -> {
+                        mView.ShowSnackBar(throwable.getMessage());
+                        mView.setButtonEnable(true);
+                    }));
+        }
+    }
+
+    public void onEventMainThread(EvenUserCall evenUserCall) {
         mView.ShowSnackBar(context.getResources().getString(R.string.userInfoUpdataSucc));
-        mView.updataImageAndName(BmobUser.getCurrentUser(context,MoiUser.class).getImageUri(),BmobUser.getCurrentUser(context,MoiUser.class).getName());
+        mView.updataImageAndName(BmobUser.getCurrentUser(context, MoiUser.class).getImageUri(), BmobUser.getCurrentUser(context, MoiUser.class).getName());
+    }
+
+    public void onEventMainThread(EvenFollowCall evenFollowCall) {
+        if (isCurrentUser()) {
+            if (evenFollowCall.isFollow()) {
+                i[0]++;
+            } else {
+                i[0]--;
+            }
+            mView.updataView(BmobUser.getCurrentUser(context, MoiUser.class), i[0], i[1]);
+        }
     }
 }

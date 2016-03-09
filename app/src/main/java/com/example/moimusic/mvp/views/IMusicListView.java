@@ -18,4 +18,5 @@ public interface IMusicListView {
     void startActivity(Intent intent);
     void setupViewPager(List<Music> musicList);
     void ShowSnackBar(String s);
+    void UpdataImageAndName(MusicList musicList);
 }

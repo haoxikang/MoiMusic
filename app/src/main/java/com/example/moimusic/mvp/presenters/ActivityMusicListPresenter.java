@@ -17,14 +17,17 @@ import com.example.moimusic.mvp.model.biz.UserBiz;
 import com.example.moimusic.mvp.model.entity.EvenActivityMusicListCall;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenMusicListContentAdapterCall;
+import com.example.moimusic.mvp.model.entity.EvenMusicListEditCall;
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.mvp.views.IMusicListView;
 import com.example.moimusic.play.PlayListSingleton;
+import com.example.moimusic.ui.activity.ActivityEditMusicList;
 import com.example.moimusic.ui.activity.ActivityPlayNow;
 import com.example.moimusic.ui.activity.UserCenterActivity;
+import com.rey.material.app.Dialog;
 
 import java.util.List;
 
@@ -56,6 +59,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
         this.iMusicListView = iMusicListView;
         this.context = context;
         id = iMusicListView.GetIntent().getStringExtra("musiclistid");
+
     }
 
     @Override
@@ -104,6 +108,11 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
         musicList = evenActivityMusicListCall.getMusicList();
     }
 
+    public void onEventMainThread(EvenMusicListEditCall evenMusicListEditCall) {
+        iMusicListView.UpdataImageAndName(evenMusicListEditCall.getMusicList());
+        iMusicListView.ShowSnackBar("歌单信息已经更新");
+    }
+
     public void floatClick() {
         PlayListSingleton.INSTANCE.setMusicList(musicList);
         PlayListSingleton.INSTANCE.setCurrentPosition(0);
@@ -125,6 +134,19 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
         switch (item.getItemId()) {
             case R.id.release: {
                 if (!isAnimal && isCurrentUser && !isReleas) {
+                    MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
+                    Dialog dialog = new Dialog(context);
+                    dialog.setTitle("正在发布歌单");
+                    dialog.cancelable(false);
+                    dialog.show();
+                    mSubscriptions.add(musicListBiz.ReleaceList(id).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(musicList1 -> {
+                                dialog.dismiss();
+                                iMusicListView.ShowSnackBar("歌单发布成功");
+                            },throwable -> {
+                                iMusicListView.ShowSnackBar(throwable.getMessage());
+                            }));
                 } else {
                     Log.d("菜单", isAnimal + "    " + isCurrentUser + "     " + isReleas);
                     iMusicListView.ShowSnackBar(context.getResources().getString(R.string.thisIsListYouNotRelease));
@@ -133,6 +155,10 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
             }
             case R.id.edit: {
                 if (!isAnimal && isCurrentUser) {
+                    Log.d("TAG", "答应id" + id);
+                    Intent intent = new Intent(context, ActivityEditMusicList.class);
+                    intent.putExtra("editlistid", id);
+                    context.startActivity(intent);
                 } else {
                     iMusicListView.ShowSnackBar(context.getResources().getString(R.string.thisIsListYouNotEdit));
                 }
@@ -148,7 +174,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(moiUser -> {
                                     iMusicListView.ShowSnackBar(context.getResources().getString(R.string.CollegeSuccess));
-                                },throwable -> {
+                                }, throwable -> {
                                     iMusicListView.ShowSnackBar(throwable.getMessage());
                                 }));
                     }

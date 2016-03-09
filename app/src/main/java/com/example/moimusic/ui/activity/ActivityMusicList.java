@@ -166,6 +166,19 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
         Snackbar.make(tabs, s, Snackbar.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void UpdataImageAndName(MusicList musicList) {
+        if (musicList.getListImageUri() != null && !musicList.getListImageUri().equals("")) {
+
+            CoverView.setImageURI(Uri.parse(musicList.getListImageUri()));
+
+        }
+
+        if (musicList.getName() != null) {
+            textName.setText(musicList.getName());
+        }
+    }
+
 
     @Override
     public Intent GetIntent() {

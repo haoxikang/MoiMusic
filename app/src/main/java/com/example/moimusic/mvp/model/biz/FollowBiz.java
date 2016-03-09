@@ -3,6 +3,7 @@ package com.example.moimusic.mvp.model.biz;
 import android.util.Log;
 
 import com.example.moimusic.R;
+import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.UserFollow;
 import com.example.moimusic.utils.ErrorList;
@@ -14,8 +15,11 @@ import org.json.JSONObject;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.FindStatisticsListener;
+import cn.bmob.v3.listener.SaveListener;
 import rx.Observable;
 
 /**
@@ -85,4 +89,77 @@ public class FollowBiz extends DataBiz {
         });
         return observable;
     }
+    public Observable<String> isFollowed(String id){
+        Observable<String> observable = Observable.create(subscriber -> {
+            BmobQuery<UserFollow> query = new BmobQuery<UserFollow>();
+//查询playerName叫“比目”的数据
+            query.addWhereEqualTo("userId", BmobUser.getCurrentUser(context, MoiUser.class).getObjectId());
+            query.addWhereEqualTo("followId", id);
+//返回50条数据，如果不加上这条语句，默认返回10条数据
+//执行查询方法
+            query.findObjects(context, new FindListener<UserFollow>() {
+                @Override
+                public void onSuccess(List<UserFollow> object) {
+                    // TODO Auto-generated method stub
+                    if (object.size()!=0){
+                        subscriber.onNext(object.get(0).getObjectId());
+                    }else {
+                        subscriber.onNext(null);
+                    }
+                }
+                @Override
+                public void onError(int code, String msg) {
+                    // TODO Auto-generated method stub
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(code)));
+                }
+            });
+        });
+        return observable;
+    }
+    public Observable<Boolean> deleteFollow(String id){
+        Observable<Boolean> observable = Observable.create(subscriber -> {
+            UserFollow userFollow = new UserFollow();
+            userFollow.setObjectId(id);
+            userFollow.delete(context, new DeleteListener() {
+
+                @Override
+                public void onSuccess() {
+                    // TODO Auto-generated method stub
+                    Log.i("bmob","删除成功");
+                    subscriber.onNext(true);
+                }
+
+                @Override
+                public void onFailure(int code, String msg) {
+                    // TODO Auto-generated method stub
+                    Log.i("bmob","删除失败："+msg);
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(code)));
+                }
+            });
+        });
+        return observable;
+    }
+    public Observable<String> addFollow(String id){
+        Observable<String> observable = Observable.create(subscriber -> {
+            UserFollow userFollow = new UserFollow();
+//注意：不能调用gameScore.setObjectId("")方法
+            userFollow.setUserId(BmobUser.getCurrentUser(context).getObjectId());
+            userFollow.setFollowId(id);
+            userFollow.save(context, new SaveListener() {
+
+                @Override
+                public void onSuccess() {
+                   subscriber.onNext(userFollow.getObjectId());
+                }
+
+                @Override
+                public void onFailure(int code, String arg0) {
+                    // 添加失败
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(code)));
+                }
+            });
+        });
+        return observable;
+    }
+
 }

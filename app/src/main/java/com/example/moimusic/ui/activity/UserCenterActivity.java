@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,10 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.a.a.a.V;
 import com.example.moimusic.R;
 import com.example.moimusic.adapter.FragmentAdapter;
 import com.example.moimusic.mvp.model.entity.MoiUser;
@@ -47,6 +50,7 @@ public class UserCenterActivity extends BaseActivity implements IUserCenterActiv
     private TabLayout tabs;
     private SimpleDraweeView simpleDraweeView;
     private TextView textName,tvLike,textFollowed;
+    private FloatingActionButton button;
     @Inject
     UserCenterActivityPresenter userCenterActivityPresenter;
 
@@ -58,6 +62,7 @@ public class UserCenterActivity extends BaseActivity implements IUserCenterActiv
         initData();
         initView();
         initClick();
+        userCenterActivityPresenter.onCreate();
         userCenterActivityPresenter.setView();
     }
 
@@ -82,9 +87,12 @@ userCenterActivityPresenter.attach(this,this);
         textName = (TextView)findViewById(R.id.user_center_name);
         tvLike = (TextView)findViewById(R.id.like_text);
         textFollowed = (TextView)findViewById(R.id.followed_text);
+        button = (FloatingActionButton) findViewById(R.id.floatbutton);
+        button.setEnabled(false);
     }
     private void initClick(){
         simpleDraweeView.setOnClickListener(v -> userCenterActivityPresenter.startEditActivity());
+        button.setOnClickListener(v -> userCenterActivityPresenter.onFollowClick());
     }
     private void setupViewPager() {
         if (userCenterActivityPresenter.isCurrentUser()){
@@ -174,6 +182,30 @@ startActivity(intent);
         if (uri!=null){
             simpleDraweeView.setImageURI(Uri.parse(uri));
         }
+    }
+
+    @Override
+    public void hideFloatButton(boolean ishide) {
+        if (ishide){
+            button.setVisibility(View.INVISIBLE);
+        }else {
+            button.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void setButtonBK(boolean isFollow) {
+        button.setEnabled(true);
+        if (isFollow){
+            button.setImageResource(R.mipmap.ic_group_white_24dp);
+        }else {
+            button.setImageResource(R.mipmap.ic_people_outline_white_24dp);
+        }
+    }
+
+    @Override
+    public void setButtonEnable(boolean isEnable) {
+        button.setEnabled(isEnable);
     }
 
     @Override

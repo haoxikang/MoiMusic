@@ -9,14 +9,18 @@ import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.utils.ErrorList;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
+import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 import rx.Observable;
 
 /**
@@ -34,8 +38,8 @@ public class MusicListBiz extends DataBiz {
                 query.addWhereEqualTo("isRelease", true);
             }
             query.order("-createdAt");
-            query.setLimit(10);
-            query.setSkip((page - 1) * 10);
+            query.setLimit(8);
+            query.setSkip((page - 1) * 8);
             query.findObjects(context, new FindListener<MusicList>() {
                 @Override
                 public void onSuccess(List<MusicList> list) {
@@ -66,8 +70,8 @@ public class MusicListBiz extends DataBiz {
             }else {
                 query.addWhereEqualTo("isAnimal", false);
             }
-            query.setLimit(10);
-            query.setSkip((page - 1) * 10);
+            query.setLimit(8);
+            query.setSkip((page - 1) * 8);
             query.findObjects(context, new FindListener<MusicList>() {
                 @Override
                 public void onSuccess(List<MusicList> list) {
@@ -100,6 +104,59 @@ public class MusicListBiz extends DataBiz {
                         subscriber.onError(new Throwable("位置错误"));
                     }
 
+                }
+
+                @Override
+                public void onFailure(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
+        });
+        return observable;
+    }
+    public Observable<MusicList> updataMusicList(String id,String path,String name){
+        Observable<MusicList> observable = Observable.create(subscriber -> {
+            BmobFile bmobFile = new BmobFile(new File(path));
+            bmobFile.uploadblock(context, new UploadFileListener() {
+
+                @Override
+                public void onSuccess() {
+                    // TODO Auto-generated method stub
+                    MusicList musicList = new MusicList();
+                     musicList.setListImageUri(bmobFile.getFileUrl(context));
+                    musicList.setName(name);
+                    musicList.update(context, id, new UpdateListener() {
+                        @Override
+                        public void onSuccess() {
+                            subscriber.onNext(musicList);
+                        }
+
+                        @Override
+                        public void onFailure(int i, String s) {
+                            subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                        }
+                    });
+                }
+
+
+                @Override
+                public void onFailure(int code, String msg) {
+                    // TODO Auto-generated method stub
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(code)));
+                }
+            });
+
+        });
+        return observable;
+    }
+    public Observable<MusicList> ReleaceList(String id){
+        Observable<MusicList> observable = Observable.create(subscriber -> {
+            MusicList musicList = new MusicList();
+            musicList.setRelease(true);
+            musicList.update(context, id, new UpdateListener() {
+                @Override
+                public void onSuccess() {
+                    subscriber.onNext(musicList);
                 }
 
                 @Override

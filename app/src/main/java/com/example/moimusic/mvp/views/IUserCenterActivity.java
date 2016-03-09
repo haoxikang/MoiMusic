@@ -15,4 +15,7 @@ public interface IUserCenterActivity {
     void updataView(MoiUser  moiUser,int like,int followed);
     void ShowSnackBar(String s);
     void updataImageAndName(String uri,String name);
+    void hideFloatButton(boolean ishide);
+    void setButtonBK(boolean isFollow);
+    void setButtonEnable(boolean isEnable);
 }

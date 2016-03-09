@@ -7,7 +7,7 @@ import cn.bmob.v3.BmobObject;
  */
 public class UserFollow extends BmobObject {
     private String userId,followId;
-
+private Integer count=1;
     public String getUserId() {
         return userId;
     }

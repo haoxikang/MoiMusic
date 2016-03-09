@@ -122,7 +122,6 @@ public class EditActivityPresenter extends BasePresenterImpl {
                 data[i] = view.getData()[i];
             } else {
                 if (imageUri != null) {
-                    Log.d("TAG", "文件大小" + file.length());
                     data[i] = file.getPath();
                 }
 
