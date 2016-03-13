@@ -1,6 +1,7 @@
 package com.example.moimusic.mvp.views;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.example.moimusic.mvp.model.entity.EvenReCall;
 import com.example.moimusic.mvp.model.entity.MoiUser;
@@ -16,4 +17,5 @@ public interface IMainView {
     void setProgressbar(int current,int all );
     void startNextActivity(Intent intent);
     void ShowSnackbar(String s);
+    void ShowLongSnackbar(String s);
 }

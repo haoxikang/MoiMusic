@@ -76,11 +76,17 @@ public class ListCollectBuild implements DialogFragment.Builder {
                         user.update(context, new UpdateListener() {
                             @Override
                             public void onSuccess() {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
                                 Toast.makeText(context, "收藏成功", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onFailure(int i, String s) {
+                                if (dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
                                 Toast.makeText(context, "收藏失败", Toast.LENGTH_SHORT).show();
                             }
                         });

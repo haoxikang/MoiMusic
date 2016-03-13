@@ -63,4 +63,9 @@
     <string name="CollegeSuccess">收藏成功</string>
     <string name="followSuccess">关注用户成功啦</string>
     <string name="unfollowSuccess">已经成功取消关注啦</string>
+    <string name="ShowPermission">检测到你没有开启必要的权限,MOI没有这些权限无法运行哦,请在弹出框里面授予MOI权限</string>
+    <string name="failOpenPermission">权限开启失败,请转到应用设置,手动开启权限</string>
+    <string name="sureTODeleteList">是否要删除歌单?</string>
+
+
 </resources>

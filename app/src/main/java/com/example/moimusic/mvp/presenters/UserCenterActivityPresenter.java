@@ -128,7 +128,10 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
     public void startEditActivity() {
         Intent intent = new Intent(context, EditActivity.class);
         intent.putExtra("isCurrent", isCurrentUser());
-        intent.putExtra("userImage", User.getImageUri());
+        if (User.getImageFile()!=null){
+            intent.putExtra("userImage", User.getImageFile().getFileUrl(context));
+        }
+
         intent.putExtra("userName", User.getName());
         intent.putExtra("userIntroduce", User.getIntroduction());
         intent.putExtra("userSex", User.getSex());
@@ -179,7 +182,8 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
 
     public void onEventMainThread(EvenUserCall evenUserCall) {
         mView.ShowSnackBar(context.getResources().getString(R.string.userInfoUpdataSucc));
-        mView.updataImageAndName(BmobUser.getCurrentUser(context, MoiUser.class).getImageUri(), BmobUser.getCurrentUser(context, MoiUser.class).getName());
+        User = BmobUser.getCurrentUser(context, MoiUser.class);
+        mView.updataImageAndName(BmobUser.getCurrentUser(context, MoiUser.class).getImageFile().getFileUrl(context), BmobUser.getCurrentUser(context, MoiUser.class).getName());
     }
 
     public void onEventMainThread(EvenFollowCall evenFollowCall) {

@@ -125,9 +125,12 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
     }
 
     public void ImageViewClicked() {
-        Intent intent = new Intent(context, UserCenterActivity.class);
-        intent.putExtra("userID", List.getMoiUser().getObjectId());
-        iMusicListView.startActivity(intent);
+        if (List!=null){
+            Intent intent = new Intent(context, UserCenterActivity.class);
+            intent.putExtra("userID", List.getMoiUser().getObjectId());
+            iMusicListView.startActivity(intent);
+        }
+
     }
 
     public void menuClick(MenuItem item) {
@@ -168,7 +171,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                 UserBiz userBiz = factory.createBiz(UserBiz.class);
                 if (!isCurrentUser) {
                     if (isAnimal) {
-
+                        
                     } else {
                         mSubscriptions.add(userBiz.CollegeList(id).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())

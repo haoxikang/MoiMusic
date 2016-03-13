@@ -9,4 +9,5 @@ public interface FragmentFavouriteMusicListView  {
     void setAdapter(MusicListViewAdapter adapter);
     void hideSwipe(boolean isHide);
     void showSnackBar(String s);
+    void updataList();
 }

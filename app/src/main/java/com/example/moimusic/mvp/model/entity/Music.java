@@ -10,14 +10,14 @@ import cn.bmob.v3.BmobObject;
 public class Music extends BmobObject{
     private MoiUser User;
     private String MusicName;
-    private String WDId;
+    private String wangyiID;
     private String MusicUri;
     private String MusicImageUri;
     private Integer CollegeNum;
     private Integer PlayNum;
     private Date SellTime;
     private String LyricUri;
-    private Animation Album;
+private String album;
     private String singer;
 
     public String getSinger() {
@@ -36,12 +36,12 @@ public class Music extends BmobObject{
         User = user;
     }
 
-    public Animation getAlbum() {
-        return Album;
+    public String getAlbum() {
+        return album;
     }
 
-    public void setAlbum(Animation album) {
-        Album = album;
+    public void setAlbum(String album) {
+        this.album = album;
     }
 
     public String getLyricUri() {
@@ -92,13 +92,7 @@ public class Music extends BmobObject{
         MusicUri = musicUri;
     }
 
-    public String getWDId() {
-        return WDId;
-    }
 
-    public void setWDId(String WDId) {
-        this.WDId = WDId;
-    }
 
     public String getMusicName() {
         return MusicName;
@@ -108,19 +102,27 @@ public class Music extends BmobObject{
         MusicName = musicName;
     }
 
+    public String getWangyiID() {
+        return wangyiID;
+    }
+
+    public void setWangyiID(String wangyiID) {
+        this.wangyiID = wangyiID;
+    }
+
     @Override
     public String toString() {
         return "Music{" +
                 "User=" + User +
                 ", MusicName='" + MusicName + '\'' +
-                ", WDId='" + WDId + '\'' +
+                ", wangyiID='" + wangyiID + '\'' +
                 ", MusicUri='" + MusicUri + '\'' +
                 ", MusicImageUri='" + MusicImageUri + '\'' +
                 ", CollegeNum=" + CollegeNum +
                 ", PlayNum=" + PlayNum +
                 ", SellTime=" + SellTime +
                 ", LyricUri='" + LyricUri + '\'' +
-                ", Album=" + Album +
+                ", album='" + album + '\'' +
                 ", singer='" + singer + '\'' +
                 '}';
     }

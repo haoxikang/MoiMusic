@@ -1,6 +1,7 @@
 package com.example.moimusic.mvp.model.entity;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobRelation;
 
 /**
@@ -14,6 +15,15 @@ public class MoiUser extends BmobUser{
     private String Sex ;
     private String Age;
     private String Name;
+    private BmobFile imageFile;
+
+    public BmobFile getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(BmobFile imageFile) {
+        this.imageFile = imageFile;
+    }
 
     public BmobRelation getMyMusicList() {
         return myMusicList;

@@ -144,7 +144,9 @@ if (!isEnable){
 
     @Override
     public void setView(String imageUri,String name,String introduce,String sex) {
-        simpleDraweeView.setImageURI(Uri.parse(imageUri));
+        if (imageUri!=null){
+            simpleDraweeView.setImageURI(Uri.parse(imageUri));
+        }
         this.name.getEditText().setText(name);
         this.introduce.getEditText().setText(introduce);
         if (sex.equals("男")){
@@ -197,7 +199,7 @@ if (!isEnable){
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
            presenter.onActivityResult(data,1);
-        } else if (requestCode == Crop.REQUEST_CROP) {
+        } else if (requestCode == Crop.REQUEST_CROP&& resultCode == RESULT_OK) {
             presenter.onActivityResult(data,2);
         }
     }

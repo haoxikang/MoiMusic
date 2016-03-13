@@ -32,7 +32,6 @@ public class EditActivityPresenter extends BasePresenterImpl {
     private String id;
     private Factory factory;
     private EditAcitivityView view;
-    public int PICK_PHOTO = 1;
     private Uri imageUri;
     private File file;
 
@@ -98,8 +97,11 @@ public class EditActivityPresenter extends BasePresenterImpl {
         if (flag == 1) {
             beginCrop(data.getData());
         } else if (flag == 2) {
-            view.showImage(Crop.getOutput(data));
-            imageUri = Crop.getOutput(data);
+            if (Crop.getOutput(data)!=null){
+                view.showImage(Crop.getOutput(data));
+                imageUri = Crop.getOutput(data);
+            }
+
         }
 
     }

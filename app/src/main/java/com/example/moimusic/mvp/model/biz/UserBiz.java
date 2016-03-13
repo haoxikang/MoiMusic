@@ -133,7 +133,10 @@ public class UserBiz extends  DataBiz{
                     public void onSuccess() {
 
                         BmobFile file = new BmobFile();
-                        file.setUrl(BmobUser.getCurrentUser(context,MoiUser.class).getImageUri());
+                        if (BmobUser.getCurrentUser(context,MoiUser.class).getImageFile()!=null){
+                            file.setUrl(BmobUser.getCurrentUser(context,MoiUser.class).getImageFile().getUrl());
+                        }
+
                         file.delete(context, new DeleteListener() {
 
                             @Override
@@ -149,7 +152,7 @@ public class UserBiz extends  DataBiz{
                             }
                         });
                         MoiUser moiUser = new MoiUser();
-                        moiUser.setImageUri(bmobFile.getFileUrl(context));
+                        moiUser.setImageFile(bmobFile);
                         if (data[0]!=null){
                             moiUser.setName(data[0]);
                         }

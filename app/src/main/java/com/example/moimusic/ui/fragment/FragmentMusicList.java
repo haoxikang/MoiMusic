@@ -39,7 +39,6 @@ public class FragmentMusicList extends BaseFragment implements FragmentMusicList
     private SwipeRefreshLayout swipeRefreshLayout;
     @Inject
     FragmentMusicListPresenter presenter;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +91,9 @@ private void initClick(){
     @Override
     public void setAdapter(MusicListViewAdapter adapter) {
         recyclerView.setAdapter(adapter);
+        adapter.setOnDeleteClickLitener((view, id) -> {
+            presenter.onDeleteClick(view,id);
+        });
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
             //用来标记是否正在向最后一个滑动，既是否向右滑动或向下滑动
@@ -150,6 +152,11 @@ private void initClick(){
     @Override
     public void StartActivty(Intent intent) {
         startActivity(intent);
+    }
+
+    @Override
+    public void updateList() {
+       recyclerView.setAdapter(new MusicListViewAdapter(new ArrayList<MusicList>(),getActivity(),true));
     }
 
     @Override

@@ -12,11 +12,14 @@ import android.view.ViewGroup;
 
 import com.example.moimusic.R;
 import com.example.moimusic.adapter.MusicListViewAdapter;
+import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.mvp.presenters.FragmentFavouriteMusicListPresenter;
 import com.example.moimusic.mvp.views.FragmentFavouriteMusicListView;
 import com.example.moimusic.reject.components.AppComponent;
 import com.example.moimusic.reject.components.DaggerFragmentFavouriteMusicListComponent;
 import com.example.moimusic.reject.models.FragmentFavouriteMusicListModule;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -55,6 +58,9 @@ public class FragmentFavouriteMusicList extends BaseFragment implements Fragment
     @Override
     public void setAdapter(MusicListViewAdapter adapter) {
         recyclerView.setAdapter(adapter);
+        adapter.setOnDeleteClickLitener((view, id) -> {
+            presenter.onDeleteClick(view, id);
+        });
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
             //用来标记是否正在向最后一个滑动，既是否向右滑动或向下滑动
@@ -108,6 +114,11 @@ public class FragmentFavouriteMusicList extends BaseFragment implements Fragment
     @Override
     public void showSnackBar(String s) {
         Snackbar.make(recyclerView, s, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updataList() {
+        recyclerView.setAdapter(new MusicListViewAdapter(new ArrayList<MusicList>(),getActivity(),true));
     }
 
     private void initView(View v) {

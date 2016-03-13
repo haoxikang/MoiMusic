@@ -1,6 +1,7 @@
 package com.example.moimusic.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -90,12 +91,14 @@ public class MainActivity extends BaseActivity implements IMainView {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_main);
         initData();
-        initFragment(savedInstanceState);
         initView();
         initClick();
         presenter.onCreate();
-        presenter.attach(this,this);
+        presenter.attach(this, this, savedInstanceState);
         presenter.initUnderMusicList();
+        presenter.checkPermission();
+        initFragment(savedInstanceState);
+
 
     }
 
@@ -114,7 +117,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         db = new SearchHistoryTable(this);
         mSuggestionsList = new ArrayList<>();
         List<SearchItem> mResultsList = new ArrayList<>();
-        mSearchAdapter= new SearchAdapter(this, mResultsList, mSuggestionsList, SearchCodes.THEME_LIGHT);
+        mSearchAdapter = new SearchAdapter(this, mResultsList, mSuggestionsList, SearchCodes.THEME_LIGHT);
 //        fm = getSupportFragmentManager();
 //        Fragment fragment = fm.findFragmentById(R.id.frameLayout);
 //        if (fragment == null) {
@@ -152,9 +155,9 @@ public class MainActivity extends BaseActivity implements IMainView {
         HeadSingertv = (TextView) navigationView.getHeaderView(0).findViewById(R.id.header_singertext);
         HeadProgressBar = (ProgressBar) navigationView.getHeaderView(0).findViewById(R.id.header_progress);
         headImageView = (SimpleDraweeView) navigationView.getHeaderView(0).findViewById(R.id.header_image_view);
-        searchView = (SearchView)findViewById(R.id.search_view);
-        if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT){
-            searchView.setPadding(0,getStatusBarHeight(),0,0);
+        searchView = (SearchView) findViewById(R.id.search_view);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            searchView.setPadding(0, getStatusBarHeight(), 0, 0);
         }
         searchView.setVersion(SearchCodes.VERSION_MENU_ITEM);
         searchView.setStyle(SearchCodes.STYLE_MENU_ITEM_CLASSIC);
@@ -170,60 +173,60 @@ public class MainActivity extends BaseActivity implements IMainView {
     }
 
     public void initClick() {
-        imageButton.setOnClickListener(v1 ->startNextActivity(new Intent(this,ActivityPlayNow.class)) );
+        imageButton.setOnClickListener(v1 -> startNextActivity(new Intent(this, ActivityPlayNow.class)));
         playFloat.setOnClickListener(v -> presenter.musicPlay());
         nextButton.setOnClickListener(v -> presenter.nextMusic());
         prevButton.setOnClickListener(v -> presenter.prevMusic());
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-                 mDrawerLayout.closeDrawers();
-                 switch (menuItem.getItemId()){
-                     case R.id.usercenter:{
-                         presenter.logButtonClick();
-                         break;
-                     }
-                     case R.id.home:{
-                         if(mainFragment==null) {
-                             mainFragment = new MainFragment();
-                         }
-                         switchContent(isFragment,mainFragment);
-                         getSupportActionBar().setTitle(menuItem.getTitle());
-                         break;
-                     }
-                     case R.id.history:{
-                         if(fragmentHistory==null) {
-                             fragmentHistory = new FragmentHistory();
-                         }
-                         switchContent(isFragment,fragmentHistory);
-                         getSupportActionBar().setTitle(menuItem.getTitle());
-                         break;
-                     }
-                     case R.id.msg:{
-                         if(fragmentMsg==null) {
-                             fragmentMsg = new FragmentMsg();
-                         }
-                         switchContent(isFragment,fragmentMsg);
-                         getSupportActionBar().setTitle(menuItem.getTitle());
-                         break;
-                     }
-                     case R.id.follow:{
-                         if(fragmentFollow==null) {
-                             fragmentFollow = new FragmentFollow();
-                         }
-                         switchContent(isFragment,fragmentFollow);
-                         getSupportActionBar().setTitle(menuItem.getTitle());
-                         break;
-                     }
-                     case R.id.seting:{
-                         break;
-                     }
-                     case R.id.exit:{
-                         stopService(new Intent(MainActivity.this, PlayService.class));
-                        finish();
-                         break;
-                     }
-                 }
-                 return true;
-             });
+            mDrawerLayout.closeDrawers();
+            switch (menuItem.getItemId()) {
+                case R.id.usercenter: {
+                    presenter.logButtonClick();
+                    break;
+                }
+                case R.id.home: {
+                    if (mainFragment == null) {
+                        mainFragment = new MainFragment();
+                    }
+                    switchContent(isFragment, mainFragment);
+                    getSupportActionBar().setTitle(menuItem.getTitle());
+                    break;
+                }
+                case R.id.history: {
+                    if (fragmentHistory == null) {
+                        fragmentHistory = new FragmentHistory();
+                    }
+                    switchContent(isFragment, fragmentHistory);
+                    getSupportActionBar().setTitle(menuItem.getTitle());
+                    break;
+                }
+                case R.id.msg: {
+                    if (fragmentMsg == null) {
+                        fragmentMsg = new FragmentMsg();
+                    }
+                    switchContent(isFragment, fragmentMsg);
+                    getSupportActionBar().setTitle(menuItem.getTitle());
+                    break;
+                }
+                case R.id.follow: {
+                    if (fragmentFollow == null) {
+                        fragmentFollow = new FragmentFollow();
+                    }
+                    switchContent(isFragment, fragmentFollow);
+                    getSupportActionBar().setTitle(menuItem.getTitle());
+                    break;
+                }
+                case R.id.seting: {
+                    break;
+                }
+                case R.id.exit: {
+                    stopService(new Intent(MainActivity.this, PlayService.class));
+                    finish();
+                    break;
+                }
+            }
+            return true;
+        });
         mSearchAdapter.setOnItemClickListener((view, position) -> {
             searchView.hide(true);
             TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
@@ -255,19 +258,20 @@ public class MainActivity extends BaseActivity implements IMainView {
             }
         });
     }
-    public void initFragment(Bundle savedInstanceState)
-    {
+
+    public void initFragment(Bundle savedInstanceState) {
         //判断activity是否重建，如果不是，则不需要重新建立fragment.
-        if(savedInstanceState==null) {
+        if (savedInstanceState == null) {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            if(mainFragment==null) {
+            if (mainFragment == null) {
                 mainFragment = new MainFragment();
             }
             isFragment = mainFragment;
-            ft.replace(R.id.frameLayout, mainFragment).commit();
+            ft.replace(R.id.frameLayout, mainFragment).commitAllowingStateLoss();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -286,11 +290,11 @@ public class MainActivity extends BaseActivity implements IMainView {
                 showSearchView();
                 break;
             }
-            case R.id.underPlayList:{
+            case R.id.underPlayList: {
                 presenter.ShowMusicList();
                 break;
             }
-            case R.id.action_log:{
+            case R.id.action_log: {
                 presenter.logButtonClick();
                 break;
             }
@@ -321,21 +325,27 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Override
     public void updataPlayView() {
         int currentMusic = playListSingleton.getCurrentPosition();
-        Music music = playListSingleton.getMusicList().get(currentMusic);
-        if (music.getMusicImageUri() != null && !music.getMusicImageUri().equals("")) {
-            headImageView.setImageURI(Uri.parse(music.getMusicImageUri()));
+        if (playListSingleton.getMusicList().size()!=0){
+            if (currentMusic<playListSingleton.getMusicList().size()){
+                Music music = playListSingleton.getMusicList().get(currentMusic);
+                if (music.getMusicImageUri() != null && !music.getMusicImageUri().equals("")) {
+                    headImageView.setImageURI(Uri.parse(music.getMusicImageUri()));
+                }
+                if (music.getMusicName() != null) {
+                    HeadTitletv.setText(music.getMusicName());
+                }
+                if (music.getSinger() != null) {
+                    HeadSingertv.setText(music.getSinger());
+                }
+                if (playListSingleton.isUnderPlay) {
+                    playFloat.setImageResource(R.mipmap.ic_pause_black_18dp);
+                } else {
+                    playFloat.setImageResource(R.mipmap.ic_play_arrow_black_18dp);
+                }
+            }
+
         }
-        if (music.getMusicName() != null) {
-            HeadTitletv.setText(music.getMusicName());
-        }
-        if (music.getSinger() != null) {
-            HeadSingertv.setText(music.getSinger());
-        }
-        if (playListSingleton.isUnderPlay) {
-            playFloat.setImageResource(R.mipmap.ic_pause_black_18dp);
-        } else {
-            playFloat.setImageResource(R.mipmap.ic_play_arrow_black_18dp);
-        }
+
 
     }
 
@@ -362,6 +372,11 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Override
     public void ShowSnackbar(String s) {
         Snackbar.make(searchView, s, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void ShowLongSnackbar(String s) {
+        Snackbar.make(searchView, s, Snackbar.LENGTH_LONG).show();
     }
 
 
@@ -395,28 +410,30 @@ public class MainActivity extends BaseActivity implements IMainView {
 //        return super.onKeyDown(keyCode, event);
 //    }
 
-private void showSearchView() {
-    mSuggestionsList.clear();
-    mSuggestionsList.add(new SearchItem("Google"));
-    mSuggestionsList.add(new SearchItem("Android"));
-    mSuggestionsList.addAll(db.getAllItems());
-    searchView.show(true);
-}
+    private void showSearchView() {
+        mSuggestionsList.clear();
+        mSuggestionsList.add(new SearchItem("Google"));
+        mSuggestionsList.add(new SearchItem("Android"));
+        mSuggestionsList.addAll(db.getAllItems());
+        searchView.show(true);
+    }
+
     @Override
     public void onBackPressed() {
         if (searchView.isSearchOpen() && searchView.isSearchOpen()) {
             searchView.hide(true);
-        }else {
+        } else {
             moveTaskToBack(true);
             super.onBackPressed();
         }
 
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         // 过滤按键动作
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK&&!searchView.isSearchOpen()) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && !searchView.isSearchOpen()) {
 
             moveTaskToBack(true);
 
@@ -438,5 +455,13 @@ private void showSearchView() {
     protected void onPause() {
         super.onPause();
         presenter.saveData();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+
+        presenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
     }
 }

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.example.moimusic.R;
 import com.example.moimusic.adapter.MusicListViewAdapter;
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
@@ -16,6 +17,8 @@ import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.mvp.views.FragmentMusicListView;
 import com.example.moimusic.mvp.views.FragmentSignInView;
 import com.example.moimusic.ui.activity.ActivityMusicList;
+import com.example.moimusic.ui.activity.LogActivity;
+import com.rey.material.app.Dialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,30 +36,39 @@ public class FragmentMusicListPresenter extends BasePresenterImpl {
     private FragmentMusicListView fragmentMusicListView;
     private MusicListViewAdapter musicListViewAdapter;
     private int page = 1;
-    private  String id;
+    private String id;
     private FragmentActivity fragmentActivity;
+
     public FragmentMusicListPresenter(ApiService apiService) {
         factory = new DataBizFactory();
     }
 
-    public void attach(FragmentMusicListView fragmentMusicListView,String id,FragmentActivity fragmentActivity) {
+    public void attach(FragmentMusicListView fragmentMusicListView, String id, FragmentActivity fragmentActivity) {
         this.fragmentMusicListView = fragmentMusicListView;
-        this.id=id;
+        this.id = id;
         this.fragmentActivity = fragmentActivity;
+    }
+
+    private boolean isCurrentUser() {
+
+        if (id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId())) {
+            return true;
+        } else
+            return false;
     }
 
     public void getMusicLists() {
 
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-        mSubscriptions.add(musicListBiz.getMyMusic(page,id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId()),id ).subscribeOn(Schedulers.io())
+        mSubscriptions.add(musicListBiz.getMyMusic(page, id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId()), id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(musicLists -> {
                     if (page == 1) {
                         fragmentMusicListView.hideSwipe(false);
-                        musicListViewAdapter = new MusicListViewAdapter(musicLists,fragmentActivity);
+                        musicListViewAdapter = new MusicListViewAdapter(musicLists, fragmentActivity,isCurrentUser());
                         fragmentMusicListView.setAdapter(musicListViewAdapter);
 
-                    } else if (page!=1) {
+                    } else if (page != 1) {
                         musicListViewAdapter.addData(musicLists);
                     }
                     fragmentMusicListView.hideSwipe(true);
@@ -67,7 +79,31 @@ public class FragmentMusicListPresenter extends BasePresenterImpl {
                 }));
 
     }
+    public void onDeleteClick(View v,String id){
+        Dialog dialog = new Dialog(fragmentActivity);
+        dialog.setTitle(fragmentActivity.getResources().getString(R.string.sureTODeleteList));
+        dialog.negativeAction(fragmentActivity.getResources().getString(R.string.cancel));
+        dialog.positiveAction(fragmentActivity.getResources().getString(R.string.OK));
+        dialog.negativeActionClickListener(v1->dialog.dismiss());
+        dialog.positiveActionClickListener(v1 -> {
+            dialog.cancelable(false);
+            MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
+            mSubscriptions.add(musicListBiz.deleteList(id, true).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(musicList -> {
+                        fragmentMusicListView.showSnackBar("删除歌单成功");
+                        fragmentMusicListView.updateList();
+                        setPage(1);
+            getMusicLists();
+                        dialog.dismiss();
 
+                    },throwable -> {
+                        fragmentMusicListView.showSnackBar(throwable.getMessage());
+                        dialog.dismiss();
+                    }));
+        });
+        dialog.show();
+    }
     public void setPage(int page) {
         this.page = page;
     }

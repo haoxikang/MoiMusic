@@ -12,4 +12,5 @@ public interface FragmentMusicListView {
     void hideSwipe(boolean isHide);
     void showSnackBar(String s);
     void StartActivty(Intent intent);
+    void updateList();
 }

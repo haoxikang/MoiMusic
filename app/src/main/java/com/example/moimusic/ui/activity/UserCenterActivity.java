@@ -89,6 +89,7 @@ userCenterActivityPresenter.attach(this,this);
         textFollowed = (TextView)findViewById(R.id.followed_text);
         button = (FloatingActionButton) findViewById(R.id.floatbutton);
         button.setEnabled(false);
+        simpleDraweeView.setEnabled(false);
     }
     private void initClick(){
         simpleDraweeView.setOnClickListener(v -> userCenterActivityPresenter.startEditActivity());
@@ -146,8 +147,9 @@ startActivity(intent);
     @Override
     public void updataView(MoiUser moiUser,int like,int followed) {
         Log.d("TAG","在个人中心打印个人类:"+moiUser.getMobilePhoneNumber());
-        if (moiUser.getImageUri()!=null&&!moiUser.getImageUri().equals("")){
-            simpleDraweeView.setImageURI(Uri.parse(moiUser.getImageUri()));
+        simpleDraweeView.setEnabled(true);
+        if (moiUser.getImageFile()!=null){
+            simpleDraweeView.setImageURI(Uri.parse(moiUser.getImageFile().getFileUrl(this)));
         }
        if (moiUser.getName()!=null&&!moiUser.getName().equals("")){
            textName.setText(moiUser.getName());
@@ -206,6 +208,7 @@ startActivity(intent);
     @Override
     public void setButtonEnable(boolean isEnable) {
         button.setEnabled(isEnable);
+
     }
 
     @Override

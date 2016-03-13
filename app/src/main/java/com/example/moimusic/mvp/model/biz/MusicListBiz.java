@@ -17,6 +17,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -162,6 +163,35 @@ public class MusicListBiz extends DataBiz {
                 @Override
                 public void onFailure(int i, String s) {
                     subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
+        });
+        return observable;
+    }
+    public Observable<MusicList> deleteList(String id,boolean isMy){
+        Observable<MusicList> observable = Observable.create(subscriber -> {
+            MoiUser user = BmobUser.getCurrentUser(context,MoiUser.class);
+            MusicList musicList = new MusicList();
+            musicList.setObjectId(id);
+            BmobRelation relation = new BmobRelation();
+            relation.remove(musicList);
+            if (isMy){
+                user.setMyMusicList(relation);
+            }else {
+                user.setCollege(relation);
+            }
+            user.update(context, new UpdateListener() {
+
+                @Override
+                public void onSuccess() {
+                    // TODO Auto-generated method stub
+                   subscriber.onNext(musicList);
+                }
+
+                @Override
+                public void onFailure(int arg0, String arg1) {
+                    // TODO Auto-generated method stub
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(arg0)));
                 }
             });
         });
