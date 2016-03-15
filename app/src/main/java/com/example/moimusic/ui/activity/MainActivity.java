@@ -57,14 +57,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+
 public class MainActivity extends BaseActivity implements IMainView {
     private SystemBarTintManager tintManager;
-    private FragmentManager fm;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView navigationView;
-    private SimpleDraweeView titleImage;
     private MaterialRippleLayout nextButton, prevButton, imageButton;
     private FloatingActionButton playFloat;
     private TextView HeadTitletv, HeadSingertv;
@@ -78,10 +78,9 @@ public class MainActivity extends BaseActivity implements IMainView {
     private MainFragment mainFragment;
     private FragmentMsg fragmentMsg;
     private Fragment isFragment; //当前fragment
-
     private SearchAdapter mSearchAdapter;
     private SearchView searchView;
-
+    private Observable<String> searchObservable;
     @Inject
     MainActivityPresenter presenter;
 
@@ -97,6 +96,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         presenter.attach(this, this, savedInstanceState);
         presenter.initUnderMusicList();
         presenter.checkPermission();
+        presenter.subscribeSearch();
         initFragment(savedInstanceState);
 
 
@@ -167,7 +167,6 @@ public class MainActivity extends BaseActivity implements IMainView {
         searchView.setHint("搜索");
         searchView.setHintSize(getResources().getDimension(R.dimen.search_text_medium));
         searchView.setAnimationDuration(360);
-
         setPlayViewEnable(false);
         searchView.setAdapter(mSearchAdapter);
     }
@@ -227,14 +226,15 @@ public class MainActivity extends BaseActivity implements IMainView {
             }
             return true;
         });
+
         mSearchAdapter.setOnItemClickListener((view, position) -> {
             searchView.hide(true);
             TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
             CharSequence text = textView.getText();
             db.addItem(new SearchItem(text));
-            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+            presenter.searchItemClick(text.toString());
         });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchObservable = Observable.create(subscriber -> searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchView.hide(true);
@@ -245,18 +245,16 @@ public class MainActivity extends BaseActivity implements IMainView {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText!=""&&newText!=null){
+                    subscriber.onNext(newText);
+                }
+
                 return false;
             }
-        });
-        searchView.setOnSearchViewListener(new SearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-            }
+        }));
 
-            @Override
-            public void onSearchViewClosed() {
-            }
-        });
+
+
     }
 
     public void initFragment(Bundle savedInstanceState) {
@@ -327,6 +325,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         int currentMusic = playListSingleton.getCurrentPosition();
         if (playListSingleton.getMusicList().size()!=0){
             if (currentMusic<playListSingleton.getMusicList().size()){
+                setPlayViewEnable(true);
                 Music music = playListSingleton.getMusicList().get(currentMusic);
                 if (music.getMusicImageUri() != null && !music.getMusicImageUri().equals("")) {
                     headImageView.setImageURI(Uri.parse(music.getMusicImageUri()));
@@ -379,6 +378,24 @@ public class MainActivity extends BaseActivity implements IMainView {
         Snackbar.make(searchView, s, Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    public Observable<String> getSearchObservable() {
+
+        return searchObservable;
+    }
+
+    @Override
+    public void onSearched(List<Music> musics) {
+        List<SearchItem> strings = new ArrayList<>();
+        for (Music music:musics){
+            Log.d("搜索",music.getMusicName());
+            strings.add(new SearchItem(music.getMusicName()));
+        }
+        mSuggestionsList.clear();
+        mSuggestionsList.addAll(strings);
+
+    }
+
 
     public void switchContent(Fragment from, Fragment to) {
         if (isFragment != to) {
@@ -412,8 +429,6 @@ public class MainActivity extends BaseActivity implements IMainView {
 
     private void showSearchView() {
         mSuggestionsList.clear();
-        mSuggestionsList.add(new SearchItem("Google"));
-        mSuggestionsList.add(new SearchItem("Android"));
         mSuggestionsList.addAll(db.getAllItems());
         searchView.show(true);
     }

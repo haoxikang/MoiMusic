@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,10 +44,11 @@ public class MusicListReplyAdapter extends RecyclerView.Adapter<MusicListReplyAd
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        if (list.get(position).getUser().getImageUri() != null && !list.get(position).getUser().getImageUri().equals("")) {
-            holder.simpleDraweeView.setImageURI(Uri.parse(list.get(position).getUser().getImageUri()));
-
+        if (list.get(position).getUser().getImageFile().getFileUrl(fragmentActivity)!=null){
+            holder.simpleDraweeView.setImageURI(Uri.parse(list.get(position).getUser().getImageFile().getFileUrl(fragmentActivity)));
         }
+
+
         holder.simpleDraweeView.setOnClickListener(v -> {
             Intent intent = new Intent(fragmentActivity, UserCenterActivity.class);
             intent.putExtra("userID", list.get(position).getUser().getObjectId());

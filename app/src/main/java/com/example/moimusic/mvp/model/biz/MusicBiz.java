@@ -42,7 +42,7 @@ public class MusicBiz extends DataBiz {
 
     public Observable<List<Music>> getMusic(String id){
         Observable<List<Music>> observable = Observable.create(subscriber -> {
-            BmobQuery<Music> query = new BmobQuery<Music>();
+            BmobQuery<Music> query = new BmobQuery<>();
             MusicList musicList = new MusicList();
             musicList.setObjectId(id);
             query.addWhereRelatedTo("Music", new BmobPointer(musicList));
@@ -68,5 +68,23 @@ public class MusicBiz extends DataBiz {
         });
         return observable;
     }
+public Observable<List<Music>> searchMusic(String name){
+    Observable<List<Music>> observable = Observable.create(subscriber -> {
+       BmobQuery<Music> query = new BmobQuery<>();
+        query.addWhereContains("MusicName", name);
+        query.setLimit(8);
+        query.findObjects(context, new FindListener<Music>() {
+            @Override
+            public void onSuccess(List<Music> list) {
+                subscriber.onNext(list);
+            }
 
+            @Override
+            public void onError(int i, String s) {
+
+            }
+        });
+    });
+    return observable;
+}
 }

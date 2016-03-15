@@ -197,9 +197,11 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
         if (musicList.getName() != null) {
             textName.setText(musicList.getName());
         }
-        if (musicList.getMoiUser().getImageUri() != null && !musicList.getMoiUser().getImageUri().equals("")) {
-            UserView.setImageURI(Uri.parse(musicList.getMoiUser().getImageUri()));
+        if (musicList.getMoiUser().getImageFile().getFileUrl(this)!=null){
+            UserView.setImageURI(Uri.parse(musicList.getMoiUser().getImageFile().getFileUrl(this)));
         }
+
+
         if (musicList.getMoiUser().getName() != null) {
             textuser.setText(musicList.getMoiUser().getName());
         }

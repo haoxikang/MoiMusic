@@ -28,6 +28,7 @@ import com.example.moimusic.mvp.model.biz.MusicListBiz;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenReCall;
 import com.example.moimusic.mvp.model.entity.MoiUser;
+import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.ui.activity.LogActivity;
@@ -37,9 +38,12 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.app.BottomSheetDialog;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
+import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -55,6 +59,8 @@ public class MainActivityPresenter extends BasePresenterImpl {
     private PlayListSingleton playListSingleton;
     private Bundle savedInstanceState;
     final public static int REQUEST_CODE_READ_PHONE_STATE = 123;
+    private Subscription searchSubscription;
+    private HashMap<String,Music> hashMap = new HashMap<>();
 
     public MainActivityPresenter(ApiService apiService) {
         playListSingleton = PlayListSingleton.INSTANCE;
@@ -207,9 +213,46 @@ public class MainActivityPresenter extends BasePresenterImpl {
 
     }
 
+    public void subscribeSearch() {
+        MusicBiz musicBiz = factory.createBiz(MusicBiz.class);
+        mSubscriptions.add(mView.getSearchObservable().subscribe(s -> {
+            if (searchSubscription!=null){
+                mSubscriptions.remove(searchSubscription);
+                Log.d("解绑成功","成功");
+            }
+            searchSubscription = musicBiz.searchMusic(s).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMap(musics ->{
+                        hashMap.clear();
+                        mView.onSearched(musics);
+                       return Observable.from(musics);
+                    }).subscribe(music -> {
+                        hashMap.put(music.getMusicName(),music);
+                    });
+
+            mSubscriptions.add(searchSubscription);
+
+        }));
+
+    }
+public void searchItemClick(String s){      //零时的,以后要改
+    Music music = hashMap.get(s);
+    if (music!=null){
+        playListSingleton.getMusicList().remove(music);
+        playListSingleton.getMusicList().add(music);
+        playListSingleton.setCurrentPosition( playListSingleton.getMusicList().size()-1);
+        EvenCall evenCall = new EvenCall();
+        evenCall.setCurrentOrder(EvenCall.PLAY);
+        EventBus.getDefault().post(evenCall);
+        mView.updataPlayView();
+        mView.setPlayButton(true);
+        mView.setProgressbar(0, 0);
+
+    }
+}
     public void initUnderMusicList() {
         if (playListSingleton.LoadList() != null) {
-            if (playListSingleton.getMusicList()!=null) {
+            if (playListSingleton.getMusicList() != null) {
                 playListSingleton.setMusicList(playListSingleton.LoadList());
                 playListSingleton.setCurrentPosition(0);
             }
