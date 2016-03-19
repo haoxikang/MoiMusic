@@ -26,6 +26,7 @@ import com.example.moimusic.mvp.model.ApiService;
 import com.example.moimusic.mvp.model.biz.MusicBiz;
 import com.example.moimusic.mvp.model.biz.MusicListBiz;
 import com.example.moimusic.mvp.model.entity.EvenCall;
+import com.example.moimusic.mvp.model.entity.EvenMusicPlay;
 import com.example.moimusic.mvp.model.entity.EvenReCall;
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
@@ -141,7 +142,12 @@ public class MainActivityPresenter extends BasePresenterImpl {
         getMusicList();
 
     }
+    public void onEventMainThread(EvenMusicPlay evenMusicPlay) {
+        mView.updataPlayView();
+        mView.setPlayButton(true);
+        mView.setProgressbar(0, 0);
 
+    }
     public void onEventMainThread(String s) {
         mView.ShowSnackbar(s);
 
@@ -238,7 +244,12 @@ public class MainActivityPresenter extends BasePresenterImpl {
 public void searchItemClick(String s){      //零时的,以后要改
     Music music = hashMap.get(s);
     if (music!=null){
-        playListSingleton.getMusicList().remove(music);
+        for (Music m :playListSingleton.getMusicList()){
+            if (m.getObjectId().endsWith(music.getObjectId())){
+                playListSingleton.getMusicList().remove(m);
+                break;
+            }
+        }
         playListSingleton.getMusicList().add(music);
         playListSingleton.setCurrentPosition( playListSingleton.getMusicList().size()-1);
         EvenCall evenCall = new EvenCall();

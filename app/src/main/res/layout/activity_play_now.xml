@@ -105,13 +105,15 @@
                         app:layout_widthPercent="100%w">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_marginRight="80dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:orientation="vertical">
 
                             <TextView
+                                android:singleLine="true"
                                 android:id="@+id/musicName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -121,6 +123,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:singleLine="true"
                                 android:id="@+id/musicSinger"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

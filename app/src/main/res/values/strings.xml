@@ -66,6 +66,8 @@
     <string name="ShowPermission">检测到你没有开启必要的权限,MOI没有这些权限无法运行哦,请在弹出框里面授予MOI权限</string>
     <string name="failOpenPermission">权限开启失败,请转到应用设置,手动开启权限</string>
     <string name="sureTODeleteList">是否要删除歌单?</string>
-
-
+    <string name="MusicListPlace">歌单广场</string>
+    <string name="HotMusic">热门歌曲</string>
+    <string name="HotMusicList">热门歌单</string>
+    <string name="NewMusic">最新歌曲</string>
 </resources>

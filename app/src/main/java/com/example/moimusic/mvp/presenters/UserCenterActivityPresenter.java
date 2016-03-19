@@ -70,6 +70,8 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
                         isFollowed = true;
                         mView.setButtonBK(true);
                     }
+                },throwable -> {
+                    mView.ShowSnackBar(throwable.getMessage());
                 })
         );
 

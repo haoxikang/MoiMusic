@@ -64,7 +64,6 @@ public class FragmentMusicListPresenter extends BasePresenterImpl {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(musicLists -> {
                     if (page == 1) {
-                        fragmentMusicListView.hideSwipe(false);
                         musicListViewAdapter = new MusicListViewAdapter(musicLists, fragmentActivity,isCurrentUser());
                         fragmentMusicListView.setAdapter(musicListViewAdapter);
 

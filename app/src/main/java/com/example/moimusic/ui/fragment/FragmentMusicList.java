@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.example.moimusic.R;
 import com.example.moimusic.adapter.MusicListViewAdapter;
@@ -60,7 +61,9 @@ public class FragmentMusicList extends BaseFragment implements FragmentMusicList
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragme_music_list, container, false);
         initView(v);
+        presenter.getMusicLists();
         initClick();
+
         return v;
     }
 
@@ -69,7 +72,13 @@ public class FragmentMusicList extends BaseFragment implements FragmentMusicList
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.music_list_swipe);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-        presenter.getMusicLists();
+        v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
 
     }
 private void initClick(){
@@ -139,8 +148,7 @@ private void initClick(){
     @Override
     public void hideSwipe(boolean isHide) {
 
-
-        swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(!isHide));
+swipeRefreshLayout.setRefreshing(!isHide);
         swipeRefreshLayout.setEnabled(isHide);
     }
 

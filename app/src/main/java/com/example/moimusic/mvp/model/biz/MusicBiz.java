@@ -87,4 +87,27 @@ public Observable<List<Music>> searchMusic(String name){
     });
     return observable;
 }
+    public Observable<List<Music>> getHomePageMusic(int sort){
+        Observable<List<Music>> observable = Observable.create(subscriber -> {
+            BmobQuery<Music> query = new BmobQuery<Music>();
+            query.setLimit(6);
+            if (sort==1){   //1是最热,2是最新
+                query.order("-PlayNum");
+            }else if (sort==2){
+                query.order("-createdAt");
+            }
+            query.findObjects(context, new FindListener<Music>() {
+                @Override
+                public void onSuccess(List<Music> list) {
+                    subscriber.onNext(list);
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
+        });
+        return observable;
+    }
 }

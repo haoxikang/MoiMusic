@@ -12,12 +12,16 @@ import android.widget.Toast;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
+import com.example.moimusic.mvp.model.entity.EvenCall;
+import com.example.moimusic.mvp.model.entity.EvenMusicPlay;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.play.PlayListSingleton;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by qqq34 on 2016/2/12.
@@ -70,7 +74,17 @@ public class UnderMusicListAdapter extends RecyclerView.Adapter<UnderMusicListAd
 
         }
         holder.simpleDraweeView.setOnClickListener(v -> {
-            Toast.makeText(AppApplication.context,"点击了删除键",Toast.LENGTH_SHORT).show();
+            if (position==playListSingleton.getCurrentPosition()){
+                playListSingleton.getMusicList().remove(position);
+                EvenCall evenCall = new EvenCall();
+                evenCall.setCurrentOrder(EvenCall.PLAY);
+                EventBus.getDefault().post(evenCall);
+                EventBus.getDefault().post(new EvenMusicPlay());
+            }else {
+                playListSingleton.getMusicList().remove(position);
+            }
+notifyDataSetChanged();
+
         });
     }
 

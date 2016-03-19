@@ -388,7 +388,6 @@ public class MainActivity extends BaseActivity implements IMainView {
     public void onSearched(List<Music> musics) {
         List<SearchItem> strings = new ArrayList<>();
         for (Music music:musics){
-            Log.d("搜索",music.getMusicName());
             strings.add(new SearchItem(music.getMusicName()));
         }
         mSuggestionsList.clear();
