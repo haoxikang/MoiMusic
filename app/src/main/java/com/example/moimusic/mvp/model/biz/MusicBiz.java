@@ -87,9 +87,15 @@ public Observable<List<Music>> searchMusic(String name){
     });
     return observable;
 }
-    public Observable<List<Music>> getHomePageMusic(int sort){
+    public Observable<List<Music>> getHomePageMusic(int sort,int type){
         Observable<List<Music>> observable = Observable.create(subscriber -> {
             BmobQuery<Music> query = new BmobQuery<Music>();
+            if (type==1){
+                query.addWhereExists("wangyiID");  //1查询动漫歌曲  2查询原创歌曲  3,查询全部
+            }else if(type==2){
+                query.addWhereDoesNotExists("wangyiID");
+            }
+
             query.setLimit(6);
             if (sort==1){   //1是最热,2是最新
                 query.order("-PlayNum");

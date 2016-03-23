@@ -82,6 +82,9 @@ public class UnderMusicListAdapter extends RecyclerView.Adapter<UnderMusicListAd
                 EventBus.getDefault().post(new EvenMusicPlay());
             }else {
                 playListSingleton.getMusicList().remove(position);
+                if (position<playListSingleton.getCurrentPosition()){
+                    playListSingleton.setCurrentPosition(playListSingleton.getCurrentPosition()-1);
+                }
             }
 notifyDataSetChanged();
 

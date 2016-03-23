@@ -138,6 +138,7 @@ private void initClick(){
 
     @Override
     public void ShowSnackBar(String s) {
+        ShowSwipe(false);
         Snackbar.make(hotList, s, Snackbar.LENGTH_SHORT).show();
     }
 

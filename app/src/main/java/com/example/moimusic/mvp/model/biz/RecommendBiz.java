@@ -2,9 +2,11 @@ package com.example.moimusic.mvp.model.biz;
 
 
 
+
+
+import android.util.Log;
+
 import com.example.moimusic.mvp.model.entity.Recommend;
-import com.example.moimusic.utils.ErrorList;
-import com.rey.material.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -16,15 +18,16 @@ import rx.Observable;
  * Created by qqq34 on 2016/3/17.
  */
 public class RecommendBiz extends DataBiz {
-    public Observable<List<Recommend>> getRecommend(String type){
+    public Observable<List<Recommend>> getRecommend(){
         Observable<List<Recommend>> observable = Observable.create(subscriber -> {
-            BmobQuery<Recommend> query = new BmobQuery<Recommend>();
-            query.addWhereEqualTo("where",type);
-            query.setLimit(4);
+            BmobQuery<Recommend> query = new BmobQuery<>();
+
+
             query.findObjects(context, new FindListener<Recommend>() {
                 @Override
                 public void onSuccess(List<Recommend> list) {
                     subscriber.onNext(list);
+                    Log.d("传进来!",list.get(0).getWhere());
                 }
 
                 @Override
