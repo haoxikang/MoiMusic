@@ -37,6 +37,8 @@
 
                 <!--</FrameLayout>-->
                 <com.facebook.drawee.view.SimpleDraweeView
+                    fresco:placeholderImageScaleType="centerCrop"
+                    fresco:actualImageScaleType="centerCrop"
                     android:id="@+id/userImage"
                     fresco:placeholderImage="@mipmap/user_image"
                     fresco:roundAsCircle="true"
