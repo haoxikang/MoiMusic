@@ -126,6 +126,7 @@ public class FragmentTrends extends BaseFragment implements FragmentTrendsView {
 
     @Override
     public void onDatafetched(List<Trends> trendses) {
+
         TrendsListAdapter adapter = new TrendsListAdapter(trendses);
         adapter.setTitleView(Title);
         list.setAdapter(adapter);
