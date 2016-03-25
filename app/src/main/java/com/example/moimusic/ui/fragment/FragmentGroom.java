@@ -86,12 +86,15 @@ private void initClick(){
     buttonhot.setOnClickListener(v -> ShowSnackBar("点击了热门"));
     buttonlistplace.setOnClickListener(v -> ShowSnackBar("点击了歌单广场"));
     buttonnew.setOnClickListener(v -> ShowSnackBar("点击了热门"));
-    swipeRefreshLayout.setOnRefreshListener(() -> presenter.getMusicData());
+    swipeRefreshLayout.setOnRefreshListener(() -> {
+        presenter.getMusicData();
+        swipeRefreshLayout.setEnabled(false);
+    });
 }
     private void initView(View v) {
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-
+swipeRefreshLayout.setEnabled(false);
 
         hotList = (RecyclerView) v.findViewById(R.id.Hotmusic);
         header = LayoutInflater.from(getContext()).inflate(R.layout.home_recom_view, null);
@@ -138,13 +141,13 @@ private void initClick(){
 
     @Override
     public void ShowSnackBar(String s) {
-        ShowSwipe(false);
         Snackbar.make(hotList, s, Snackbar.LENGTH_SHORT).show();
     }
 
-
-    private void ShowSwipe(boolean isShow) {
+    @Override
+    public void ShowSwipe(boolean isShow) {
         swipeRefreshLayout.setRefreshing(isShow);
+        swipeRefreshLayout.setEnabled(true);
     }
 
     @Override
@@ -155,6 +158,5 @@ private void initClick(){
         homeMusicAdapter.setTitle2View(Title2);
         hotList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         hotList.setAdapter(homeMusicAdapter);
-        ShowSwipe(false);
     }
 }

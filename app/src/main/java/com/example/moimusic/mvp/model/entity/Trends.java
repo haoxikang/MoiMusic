@@ -11,8 +11,16 @@ public class Trends extends BmobObject {
     private Music songid;
     private MusicList listid;
     private String content,type;
-    private Integer likes;
+    private Integer likes,replysNum;
 private BmobFile image;
+
+    public Integer getReplysNum() {
+        return replysNum;
+    }
+
+    public void setReplysNum(Integer replysNum) {
+        this.replysNum = replysNum;
+    }
 
     public MoiUser getUserid() {
         return userid;

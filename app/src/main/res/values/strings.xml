@@ -71,4 +71,6 @@
     <string name="HotMusicList">热门歌单</string>
     <string name="NewMusic">最新歌曲</string>
     <string name="TimeLine">时间线</string>
+    <string name="hotTrends">热门动态</string>
+    <string name="friendTrends">好友动态</string>
 </resources>

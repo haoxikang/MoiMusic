@@ -13,4 +13,5 @@ public interface FragmentGroomView {
     void initPage(List<Recommend> recommends);
     void ShowSnackBar(String s);
     void onDatafetched(List<Music> musics);
+    void ShowSwipe(boolean isShow);
 }

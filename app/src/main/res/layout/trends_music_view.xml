@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:background="#fafafa"
     android:padding="16dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
@@ -7,13 +8,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/userImage"
         android:layout_marginRight="8dp"
         fresco:roundedCornerRadius="5dp"
         fresco:placeholderImageScaleType="centerCrop"
         fresco:actualImageScaleType="centerCrop"
-        android:layout_width="68dp"
-        android:layout_height="68dp"
-        android:id="@+id/view2" />
+        android:layout_width="54dp"
+        android:layout_height="54dp" />
     <LinearLayout
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
@@ -21,21 +22,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/view2"
-        android:layout_toEndOf="@+id/view2">
+        android:layout_toRightOf="@+id/userImage"
+        android:layout_toEndOf="@+id/userImage">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/name"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:text="H丶"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
+                android:id="@+id/time"
                 android:layout_centerVertical="true"
                 android:textSize="12sp"
-                android:text="16.3.20 15:56:46"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -43,9 +44,9 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/content"
             android:textColor="@color/black"
             android:layout_marginTop="8dp"
-            android:text="新人求脸熟,萌萌哒妹子一个."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <RelativeLayout
@@ -53,21 +54,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/musicImage"
                 fresco:roundedCornerRadius="5dp"
                 fresco:placeholderImageScaleType="centerCrop"
                 fresco:actualImageScaleType="centerCrop"
                 android:layout_width="match_parent"
-                android:layout_height="128dp" />
+                android:layout_height="148dp" />
             <RelativeLayout
-                android:background="#85000000"
+                android:background="@drawable/radius"
                 android:layout_width="match_parent"
-                android:layout_height="128dp">
+                android:layout_height="148dp">
 
                 <ImageView
+                    android:id="@+id/play"
                     android:layout_marginRight="16dp"
                     android:src="@mipmap/ic_play_arrow_white_48dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
@@ -81,23 +84,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/musicName"
                     android:textColor="@color/white"
-                    android:text="LAST STURTUS"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_marginTop="8dp"
-                    android:text="Amier"
                     android:textSize="12sp"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    android:id="@+id/header_singertext" />
+                    android:id="@+id/musicSinger" />
             </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/replys"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -108,9 +111,9 @@
                 android:layout_height="18dp"
                 android:id="@+id/imageView2" />
             <TextView
+                android:id="@+id/replysNum"
                 android:layout_marginLeft="4dp"
                 android:textSize="12sp"
-                android:text="7659"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

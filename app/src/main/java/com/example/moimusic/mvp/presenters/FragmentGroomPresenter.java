@@ -59,7 +59,7 @@ public class FragmentGroomPresenter extends BasePresenterImpl {
                     getMusicData();
                 },throwable -> {
                     mView.ShowSnackBar(throwable.getMessage());
-
+                    mView.ShowSwipe(false);
                 }));
     }
     public void getMusicData(){
@@ -74,12 +74,15 @@ public class FragmentGroomPresenter extends BasePresenterImpl {
                         musics2.addAll(musics);
                         musics2.addAll(musics1);
                         mView.onDatafetched(musics2);
+                        mView.ShowSwipe(false);
                     },throwable -> {
                         mView.ShowSnackBar(throwable.getMessage());
+                        mView.ShowSwipe(false);
 
                     }));
         },throwable -> {
             mView.ShowSnackBar(throwable.getMessage());
+            mView.ShowSwipe(false);
         }));
 
     }
