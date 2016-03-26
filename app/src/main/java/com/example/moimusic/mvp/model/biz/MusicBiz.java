@@ -111,6 +111,7 @@ public Observable<List<Music>> searchMusic(String name){
                 @Override
                 public void onError(int i, String s) {
                     subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                    Log.d("error",i+s);
                 }
             });
         });

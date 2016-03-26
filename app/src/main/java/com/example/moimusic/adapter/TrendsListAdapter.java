@@ -44,9 +44,12 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(int position) {
         if (position==0)return TYPE_TITLE;
-        if (lists.get(position-1).getType().equals("1")) return TYPE_NORMAL;
-        if (lists.get(position-1).getType().equals("2")) return TYPE_IMAGE;
-        if (lists.get(position-1).getType().equals("3")) return TYPE_MUSIC;
+        if(lists.size()>1){
+            if ("1".equals(lists.get(position-1).getType())) return TYPE_NORMAL;
+            if ("2".equals(lists.get(position-1).getType())) return TYPE_IMAGE;
+            if ("3".equals(lists.get(position-1).getType())) return TYPE_MUSIC;
+        }
+
         return TYPE_LIST;
     }
     class MyTitleHolder extends RecyclerView.ViewHolder {
@@ -133,6 +136,9 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return;
         }
         Trends trends = lists.get(position-1);
+        if (trends.getType()==null){
+            return;
+        }
         ((NormalViewHolder) holder).name.setText(trends.getUserid().getName());
         ((NormalViewHolder) holder).time.setText(trends.getCreatedAt());
         ((NormalViewHolder) holder).content.setText(trends.getContent());

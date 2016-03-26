@@ -14,6 +14,20 @@ public class Trends extends BmobObject {
     private Integer likes,replysNum;
 private BmobFile image;
 
+    @Override
+    public String toString() {
+        return "Trends{" +
+                "userid=" + userid +
+                ", songid=" + songid +
+                ", listid=" + listid +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                ", likes=" + likes +
+                ", replysNum=" + replysNum +
+                ", image=" + image +
+                '}';
+    }
+
     public Integer getReplysNum() {
         return replysNum;
     }

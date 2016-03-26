@@ -39,7 +39,6 @@ import javax.inject.Inject;
  */
 public class FragmentTrends extends BaseFragment implements FragmentTrendsView {
     private RecyclerView list;
-    private List<String> mDatas;
     private ButtonFlat title1, title2;
     private View Title;
     private FloatingActionButton fab;
@@ -85,8 +84,7 @@ public class FragmentTrends extends BaseFragment implements FragmentTrendsView {
         title2 =(ButtonFlat)Title.findViewById(R.id.text2) ;
         title2.setText(getContext().getResources().getString(R.string.friendTrends));
         list.setLayoutManager(new LinearLayoutManager(getContext()));
-        list.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL_LIST));
+
         title1 = (ButtonFlat) view.findViewById(R.id.text1);
         title2 = (ButtonFlat) view.findViewById(R.id.text2);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

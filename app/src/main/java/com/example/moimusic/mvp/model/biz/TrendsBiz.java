@@ -1,5 +1,7 @@
 package com.example.moimusic.mvp.model.biz;
 
+import android.util.Log;
+
 import com.example.moimusic.mvp.model.entity.Recommend;
 import com.example.moimusic.mvp.model.entity.Trends;
 import com.example.moimusic.utils.ErrorList;
@@ -23,7 +25,18 @@ public class TrendsBiz extends DataBiz {
             query.findObjects(context, new FindListener<Trends>() {
                 @Override
                 public void onSuccess(List<Trends> list) {
-                    subscriber.onNext(list);
+                    if (list.size()!=0){
+                        for (Trends trends:list){
+                            if (trends.getType()==null){
+                                subscriber.onError(new Throwable("获取动态失败"));
+
+                            }
+                        }
+                        subscriber.onNext(list);
+                    }else {
+                        subscriber.onError(new Throwable("获取动态失败"));
+                    }
+
                 }
 
                 @Override

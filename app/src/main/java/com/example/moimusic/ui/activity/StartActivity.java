@@ -16,17 +16,23 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.moimusic.R;
 import com.example.moimusic.Servers.PlayService;
 import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.reject.components.AppComponent;
+import com.rey.material.app.Dialog;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
 
 public class StartActivity extends BaseActivity {
     final public static int REQUEST_CODE_READ_PHONE_STATE= 123;
+    private LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +47,23 @@ public class StartActivity extends BaseActivity {
         initview();
             if (Build.VERSION.SDK_INT >= 23) {
                 int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+                int checkReadStoragePermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
+                int checkWriteStoragePermission = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                List<String> permisson = new ArrayList<>();
                 if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_STATE},REQUEST_CODE_READ_PHONE_STATE);
-                    return;
-                }else{
-                    //上面已经写好的拨号方法
+                    permisson.add(Manifest.permission.READ_PHONE_STATE);
+                }
+                if (checkReadStoragePermission != PackageManager.PERMISSION_GRANTED){
+                    permisson.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                }
+                if (checkWriteStoragePermission != PackageManager.PERMISSION_GRANTED){
+                    permisson.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
+                if (permisson.size()!=0){
+                    String[] strArr = new String[permisson.size()];
+                    permisson.toArray(strArr);
+                    ActivityCompat.requestPermissions(this,strArr,REQUEST_CODE_READ_PHONE_STATE);
+                }else {
                     startActivity();
                 }
             } else {
@@ -62,10 +80,18 @@ public class StartActivity extends BaseActivity {
             case REQUEST_CODE_READ_PHONE_STATE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
-                    startActivity();
+                    int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+                    int checkReadStoragePermission = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
+                    int checkWriteStoragePermission = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if(checkCallPhonePermission == PackageManager.PERMISSION_GRANTED&&checkReadStoragePermission == PackageManager.PERMISSION_GRANTED&&checkWriteStoragePermission == PackageManager.PERMISSION_GRANTED){
+                        startActivity();
+                    }else {
+                        finishActivity();
+                    }
+
                 } else {
                     // Permission Denied
-                    startActivity();
+                    finishActivity();
                 }
                 break;
             default:
@@ -78,6 +104,7 @@ public class StartActivity extends BaseActivity {
     }
 
     private void initview() {
+        linearLayout = (LinearLayout)findViewById(R.id.linearlayout);
     }
     @Override
     protected void onDestroy() {
@@ -95,4 +122,12 @@ private void startActivity(){
 
     }).start();
 }
+    private void finishActivity(){
+        Dialog dialog = new Dialog(this)
+                .title(getResources().getString(R.string.failOpenPermission))
+                .cancelable(false)
+                .positiveAction(getResources().getString(R.string.OK))
+                .positiveActionClickListener(v -> finish());
+        dialog.show();
+    }
 }

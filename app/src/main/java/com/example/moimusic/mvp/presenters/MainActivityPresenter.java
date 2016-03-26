@@ -39,7 +39,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.app.BottomSheetDialog;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
@@ -167,9 +169,23 @@ public class MainActivityPresenter extends BasePresenterImpl {
     public void checkPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
-            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+            int checkReadStoragePermission = ContextCompat.checkSelfPermission(context,Manifest.permission.READ_EXTERNAL_STORAGE);
+            int checkWriteStoragePermission = ContextCompat.checkSelfPermission(context,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            List<String> permisson = new ArrayList<>();
+            if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+                permisson.add(Manifest.permission.READ_PHONE_STATE);
+            }
+            if (checkReadStoragePermission != PackageManager.PERMISSION_GRANTED){
+                permisson.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (checkWriteStoragePermission != PackageManager.PERMISSION_GRANTED){
+                permisson.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (permisson.size()!=0){
+                String[] strArr = new String[permisson.size()];
+                permisson.toArray(strArr);
                 mView.ShowLongSnackbar(context.getResources().getString(R.string.ShowPermission));
-                ActivityCompat.requestPermissions((MainActivity) context, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE);
+                ActivityCompat.requestPermissions((MainActivity)context,strArr,REQUEST_CODE_READ_PHONE_STATE);
             }
         }
     }
@@ -283,7 +299,7 @@ public void searchItemClick(String s){      //零时的,以后要改
         switch (requestCode) {
             case REQUEST_CODE_READ_PHONE_STATE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//刷新UI
+
                 } else {
                     // Permission Denied
                     mView.ShowLongSnackbar(context.getResources().getString(R.string.failOpenPermission));

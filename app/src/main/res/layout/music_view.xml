@@ -5,57 +5,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:ripple="http://schemas.android.com/apk/res-auto">
-    <com.zhy.android.percent.support.PercentRelativeLayout
-        android:id="@+id/relativeLayout"
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="3dp"
         app:layout_marginPercent="2%w"
-        android:background="#f1f4f5"
         app:layout_heightPercent="120%w"
         app:layout_widthPercent="100%w"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/simpleView"
-            fresco:placeholderImageScaleType="centerCrop"
-            fresco:actualImageScaleType="centerCrop"
-            android:layout_width="0dp"
-            app:layout_heightPercent="72%h"
-            app:layout_widthPercent="100%w"
-            android:layout_height="0dp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <com.zhy.android.percent.support.PercentRelativeLayout
+            android:id="@+id/relativeLayout"
             android:background="#f1f4f5"
-            android:layout_below="@+id/simpleView"
-            app:layout_heightPercent="28%h"
-            app:layout_widthPercent="100%w"
-            android:layout_width="0dp"
-            android:layout_height="0dp">
-            <LinearLayout
-                app:layout_widthPercent="70%w"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/simpleView"
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:actualImageScaleType="centerCrop"
+                android:layout_width="0dp"
+                app:layout_heightPercent="72%h"
+                app:layout_widthPercent="100%w"
+                android:layout_height="0dp" />
+            <com.zhy.android.percent.support.PercentRelativeLayout
                 android:background="#f1f4f5"
-                android:layout_marginLeft="16dp"
-                android:layout_centerVertical="true"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="#616161"
-                    android:id="@+id/name"
-                    android:singleLine="true"
-                    android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:text="Sir Sly"
+                android:layout_below="@+id/simpleView"
+                app:layout_heightPercent="28%h"
+                app:layout_widthPercent="100%w"
+                android:layout_width="0dp"
+                android:layout_height="0dp">
+                <LinearLayout
+                    app:layout_widthPercent="70%w"
+                    android:background="#f1f4f5"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textColor="#616161"
-                    android:id="@+id/singer"
-                    android:layout_marginTop="4dp"
-                    android:singleLine="true"
-                    android:textSize="12sp"
-                    android:text="You Haunt Me "
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <!--<ImageView-->
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textColor="#616161"
+                        android:id="@+id/name"
+                        android:singleLine="true"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:text="Sir Sly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="#616161"
+                        android:id="@+id/singer"
+                        android:layout_marginTop="4dp"
+                        android:singleLine="true"
+                        android:textSize="12sp"
+                        android:text="You Haunt Me "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <!--<ImageView-->
                 <!--android:id="@+id/playButtom"-->
                 <!--android:tint="#616161"-->
                 <!--android:layout_marginRight="16dp"-->
@@ -65,17 +69,19 @@
                 <!--android:layout_centerVertical="true"-->
                 <!--android:layout_alignParentRight="true"-->
                 <!--android:layout_alignParentEnd="true" />-->
-        </com.zhy.android.percent.support.PercentRelativeLayout>
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:id="@+id/header_image"
-            ripple:mrl_rippleColor="@color/playBack"
-            ripple:mrl_rippleRoundedCorners="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <RelativeLayout
+            </com.zhy.android.percent.support.PercentRelativeLayout>
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/header_image"
+                ripple:mrl_rippleColor="@color/playBack"
+                ripple:mrl_rippleRoundedCorners="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            </RelativeLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
-    </com.zhy.android.percent.support.PercentRelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+    </android.support.v7.widget.CardView>
+
 </com.zhy.android.percent.support.PercentRelativeLayout>
