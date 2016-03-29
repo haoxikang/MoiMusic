@@ -81,8 +81,7 @@ public class MainActivityPresenter extends BasePresenterImpl {
 
     public void getMusicList() {
         MusicBiz musicBiz = factory.createBiz(MusicBiz.class);
-        mSubscriptions.add(musicBiz.getMusics().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(musicBiz.getMusics()
                 .subscribe(musicList -> {
                     Log.d("TAGList", musicList.get(0).toString());
                     playListSingleton.setMusicList(musicList);
@@ -242,8 +241,7 @@ public class MainActivityPresenter extends BasePresenterImpl {
                 mSubscriptions.remove(searchSubscription);
                 Log.d("解绑成功","成功");
             }
-            searchSubscription = musicBiz.searchMusic(s).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            searchSubscription = musicBiz.searchMusic(s)
                     .flatMap(musics ->{
                         hashMap.clear();
                         mView.onSearched(musics);

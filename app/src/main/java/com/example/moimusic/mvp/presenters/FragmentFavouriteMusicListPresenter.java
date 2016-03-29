@@ -42,8 +42,7 @@ public class FragmentFavouriteMusicListPresenter extends BasePresenterImpl {
     public void getMusicLists() {
 
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-        mSubscriptions.add(musicListBiz.getCollegeMusic(page, false).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(musicListBiz.getCollegeMusic(page, false)
                 .subscribe(musicLists -> {
                     if (page == 1) {
                         fragmentFavouriteMusicListView.hideSwipe(false);
@@ -74,8 +73,7 @@ public class FragmentFavouriteMusicListPresenter extends BasePresenterImpl {
         dialog.positiveActionClickListener(v1 -> {
             dialog.cancelable(false);
             MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-            mSubscriptions.add(musicListBiz.deleteList(id, false).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(musicListBiz.deleteList(id, false)
                     .subscribe(musicList -> {
                         fragmentFavouriteMusicListView.showSnackBar("删除歌单成功");
                         fragmentFavouriteMusicListView.updataList();

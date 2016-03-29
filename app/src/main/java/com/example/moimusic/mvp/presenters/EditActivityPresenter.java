@@ -131,8 +131,7 @@ public class EditActivityPresenter extends BasePresenterImpl {
 
         }
         UserBiz userBiz = factory.createBiz(UserBiz.class);
-        mSubscriptions.add(userBiz.updata(data).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(userBiz.updata(data)
                 .subscribe(moiUser -> {
                     EventBus.getDefault().post(new EvenUserCall());
                     view.finish();

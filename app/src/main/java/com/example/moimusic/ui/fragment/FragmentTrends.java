@@ -1,5 +1,6 @@
 package com.example.moimusic.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,7 @@ import com.example.moimusic.reject.components.DaggerFragmentSignUpComponent;
 import com.example.moimusic.reject.components.DaggerFragmentTrendsComponent;
 import com.example.moimusic.reject.models.FragmentSignUpModule;
 import com.example.moimusic.reject.models.FragmentTrendsModule;
+import com.example.moimusic.ui.activity.ActivityNewTrends;
 import com.example.moimusic.ui.customview.DividerItemDecoration;
 import com.gc.materialdesign.views.ButtonFlat;
 import com.melnykov.fab.FloatingActionButton;
@@ -100,6 +102,11 @@ public class FragmentTrends extends BaseFragment implements FragmentTrendsView {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.getTrends();
             swipeRefreshLayout.setEnabled(false);
+        });
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ActivityNewTrends.class);
+            intent.putExtra("shareType","文字");
+            startActivity(intent);
         });
     }
 

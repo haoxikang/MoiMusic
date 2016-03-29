@@ -6,6 +6,7 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:ripple="http://schemas.android.com/apk/res-auto">
     <android.support.v7.widget.CardView
+        app:cardBackgroundColor = "#f1f4f5"
         app:cardCornerRadius="3dp"
         app:layout_marginPercent="2%w"
         app:layout_heightPercent="120%w"

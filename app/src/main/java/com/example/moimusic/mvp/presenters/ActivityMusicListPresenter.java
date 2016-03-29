@@ -68,8 +68,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
         MusicBiz musicBiz = factory.createBiz(MusicBiz.class);
         if (id != null && !id.equals("")) {
-            mSubscriptions.add(musicListBiz.getMusicList(id).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(musicListBiz.getMusicList(id)
                     .subscribe(musicList -> {
                         List = musicList;
                         iMusicListView.showView(musicList);
@@ -81,8 +80,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                     }, throwable1 -> {
                         iMusicListView.ShowSnackBar(throwable1.getMessage());
                     }));
-            mSubscriptions.add(musicBiz.getMusic(id).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(musicBiz.getMusic(id)
                     .subscribe(musicList -> {
                         iMusicListView.setupViewPager(musicList);
                         IncreaseBiz.musicListIncreace(id);
@@ -142,8 +140,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                     dialog.setTitle("正在发布歌单");
                     dialog.cancelable(false);
                     dialog.show();
-                    mSubscriptions.add(musicListBiz.ReleaceList(id).subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+                    mSubscriptions.add(musicListBiz.ReleaceList(id)
                             .subscribe(musicList1 -> {
                                 dialog.dismiss();
                                 iMusicListView.ShowSnackBar("歌单发布成功");
@@ -173,8 +170,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                     if (isAnimal) {
                         
                     } else {
-                        mSubscriptions.add(userBiz.CollegeList(id).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
+                        mSubscriptions.add(userBiz.CollegeList(id)
                                 .subscribe(moiUser -> {
                                     iMusicListView.ShowSnackBar(context.getResources().getString(R.string.CollegeSuccess));
                                 }, throwable -> {

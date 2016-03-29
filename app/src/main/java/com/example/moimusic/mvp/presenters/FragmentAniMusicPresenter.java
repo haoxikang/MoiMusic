@@ -39,8 +39,7 @@ public class FragmentAniMusicPresenter extends BasePresenterImpl {
     public void onCreate() {
         super.onCreate();
         RecommendBiz biz = factory.createBiz(RecommendBiz.class);
-        mSubscriptions.add(biz.getRecommend().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(biz.getRecommend()
                 .subscribe(recommends -> {
                     List<Recommend> list = new ArrayList<>();
                     for (Recommend recommend:recommends){
@@ -57,8 +56,7 @@ public class FragmentAniMusicPresenter extends BasePresenterImpl {
     }
     public void getMusicData(){
         MusicBiz musicBiz = factory.createBiz(MusicBiz.class);
-        mSubscriptions.add(musicBiz.getHomePageMusic(2,1).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(musicBiz.getHomePageMusic(2,1)
                 .subscribe(musics -> {
                     mSubscriptions.add(musicBiz.getHomePageMusic(1,1).subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())

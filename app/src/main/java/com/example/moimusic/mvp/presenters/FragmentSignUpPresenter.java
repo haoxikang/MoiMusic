@@ -47,8 +47,7 @@ public class FragmentSignUpPresenter extends BasePresenterImpl {
         }else {
             fragmentSignUpView.showProgressWithAllViewUnEnable(true);
             UserBiz userBiz = factory.createBiz(UserBiz.class);
-            mSubscriptions.add(userBiz.Logup(text).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(userBiz.Logup(text)
             .subscribe(moiUser -> {
                 EventBus.getDefault().post(AppApplication.context.getResources().getString(R.string.log_up_succ));
                 fragmentSignUpView.showProgressWithAllViewUnEnable(false);
@@ -72,8 +71,7 @@ public class FragmentSignUpPresenter extends BasePresenterImpl {
             fragmentSignUpView.phoneNumberEnable(false);
             fragmentSignUpView.setButonFlatEnable(false);
             UserBiz userBiz = factory.createBiz(UserBiz.class);
-            mSubscriptions.add(countDowm().subscribeOn(Schedulers.io()
-            ).observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(countDowm()
                     .subscribe(s1 -> fragmentSignUpView.setButtonFlatText(s1)
                             , throwable -> {
 
@@ -82,8 +80,7 @@ public class FragmentSignUpPresenter extends BasePresenterImpl {
                                 fragmentSignUpView.setButonFlatEnable(true);
                                 fragmentSignUpView.phoneNumberEnable(true);
                             }));
-            mSubscriptions.add(userBiz.sendMSG(s).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(userBiz.sendMSG(s)
                     .subscribe(aBoolean -> {
                         if (aBoolean) {
                             fragmentSignUpView.showSnakBar(AppApplication.context.getResources().getString(R.string.send_msg_succ));

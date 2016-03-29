@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,8 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int TYPE_LIST = 1;
     public static final int TYPE_NORMAL = 2;
     public static final int TYPE_IMAGE = 3;
-    public static final int TYPE_TITLE= 5;
-    private View  TitleView;
+    public static final int TYPE_TITLE = 5;
+    private View TitleView;
     private Context context;
     private List<Trends> lists = new ArrayList<>();
 
@@ -43,15 +44,16 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
-        if (position==0)return TYPE_TITLE;
-        if(lists.size()>1){
-            if ("1".equals(lists.get(position-1).getType())) return TYPE_NORMAL;
-            if ("2".equals(lists.get(position-1).getType())) return TYPE_IMAGE;
-            if ("3".equals(lists.get(position-1).getType())) return TYPE_MUSIC;
+        if (position == 0) return TYPE_TITLE;
+        if (lists.size() > 1) {
+            if ("1".equals(lists.get(position - 1).getType())) return TYPE_NORMAL;
+            if ("2".equals(lists.get(position - 1).getType())) return TYPE_IMAGE;
+            if ("3".equals(lists.get(position - 1).getType())) return TYPE_MUSIC;
         }
 
         return TYPE_LIST;
     }
+
     class MyTitleHolder extends RecyclerView.ViewHolder {
 
 
@@ -59,6 +61,7 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             super(itemView);
         }
     }
+
     class NormalViewHolder extends RecyclerView.ViewHolder {
         protected TextView name, time, content, replysNumber;
         protected SimpleDraweeView userImage;
@@ -115,7 +118,7 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
-        if (viewType==TYPE_TITLE)return new MyTitleHolder(TitleView);
+        if (viewType == TYPE_TITLE) return new MyTitleHolder(TitleView);
         if (viewType == TYPE_NORMAL) return new NormalViewHolder(LayoutInflater.from(
                 AppApplication.context).inflate(R.layout.trends_view, parent,
                 false));
@@ -135,26 +138,32 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (getItemViewType(position) == TYPE_TITLE) {
             return;
         }
-        Trends trends = lists.get(position-1);
-        if (trends.getType()==null){
+        Trends trends = lists.get(position - 1);
+        if (trends.getType() == null) {
             return;
         }
         ((NormalViewHolder) holder).name.setText(trends.getUserid().getName());
         ((NormalViewHolder) holder).time.setText(trends.getCreatedAt());
         ((NormalViewHolder) holder).content.setText(trends.getContent());
-        if (trends.getUserid().getImageFile()!=null){
+        if (trends.getUserid().getImageFile() != null) {
             ((NormalViewHolder) holder).userImage.setImageURI(Uri.parse(trends.getUserid().getImageFile().getFileUrl(context)));
         }
 
-        if (trends.getReplysNum()!=null){
-            ((NormalViewHolder) holder).replysNumber.setText(trends.getReplysNum()+"");
-        }else {
-            ((NormalViewHolder) holder).replysNumber.setText(0+"");
+        if (trends.getReplysNum() != null) {
+            ((NormalViewHolder) holder).replysNumber.setText(trends.getReplysNum() + "");
+        } else {
+            ((NormalViewHolder) holder).replysNumber.setText(0 + "");
         }
 
         if (getItemViewType(position) == TYPE_IMAGE) {
+            if (trends.getType() == null) {
+                return;
+            }
             ((ImageViewHolder) holder).contentImage.setImageURI(Uri.parse(trends.getImage().getFileUrl(context)));
         } else if (getItemViewType(position) == TYPE_MUSIC) {
+            if (trends.getType() == null) {
+                return;
+            }
             Music music = trends.getSongid();
             ((MusicViewHolder) holder).musicImage.setImageURI(Uri.parse(music.getMusicImageUri()));
             ((MusicViewHolder) holder).musicName.setText(music.getMusicName());
@@ -163,8 +172,11 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             });
         } else if (getItemViewType(position) == TYPE_LIST) {
+            if (trends.getType() == null) {
+                return;
+            }
             MusicList musicList = trends.getListid();
-            if (musicList.getListImageUri()!=null){
+            if (musicList.getListImageUri() != null) {
                 ((ListViewHolder) holder).ListImage.setImageURI(Uri.parse(musicList.getListImageUri()));
             }
 
@@ -179,8 +191,9 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return lists.size()+1;
+        return lists.size() + 1;
     }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

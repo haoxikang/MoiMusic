@@ -1,6 +1,7 @@
 package com.example.moimusic.mvp.presenters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
@@ -38,8 +39,7 @@ public class FragmentTrendsPresenter extends BasePresenterImpl {
 
     public void getTrends(){
         TrendsBiz biz = factory.createBiz(TrendsBiz.class);
-        mSubscriptions.add(biz.getTrends().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(biz.getTrends()
         .subscribe(trendses -> {
             for (Trends trends:trendses){
                 if (trends.getType()==null){

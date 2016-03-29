@@ -60,8 +60,7 @@ private String id;
             MusicListBiz biz = factory.createBiz(MusicListBiz.class);
             view.setEnable(false);
             view.showProgress(true);
-            mSubscriptions.add(biz.updataMusicList(id, file.getPath(), view.getText().toString()).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(biz.updataMusicList(id, file.getPath(), view.getText().toString())
                     .subscribe(musicList -> {
                         view.setEnable(true);
                         view.showProgress(false);
@@ -82,8 +81,11 @@ private String id;
         if (flag == 1) {
             beginCrop(data.getData());
         } else if (flag == 2) {
-            view.showImage(Crop.getOutput(data));
-            imageUri = Crop.getOutput(data);
+            if (data!=null){
+                view.showImage(Crop.getOutput(data));
+                imageUri = Crop.getOutput(data);
+            }
+
         }
 
     }

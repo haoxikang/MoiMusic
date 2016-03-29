@@ -46,8 +46,7 @@ public class FragmentGroomPresenter extends BasePresenterImpl {
     public void onCreate() {
         super.onCreate();
         RecommendBiz biz = factory.createBiz(RecommendBiz.class);
-        mSubscriptions.add(biz.getRecommend().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(biz.getRecommend()
                 .subscribe(recommends -> {
                     List<Recommend> list = new ArrayList<>();
                     for (Recommend recommend:recommends){
@@ -64,11 +63,9 @@ public class FragmentGroomPresenter extends BasePresenterImpl {
     }
     public void getMusicData(){
         MusicBiz musicBiz = factory.createBiz(MusicBiz.class);
-        mSubscriptions.add(musicBiz.getHomePageMusic(1,0).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(musicBiz.getHomePageMusic(1,0)
         .subscribe(musics -> {
-            mSubscriptions.add(musicBiz.getHomePageMusic(2,0).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(musicBiz.getHomePageMusic(2,0)
                     .subscribe(musics1 -> {
                         List<Music> musics2 = new ArrayList<>();
                         musics2.addAll(musics);

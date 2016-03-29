@@ -58,8 +58,7 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
         Intent intent = mView.GetIntent();
         String s = intent.getStringExtra("userID");
         FollowBiz followBiz = factory.createBiz(FollowBiz.class);
-        mSubscriptions.add(followBiz.isFollowed(s).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(followBiz.isFollowed(s)
                 .subscribe(s1 -> {
                     if (s1 == null) {
 
@@ -102,16 +101,14 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
         String s = intent.getStringExtra("userID");
         FollowBiz followBiz = factory.createBiz(FollowBiz.class);
         UserBiz userBiz = factory.createBiz(UserBiz.class);
-        mSubscriptions.add(followBiz.getFollowData(s).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(followBiz.getFollowData(s)
                 .subscribe(ints -> {
                     if (s.equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
                         User = BmobUser.getCurrentUser(context, MoiUser.class);
                         mView.updataView(BmobUser.getCurrentUser(context, MoiUser.class), ints[0], ints[1]);
                         i = ints;
                     } else {
-                        mSubscriptions.add(userBiz.getUser(s).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
+                        mSubscriptions.add(userBiz.getUser(s)
                                 .subscribe(moiUser -> {
                                     User = moiUser;
                                     mView.updataView(moiUser, ints[0], ints[1]);
@@ -149,8 +146,7 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
         FollowBiz followBiz = factory.createBiz(FollowBiz.class);
         if (isFollowed) {
             mView.setButtonEnable(false);
-            mSubscriptions.add(followBiz.deleteFollow(followedId).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(followBiz.deleteFollow(followedId)
                     .subscribe(aBoolean -> {
                         isFollowed = false;
                         mView.setButtonBK(false);
@@ -164,8 +160,7 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
                         mView.setButtonEnable(true);
                     }));
         } else {
-            mSubscriptions.add(followBiz.addFollow(s).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(followBiz.addFollow(s)
                     .subscribe(s1 -> {
                         followedId = s1;
                         isFollowed = true;

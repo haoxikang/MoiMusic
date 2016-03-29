@@ -56,8 +56,7 @@ public class FragmentMuiscListReplysPresenter extends BasePresenterImpl {
     @Override
     public void onCreate() {
         super.onCreate();
-        mSubscriptions.add(iReplysData.getReplys(page,id).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(iReplysData.getReplys(page,id)
         .subscribe(iReplies -> {
                 if (page==1){
                      adapter = new MusicListReplyAdapter(iReplies,activity);
@@ -96,8 +95,7 @@ public class FragmentMuiscListReplysPresenter extends BasePresenterImpl {
             mDialog.show();
         }else {
             view.setViewEnable(false);
-            mSubscriptions.add(iReplysData.sendComment(s,id).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(iReplysData.sendComment(s,id)
             .subscribe(s1 -> {
 
             },throwable ->  {

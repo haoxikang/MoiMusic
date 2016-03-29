@@ -88,13 +88,11 @@ private void initClick(){
     buttonnew.setOnClickListener(v -> ShowSnackBar("点击了热门"));
     swipeRefreshLayout.setOnRefreshListener(() -> {
         presenter.getMusicData();
-        swipeRefreshLayout.setEnabled(false);
     });
 }
     private void initView(View v) {
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-swipeRefreshLayout.setEnabled(false);
 
         hotList = (RecyclerView) v.findViewById(R.id.Hotmusic);
         header = LayoutInflater.from(getContext()).inflate(R.layout.home_recom_view, null);
@@ -147,7 +145,6 @@ swipeRefreshLayout.setEnabled(false);
     @Override
     public void ShowSwipe(boolean isShow) {
         swipeRefreshLayout.setRefreshing(isShow);
-        swipeRefreshLayout.setEnabled(true);
     }
 
     @Override

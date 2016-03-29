@@ -60,8 +60,7 @@ public class FragmentMusicListPresenter extends BasePresenterImpl {
     public void getMusicLists() {
 
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-        mSubscriptions.add(musicListBiz.getMyMusic(page, id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId()), id).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        mSubscriptions.add(musicListBiz.getMyMusic(page, id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId()), id)
                 .subscribe(musicLists -> {
                     if (page == 1) {
                         musicListViewAdapter = new MusicListViewAdapter(musicLists, fragmentActivity,isCurrentUser());
@@ -87,8 +86,7 @@ public class FragmentMusicListPresenter extends BasePresenterImpl {
         dialog.positiveActionClickListener(v1 -> {
             dialog.cancelable(false);
             MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-            mSubscriptions.add(musicListBiz.deleteList(id, true).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(musicListBiz.deleteList(id, true)
                     .subscribe(musicList -> {
                         fragmentMusicListView.showSnackBar("删除歌单成功");
                         fragmentMusicListView.updateList();

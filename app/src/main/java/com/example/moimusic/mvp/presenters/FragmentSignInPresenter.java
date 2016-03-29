@@ -44,8 +44,7 @@ public class FragmentSignInPresenter extends BasePresenterImpl{
         }else {
             fragmentSignInView.showProgressWithAllViewUnEnable(true);
             UserBiz userBiz = factory.createBiz(UserBiz.class);
-            mSubscriptions.add(userBiz.LogIn(text).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            mSubscriptions.add(userBiz.LogIn(text)
                     .subscribe(moiUser -> {
                         EventBus.getDefault().post(AppApplication.context.getResources().getString(R.string.log_in_succ));
                         fragmentSignInView.showProgressWithAllViewUnEnable(false);
