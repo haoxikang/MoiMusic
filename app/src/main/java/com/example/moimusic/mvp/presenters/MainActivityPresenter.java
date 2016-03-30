@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.moimusic.R;
 import com.example.moimusic.adapter.UnderMusicListAdapter;
@@ -24,7 +22,6 @@ import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
 import com.example.moimusic.mvp.model.ApiService;
 import com.example.moimusic.mvp.model.biz.MusicBiz;
-import com.example.moimusic.mvp.model.biz.MusicListBiz;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenMusicPlay;
 import com.example.moimusic.mvp.model.entity.EvenReCall;
@@ -38,7 +35,6 @@ import com.example.moimusic.ui.activity.UserCenterActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.app.BottomSheetDialog;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +43,6 @@ import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
 import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by qqq34 on 2016/1/28.

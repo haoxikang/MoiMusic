@@ -36,6 +36,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import cn.bmob.v3.Bmob;
+
 /**
  * Created by qqq34 on 2016/1/30.
  */
@@ -104,9 +106,8 @@ public class FragmentTrends extends BaseFragment implements FragmentTrendsView {
             swipeRefreshLayout.setEnabled(false);
         });
         fab.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), ActivityNewTrends.class);
-            intent.putExtra("shareType","文字");
-            startActivity(intent);
+            presenter.onFabClick();
+
         });
     }
 
