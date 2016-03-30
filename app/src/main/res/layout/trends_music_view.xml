@@ -82,19 +82,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="148dp" />
                 <RelativeLayout
+                    android:id="@+id/areaMusic"
                     android:background="@drawable/radius"
                     android:layout_width="match_parent"
                     android:layout_height="148dp">
-
-                    <ImageView
-                        android:id="@+id/play"
-                        android:layout_marginRight="16dp"
-                        android:src="@mipmap/ic_play_arrow_white_48dp"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true" />
                 </RelativeLayout>
                 <LinearLayout
                     android:layout_marginLeft="24dp"

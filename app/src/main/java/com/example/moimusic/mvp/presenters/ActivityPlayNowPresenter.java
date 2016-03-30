@@ -1,16 +1,28 @@
 package com.example.moimusic.mvp.presenters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.balysv.materialripple.MaterialRippleLayout;
+import com.example.moimusic.R;
 import com.example.moimusic.mvp.model.ApiService;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenMusicListContentAdapterCall;
 import com.example.moimusic.mvp.model.entity.EvenReCall;
+import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.views.IActivityPlayNowView;
 import com.example.moimusic.play.PlayListSingleton;
+import com.example.moimusic.ui.activity.ActivityNewTrends;
+import com.example.moimusic.ui.activity.LogActivity;
 import com.example.moimusic.utils.Utils;
+import com.rey.material.app.BottomSheetDialog;
 
+import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -92,5 +104,29 @@ private Context context;
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+    public void showMore(){
+        BottomSheetDialog mDialog = new BottomSheetDialog(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.play_now_more, null);
+        MaterialRippleLayout rippleShare = (MaterialRippleLayout)view.findViewById(R.id.rippleShare);
+        rippleShare.setOnClickListener(v -> {
+            if (BmobUser.getCurrentUser(context,MoiUser.class)==null){
+                this.view.startActivity(new Intent(context, LogActivity.class));
+            }else {
+                Intent intent = new Intent(context, ActivityNewTrends.class);
+                intent.putExtra("shareType","歌曲");
+                intent.putExtra("shareName",playListSingleton.getCurrent().getMusicName());
+                intent.putExtra("shareSinger",playListSingleton.getCurrent().getSinger());
+                intent.putExtra("ID",playListSingleton.getCurrent().getObjectId());
+                intent.putExtra("musicImage",playListSingleton.getCurrent().getMusicImageUri());
+                this.view.startActivity(intent);
+            }
+
+        });
+        mDialog.contentView(view)
+                .heightParam(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .inDuration(500)
+                .cancelable(true)
+                .show();
     }
 }

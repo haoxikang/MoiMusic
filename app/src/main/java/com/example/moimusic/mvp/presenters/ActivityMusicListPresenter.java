@@ -25,7 +25,9 @@ import com.example.moimusic.mvp.views.IMainView;
 import com.example.moimusic.mvp.views.IMusicListView;
 import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.ui.activity.ActivityEditMusicList;
+import com.example.moimusic.ui.activity.ActivityNewTrends;
 import com.example.moimusic.ui.activity.ActivityPlayNow;
+import com.example.moimusic.ui.activity.LogActivity;
 import com.example.moimusic.ui.activity.UserCenterActivity;
 import com.rey.material.app.Dialog;
 
@@ -134,6 +136,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
     public void menuClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.release: {
+                Log.d("菜单", isAnimal + "    " + isCurrentUser + "     " + isReleas);
                 if (!isAnimal && isCurrentUser && !isReleas) {
                     MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
                     Dialog dialog = new Dialog(context);
@@ -144,11 +147,11 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                             .subscribe(musicList1 -> {
                                 dialog.dismiss();
                                 iMusicListView.ShowSnackBar("歌单发布成功");
+                                isReleas=true;
                             },throwable -> {
                                 iMusicListView.ShowSnackBar(throwable.getMessage());
                             }));
                 } else {
-                    Log.d("菜单", isAnimal + "    " + isCurrentUser + "     " + isReleas);
                     iMusicListView.ShowSnackBar(context.getResources().getString(R.string.thisIsListYouNotRelease));
                 }
                 break;
@@ -165,25 +168,41 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                 break;
             }
             case R.id.favorite: {
-                UserBiz userBiz = factory.createBiz(UserBiz.class);
-                if (!isCurrentUser) {
-                    if (isAnimal) {
-                        
-                    } else {
-                        mSubscriptions.add(userBiz.CollegeList(id)
-                                .subscribe(moiUser -> {
-                                    iMusicListView.ShowSnackBar(context.getResources().getString(R.string.CollegeSuccess));
-                                }, throwable -> {
-                                    iMusicListView.ShowSnackBar(throwable.getMessage());
-                                }));
-                    }
-                } else {
-                    iMusicListView.ShowSnackBar(context.getResources().getString(R.string.ownListNotCollege));
-                }
+                if (BmobUser.getCurrentUser(context,MoiUser.class)==null){
+                    iMusicListView.startActivity(new Intent(context, LogActivity.class));
+                }else {
+                    UserBiz userBiz = factory.createBiz(UserBiz.class);
+                    if (!isCurrentUser) {
+                        if (isAnimal) {
 
+                        } else {
+                            mSubscriptions.add(userBiz.CollegeList(id)
+                                    .subscribe(moiUser -> {
+                                        iMusicListView.ShowSnackBar(context.getResources().getString(R.string.CollegeSuccess));
+                                    }, throwable -> {
+                                        iMusicListView.ShowSnackBar(throwable.getMessage());
+                                    }));
+                        }
+                    } else {
+                        iMusicListView.ShowSnackBar(context.getResources().getString(R.string.ownListNotCollege));
+                    }
+                }
                 break;
             }
-
+            case R.id.share:{
+                if (BmobUser.getCurrentUser(context,MoiUser.class)==null){
+                    iMusicListView.startActivity(new Intent(context, LogActivity.class));
+                }else {
+                    Intent intent = new Intent(context, ActivityNewTrends.class);
+                    intent.putExtra("shareType","歌单");
+                    intent.putExtra("shareName",List.getName());
+                    intent.putExtra("shareSinger",List.getMoiUser().getName());
+                    intent.putExtra("ID",id);
+                    intent.putExtra("musicImage",List.getListImageUri());
+                    iMusicListView.startActivity(intent);
+                }
+                break;
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.moimusic.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -14,11 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
 import com.example.moimusic.mvp.presenters.ActivityNewTrendsPresenter;
 import com.example.moimusic.mvp.views.ActivityNewTrendsView;
@@ -31,6 +34,9 @@ import com.example.moimusic.utils.SoftKeyboardUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.widget.ProgressView;
 import com.soundcloud.android.crop.Crop;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -49,6 +55,8 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
     private boolean isFrist = true;
     private int KeybardHeight;
     private MenuItem itemView;
+    private int before,after;
+    private boolean isKeybordShow;
     @Inject
     ActivityNewTrendsPresenter presenter;
 
@@ -68,9 +76,13 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         SoftKeyboardUtil.observeSoftKeyboard(this, (softKeybardHeight, visible) -> {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.BELOW, R.id.shadow);
+            isKeybordShow=visible;
             if (visible) {
+
+                after=softKeybardHeight;
                 params.height = height - softKeybardHeight + KeybardHeight;
             } else {
+                before=softKeybardHeight;
                 KeybardHeight = softKeybardHeight;
             }
             SoftKeyboardUtil.isKeyboardEven = false;
@@ -79,6 +91,25 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         });
         Rimage.setOnClickListener(v -> presenter.onRImageClick());
         deleteLayout.setOnClickListener(v -> presenter.onDeleteLayoutClick());
+        Rface.setOnClickListener(v -> {
+            Log.d("见哦盘",+after+"   "+before);
+            if (after!=0&&before!=0){
+                RelativeLayout.LayoutParams params=(RelativeLayout.LayoutParams) relativeLayout.getLayoutParams();
+                if (isKeybordShow){
+                    showKeyBoard();
+                }
+
+                if (relativeLayout.getHeight()==height){
+                    params.height=height-after+before;
+                }else {
+                    params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    params.addRule(RelativeLayout.BELOW, R.id.shadow);
+                }
+                SoftKeyboardUtil.isKeyboardEven = false;
+                relativeLayout.setLayoutParams(params);
+            }
+
+        });
     }
 
     private void initview() {
@@ -92,6 +123,7 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         bkLayout = (RelativeLayout) findViewById(R.id.bklayout);
         deleteLayout = (RelativeLayout) findViewById(R.id.delete);
         editText = (EditText) findViewById(R.id.text);
+
         draweeView = (SimpleDraweeView) findViewById(R.id.image);
         name = (TextView) findViewById(R.id.musicName);
         singer = (TextView) findViewById(R.id.musicSinger);
@@ -139,8 +171,18 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus && isFrist) {
+            editText.setFocusableInTouchMode(true);
+            editText.requestFocus();
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask()
+                           {
+                               public void run()
+                               {
+                                   showKeyBoard();
+                               }
+                           },
+                    200);
             height = relativeLayout.getHeight();
-            Log.d("键盘", height + "");
             isFrist = false;
         }
     }
@@ -221,5 +263,11 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         } else if (requestCode == Crop.REQUEST_CROP) {
             presenter.onActivityResult(data, 2);
         }
+    }
+
+    public  void showKeyBoard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) AppApplication.get(this)
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

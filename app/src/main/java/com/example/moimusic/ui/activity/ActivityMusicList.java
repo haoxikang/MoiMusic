@@ -67,7 +67,7 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
     private TextView textName, textuser;
     private RelativeLayout back;
     private FloatingActionButton floatingActionButton;
-    private MenuItem like, release, edit;
+    private MenuItem like, release, edit,share;
     @Inject
     ActivityMusicListPresenter presenter;
 
@@ -89,6 +89,8 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
         like = menu.findItem(R.id.favorite);
         edit = menu.findItem(R.id.edit);
         release = menu.findItem(R.id.release);
+        share = menu.findItem(R.id.share);
+        share.setEnabled(false);
         like.setEnabled(false);
         edit.setEnabled(false);
         release.setEnabled(false);
@@ -157,6 +159,7 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
         like.setEnabled(true);
         edit.setEnabled(true);
         release.setEnabled(true);
+        share.setEnabled(true);
 
 
     }

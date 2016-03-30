@@ -40,7 +40,10 @@
                     android:layout_height="wrap_content"
                     android:background="#f5f6f7"
                     android:hint="说点什么吧......(最多只能输入80字哦)"
-                    android:textSize="15sp" />
+                    android:textSize="15sp" >
+                    <requestFocus/>
+                </EditText>
+
                 <RelativeLayout
                     android:layout_marginTop="16dp"
                     android:layout_below="@+id/text"
@@ -205,6 +208,7 @@
                     </com.balysv.materialripple.MaterialRippleLayout>
                 </RelativeLayout>
             </com.zhy.android.percent.support.PercentRelativeLayout>
+
         </LinearLayout>
     </RelativeLayout>
     <com.rey.material.widget.ProgressView
@@ -217,4 +221,14 @@
         app:pv_progressMode="indeterminate"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+    <FrameLayout
+        android:layout_below="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="156dp">
+        <TextView
+            android:textColor="@color/black"
+            android:text="传说中的测试!!!!!!!!"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 </RelativeLayout>

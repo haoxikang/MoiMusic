@@ -50,7 +50,7 @@ public class ActivityPlayNow extends BaseActivity implements IActivityPlayNowVie
     private ImageView musicListView, musicReplys;
     private SimpleDraweeView simpleDraweeView;
     private ViewPager viewPager;
-    private MaterialRippleLayout rippleLoop,ripplePre,rippleNext,rippleMix,rippleList,rippleReplys;
+    private MaterialRippleLayout rippleLoop,ripplePre,rippleNext,rippleMix,rippleList,rippleReplys,rippleMore;
     private TextView Name,Singer,nowText,allText;
     private FloatingActionButton playButton;
     private Slider slider;
@@ -79,6 +79,7 @@ public class ActivityPlayNow extends BaseActivity implements IActivityPlayNowVie
         Singer = (TextView)findViewById(R.id.musicSinger);
         Name.setText(PlayListSingleton.INSTANCE.getCurrent().getMusicName());
         Singer.setText(PlayListSingleton.INSTANCE.getCurrent().getSinger());
+        rippleMore= (MaterialRippleLayout)findViewById(R.id.more);
         rippleLoop = (MaterialRippleLayout)findViewById(R.id.rippleLoop);
         ripplePre = (MaterialRippleLayout)findViewById(R.id.ripplePre);
         rippleNext = (MaterialRippleLayout)findViewById(R.id.rippleNext);
@@ -166,6 +167,7 @@ public class ActivityPlayNow extends BaseActivity implements IActivityPlayNowVie
             }
             return false;
         });
+        rippleMore.setOnClickListener(v -> presenter.showMore());
     }
 
     @Override

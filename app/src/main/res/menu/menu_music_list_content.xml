@@ -6,13 +6,18 @@
         android:title="@string/ReleaseTheSong"
         android:icon="@mipmap/ic_open_in_browser_white_24dp"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/edit"
         android:orderInCategory="100"
         android:icon="@mipmap/ic_create_white_24dp"
         android:title="@string/EditTheList"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
+    <item
+        android:icon="@mipmap/ic_share_white_24dp"
+        android:title="@string/shareList"
+        android:id="@+id/share"
+        android:orderInCategory="100"/>
 
     <item
         android:id="@+id/favorite"

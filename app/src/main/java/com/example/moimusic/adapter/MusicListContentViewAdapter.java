@@ -1,5 +1,6 @@
 package com.example.moimusic.adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -17,16 +18,19 @@ import com.example.moimusic.R;
 import com.example.moimusic.mvp.model.entity.EvenActivityMusicListCall;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenMusicListContentAdapterCall;
+import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.ui.activity.ActivityPlayNow;
+import com.example.moimusic.ui.activity.LogActivity;
 import com.example.moimusic.ui.dialog.ListCollectBuild;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.app.DialogFragment;
 
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
 
 
@@ -37,6 +41,7 @@ public class MusicListContentViewAdapter extends RecyclerView.Adapter<MusicListC
 
     List<Music> musicList;
 FragmentActivity activity;
+    Context context;
     public interface OnItemClickLitener {
         void onItemClick(View view, int position);
 
@@ -57,6 +62,7 @@ FragmentActivity activity;
 
     @Override
     public MusicListContentViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        context = parent.getContext();
         MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
                 AppApplication.context).inflate(R.layout.fragment_music_list_content_view, parent,
                 false));
@@ -90,9 +96,14 @@ FragmentActivity activity;
             });
         }
         holder.simpleDraweeView.setOnClickListener(v -> {
-            FragmentManager fragmentManager = activity.getSupportFragmentManager();
-            DialogFragment dialogFragment = DialogFragment.newInstance(new ListCollectBuild(musicList.get(position).getObjectId()));
-            dialogFragment.show(fragmentManager,"dididi");
+            if (BmobUser.getCurrentUser(context,MoiUser.class)==null){
+                context.startActivity(new Intent(context, LogActivity.class));
+            }else {
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                DialogFragment dialogFragment = DialogFragment.newInstance(new ListCollectBuild(musicList.get(position).getObjectId()));
+                dialogFragment.show(fragmentManager,"dididi");
+            }
+
         });
     }
 

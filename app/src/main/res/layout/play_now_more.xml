@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:background="@color/greybk"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto">
+
+        <TextView
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            android:text="@string/searchSinger"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_margin="16dp"
+        android:textColor="@color/black"
+        android:text="@string/collegeMusic"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/rippleShare"
+        ripple:mrl_rippleColor="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/shareText"
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            android:text="@string/shareMusic"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+
+</LinearLayout>

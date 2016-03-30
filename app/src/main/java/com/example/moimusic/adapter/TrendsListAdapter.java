@@ -1,6 +1,7 @@
 package com.example.moimusic.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,17 +10,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
+import com.example.moimusic.mvp.model.entity.EvenCall;
+import com.example.moimusic.mvp.model.entity.EvenMusicPlay;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.mvp.model.entity.Trends;
+import com.example.moimusic.play.PlayListSingleton;
+import com.example.moimusic.ui.activity.ActivityMusicList;
+import com.example.moimusic.ui.activity.ActivityNewTrends;
+import com.example.moimusic.ui.activity.ActivityPlayNow;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by Administrator on 2016/3/25.
@@ -45,13 +55,14 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(int position) {
         if (position == 0) return TYPE_TITLE;
-        if (lists.size() > 1) {
-            if ("1".equals(lists.get(position - 1).getType())) return TYPE_NORMAL;
+        if (lists.size() >=1) {
+            if ("4".equals(lists.get(position - 1).getType())) return TYPE_LIST;
             if ("2".equals(lists.get(position - 1).getType())) return TYPE_IMAGE;
             if ("3".equals(lists.get(position - 1).getType())) return TYPE_MUSIC;
+            if ("1".equals(lists.get(position - 1).getType())) return TYPE_NORMAL;
         }
 
-        return TYPE_LIST;
+        return TYPE_NORMAL;
     }
 
     class MyTitleHolder extends RecyclerView.ViewHolder {
@@ -88,30 +99,26 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     class MusicViewHolder extends NormalViewHolder {
         private TextView musicName, musicSinger;
         private SimpleDraweeView musicImage;
-        private ImageView play;
-
+private RelativeLayout areaMusic;
         public MusicViewHolder(View itemView) {
             super(itemView);
-
+areaMusic = (RelativeLayout)itemView.findViewById(R.id.areaMusic);
             musicName = (TextView) itemView.findViewById(R.id.musicName);
             musicSinger = (TextView) itemView.findViewById(R.id.musicSinger);
             musicImage = (SimpleDraweeView) itemView.findViewById(R.id.musicImage);
-            play = (ImageView) itemView.findViewById(R.id.play);
         }
     }
 
     class ListViewHolder extends NormalViewHolder {
         private TextView ListName, ListSinger;
         private SimpleDraweeView ListImage;
-        private ImageView play;
-
+        private RelativeLayout areaMusic;
         public ListViewHolder(View itemView) {
             super(itemView);
-
+            areaMusic = (RelativeLayout)itemView.findViewById(R.id.areaMusic);
             ListName = (TextView) itemView.findViewById(R.id.musicName);
             ListSinger = (TextView) itemView.findViewById(R.id.musicSinger);
             ListImage = (SimpleDraweeView) itemView.findViewById(R.id.musicImage);
-            play = (ImageView) itemView.findViewById(R.id.play);
         }
     }
 
@@ -168,8 +175,25 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ((MusicViewHolder) holder).musicImage.setImageURI(Uri.parse(music.getMusicImageUri()));
             ((MusicViewHolder) holder).musicName.setText(music.getMusicName());
             ((MusicViewHolder) holder).musicSinger.setText(music.getSinger());
-            ((MusicViewHolder) holder).play.setOnClickListener(v -> {
+            ((MusicViewHolder) holder).areaMusic.setOnClickListener(v -> {
+                final Music music1 = trends.getSongid();
+                if (music1 != null) {
+                    PlayListSingleton playListSingleton = PlayListSingleton.INSTANCE;
+                    for (Music m : playListSingleton.getMusicList()) {
+                        if (m.getObjectId().endsWith(music.getObjectId())) {
+                            playListSingleton.getMusicList().remove(m);
+                            break;
+                        }
+                    }
+                    playListSingleton.getMusicList().add(music);
+                    playListSingleton.setCurrentPosition(playListSingleton.getMusicList().size() - 1);
+                    EvenCall evenCall = new EvenCall();
+                    evenCall.setCurrentOrder(EvenCall.PLAY);
+                    EventBus.getDefault().post(evenCall);
+                    EventBus.getDefault().post(new EvenMusicPlay());
 
+                    context.startActivity(new Intent(context, ActivityPlayNow.class));
+                }
             });
         } else if (getItemViewType(position) == TYPE_LIST) {
             if (trends.getType() == null) {
@@ -182,8 +206,10 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             ((ListViewHolder) holder).ListName.setText(musicList.getName());
             ((ListViewHolder) holder).ListSinger.setText(musicList.getMoiUser().getName());
-            ((ListViewHolder) holder).play.setOnClickListener(v -> {
-
+            ((ListViewHolder) holder).areaMusic.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ActivityMusicList.class);
+                intent.putExtra("musiclistid",trends.getListid().getObjectId());
+                context.startActivity(intent);
             });
         }
 

@@ -73,4 +73,8 @@
     <string name="TimeLine">时间线</string>
     <string name="hotTrends">热门动态</string>
     <string name="friendTrends">好友动态</string>
+    <string name="shareList">分享歌单</string>
+    <string name="shareMusic">分享歌曲</string>
+    <string name="searchSinger">查找歌手</string>
+    <string name="collegeMusic">收藏歌曲</string>
 </resources>

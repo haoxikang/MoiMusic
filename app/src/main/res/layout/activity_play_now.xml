@@ -131,15 +131,21 @@
                                 android:text="Lily&amp;Tom"
                                 android:textColor="@color/black" />
                         </LinearLayout>
+<com.balysv.materialripple.MaterialRippleLayout
+    android:id="@+id/more"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
+    android:layout_marginRight="16dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="16dp"
-                            android:src="@mipmap/ic_more_vert_black_24dp" />
+        android:src="@mipmap/ic_more_vert_black_24dp" />
+</com.balysv.materialripple.MaterialRippleLayout>
+
                     </RelativeLayout>
 
                     <RelativeLayout
