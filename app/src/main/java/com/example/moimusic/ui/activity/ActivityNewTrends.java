@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,15 @@ import com.example.moimusic.utils.SoftKeyboardUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.widget.ProgressView;
 import com.soundcloud.android.crop.Crop;
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,8 +55,8 @@ import javax.inject.Inject;
  */
 public class ActivityNewTrends extends BaseActivity implements ActivityNewTrendsView {
     private Toolbar mToolbar;
-    private RelativeLayout relativeLayout, deleteLayout, bkLayout;
-    private EditText editText;
+    private RelativeLayout relativeLayout, deleteLayout, bkLayout,root;
+    private EmojiEditText editText;
     private SimpleDraweeView draweeView;
     private TextView name, singer;
     private ProgressView progressView;
@@ -55,8 +65,8 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
     private boolean isFrist = true;
     private int KeybardHeight;
     private MenuItem itemView;
-    private int before,after;
-    private boolean isKeybordShow;
+    private  EmojiPopup    emojiPopup;
+    private ImageView imageView;
     @Inject
     ActivityNewTrendsPresenter presenter;
 
@@ -76,13 +86,10 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         SoftKeyboardUtil.observeSoftKeyboard(this, (softKeybardHeight, visible) -> {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.BELOW, R.id.shadow);
-            isKeybordShow=visible;
             if (visible) {
 
-                after=softKeybardHeight;
                 params.height = height - softKeybardHeight + KeybardHeight;
             } else {
-                before=softKeybardHeight;
                 KeybardHeight = softKeybardHeight;
             }
             SoftKeyboardUtil.isKeyboardEven = false;
@@ -92,23 +99,23 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         Rimage.setOnClickListener(v -> presenter.onRImageClick());
         deleteLayout.setOnClickListener(v -> presenter.onDeleteLayoutClick());
         Rface.setOnClickListener(v -> {
-            Log.d("见哦盘",+after+"   "+before);
-            if (after!=0&&before!=0){
-                RelativeLayout.LayoutParams params=(RelativeLayout.LayoutParams) relativeLayout.getLayoutParams();
-                if (isKeybordShow){
-                    showKeyBoard();
-                }
-
-                if (relativeLayout.getHeight()==height){
-                    params.height=height-after+before;
-                }else {
-                    params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    params.addRule(RelativeLayout.BELOW, R.id.shadow);
-                }
-                SoftKeyboardUtil.isKeyboardEven = false;
-                relativeLayout.setLayoutParams(params);
-            }
-
+//            Log.d("见哦盘",+after+"   "+before);
+//            if (after!=0&&before!=0){
+//                RelativeLayout.LayoutParams params=(RelativeLayout.LayoutParams) relativeLayout.getLayoutParams();
+//                if (isKeybordShow){
+//                    showKeyBoard();
+//                }
+//
+//                if (relativeLayout.getHeight()==height){
+//                    params.height=height-after+before;
+//                }else {
+//                    params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+//                    params.addRule(RelativeLayout.BELOW, R.id.shadow);
+//                }
+//                SoftKeyboardUtil.isKeyboardEven = false;
+//                relativeLayout.setLayoutParams(params);
+//            }
+            emojiPopup.toggle();
         });
     }
 
@@ -122,8 +129,8 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         relativeLayout = (RelativeLayout) findViewById(R.id.inputLayout);
         bkLayout = (RelativeLayout) findViewById(R.id.bklayout);
         deleteLayout = (RelativeLayout) findViewById(R.id.delete);
-        editText = (EditText) findViewById(R.id.text);
-
+        editText = (EmojiEditText) findViewById(R.id.text);
+root = (RelativeLayout)findViewById(R.id.root);
         draweeView = (SimpleDraweeView) findViewById(R.id.image);
         name = (TextView) findViewById(R.id.musicName);
         singer = (TextView) findViewById(R.id.musicSinger);
@@ -131,6 +138,8 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         progressView.setVisibility(View.INVISIBLE);
         Rimage = (MaterialRippleLayout) findViewById(R.id.rippleImage);
         Rface = (MaterialRippleLayout) findViewById(R.id.rippleface);
+        imageView = (ImageView)findViewById(R.id.imageview);
+        setUpEmojiPopup();
     }
 
     @Override
@@ -269,5 +278,8 @@ public class ActivityNewTrends extends BaseActivity implements ActivityNewTrends
         InputMethodManager inputMethodManager = (InputMethodManager) AppApplication.get(this)
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+    private void setUpEmojiPopup() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(root).setOnEmojiBackspaceClickListener(v -> Log.d("MainActivity", "Clicked on Backspace")).setOnEmojiClickedListener(emoji -> Log.d("MainActivity", "Clicked on emoji")).setOnEmojiPopupShownListener(() -> imageView.setImageResource(R.mipmap.ic_keyboard_grey600_48dp)).setOnSoftKeyboardOpenListener(keyBoardHeight -> Log.d("MainActivity", "Opened soft keyboard")).setOnEmojiPopupDismissListener(() -> imageView.setImageResource(R.mipmap.ic_tag_faces_grey600_48dp)).setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss()).build(editText);
     }
 }

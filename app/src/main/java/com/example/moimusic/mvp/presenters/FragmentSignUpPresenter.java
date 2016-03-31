@@ -72,6 +72,8 @@ public class FragmentSignUpPresenter extends BasePresenterImpl {
             fragmentSignUpView.setButonFlatEnable(false);
             UserBiz userBiz = factory.createBiz(UserBiz.class);
             mSubscriptions.add(countDowm()
+                    .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(s1 -> fragmentSignUpView.setButtonFlatText(s1)
                             , throwable -> {
 

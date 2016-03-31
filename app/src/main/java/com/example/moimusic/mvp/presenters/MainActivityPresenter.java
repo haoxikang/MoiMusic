@@ -278,9 +278,12 @@ public void searchItemClick(String s){      //零时的,以后要改
             if (playListSingleton.loadCurrent() != null && !playListSingleton.loadCurrent().equals("")) {
                 playListSingleton.setCurrentPosition(Integer.parseInt(playListSingleton.loadCurrent()));
             }
-            if (playListSingleton.getMusicList().size() != 0) {
-                mView.updataPlayView();
-                mView.setPlayViewEnable(true);
+            if (playListSingleton.getMusicList()!= null) {
+                if (playListSingleton.getMusicList().size()!=0){
+                    mView.updataPlayView();
+                    mView.setPlayViewEnable(true);
+                }
+
             }
 
         }

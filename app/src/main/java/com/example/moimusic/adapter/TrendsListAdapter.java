@@ -25,6 +25,7 @@ import com.example.moimusic.ui.activity.ActivityMusicList;
 import com.example.moimusic.ui.activity.ActivityNewTrends;
 import com.example.moimusic.ui.activity.ActivityPlayNow;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.vanniktech.emoji.EmojiTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,14 +75,15 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     class NormalViewHolder extends RecyclerView.ViewHolder {
-        protected TextView name, time, content, replysNumber;
+        protected TextView name, time, replysNumber;
+        protected EmojiTextView content;
         protected SimpleDraweeView userImage;
 
         public NormalViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.name);
             time = (TextView) itemView.findViewById(R.id.time);
-            content = (TextView) itemView.findViewById(R.id.content);
+            content = (EmojiTextView) itemView.findViewById(R.id.content);
             replysNumber = (TextView) itemView.findViewById(R.id.replysNum);
             userImage = (SimpleDraweeView) itemView.findViewById(R.id.userImage);
         }
