@@ -70,6 +70,7 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
                         mView.setButtonBK(true);
                     }
                 },throwable -> {
+                    Log.d("ERROR","1");
                     mView.ShowSnackBar(throwable.getMessage());
                 })
         );

@@ -146,7 +146,6 @@ startActivity(intent);
 
     @Override
     public void updataView(MoiUser moiUser,int like,int followed) {
-        Log.d("TAG","在个人中心打印个人类:"+moiUser.getImageFile().getFileUrl(this));
         simpleDraweeView.setEnabled(true);
         if (moiUser.getImageFile()!=null){
             simpleDraweeView.setImageURI(Uri.parse(moiUser.getImageFile().getFileUrl(this)));

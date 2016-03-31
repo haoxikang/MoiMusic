@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
 import com.example.moimusic.mvp.model.entity.EvenCall;
 import com.example.moimusic.mvp.model.entity.EvenMusicPlay;
+import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.mvp.model.entity.Trends;
@@ -24,12 +26,16 @@ import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.ui.activity.ActivityMusicList;
 import com.example.moimusic.ui.activity.ActivityNewTrends;
 import com.example.moimusic.ui.activity.ActivityPlayNow;
+import com.example.moimusic.ui.activity.ActivityTrendsContent;
+import com.example.moimusic.ui.activity.LogActivity;
+import com.example.moimusic.ui.activity.UserCenterActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.vanniktech.emoji.EmojiTextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -48,6 +54,8 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public TrendsListAdapter(List<Trends> lists) {
         this.lists = lists;
     }
+
+
 
     public void setTitleView(View titleView) {
         TitleView = titleView;
@@ -78,6 +86,7 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         protected TextView name, time, replysNumber;
         protected EmojiTextView content;
         protected SimpleDraweeView userImage;
+        protected LinearLayout linearLayout;
 
         public NormalViewHolder(View itemView) {
             super(itemView);
@@ -86,6 +95,7 @@ public class TrendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             content = (EmojiTextView) itemView.findViewById(R.id.content);
             replysNumber = (TextView) itemView.findViewById(R.id.replysNum);
             userImage = (SimpleDraweeView) itemView.findViewById(R.id.userImage);
+            linearLayout = (LinearLayout)itemView.findViewById(R.id.linearlayout);
         }
     }
 
@@ -154,8 +164,25 @@ areaMusic = (RelativeLayout)itemView.findViewById(R.id.areaMusic);
         ((NormalViewHolder) holder).name.setText(trends.getUserid().getName());
         ((NormalViewHolder) holder).time.setText(trends.getCreatedAt());
         ((NormalViewHolder) holder).content.setText(trends.getContent());
+        ((NormalViewHolder) holder).userImage.setOnClickListener(v1 -> {
+            if (BmobUser.getCurrentUser(context,MoiUser.class)==null){
+                context.startActivity(new Intent(context, LogActivity.class));
+            }else {
+                Intent intent = new Intent(context, UserCenterActivity.class);
+                intent.putExtra("userID",trends.getUserid().getObjectId());
+                context.startActivity(intent);
+            }
+
+        });
+        ((NormalViewHolder) holder).linearLayout.setOnClickListener(v1 -> {
+            Intent intent = new Intent(context, ActivityTrendsContent.class);
+            intent.putExtra("TrendsObject",trends);
+            context.startActivity(intent);
+        });
         if (trends.getUserid().getImageFile() != null) {
             ((NormalViewHolder) holder).userImage.setImageURI(Uri.parse(trends.getUserid().getImageFile().getFileUrl(context)));
+        }else {
+            ((NormalViewHolder) holder).userImage.setImageURI(Uri.parse("null"));
         }
 
         if (trends.getReplysNum() != null) {

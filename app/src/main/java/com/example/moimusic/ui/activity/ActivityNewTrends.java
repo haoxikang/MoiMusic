@@ -280,6 +280,12 @@ root = (RelativeLayout)findViewById(R.id.root);
         inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
     private void setUpEmojiPopup() {
-        emojiPopup = EmojiPopup.Builder.fromRootView(root).setOnEmojiBackspaceClickListener(v -> Log.d("MainActivity", "Clicked on Backspace")).setOnEmojiClickedListener(emoji -> Log.d("MainActivity", "Clicked on emoji")).setOnEmojiPopupShownListener(() -> imageView.setImageResource(R.mipmap.ic_keyboard_grey600_48dp)).setOnSoftKeyboardOpenListener(keyBoardHeight -> Log.d("MainActivity", "Opened soft keyboard")).setOnEmojiPopupDismissListener(() -> imageView.setImageResource(R.mipmap.ic_tag_faces_grey600_48dp)).setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss()).build(editText);
+        emojiPopup = EmojiPopup.Builder.fromRootView(root).setOnEmojiBackspaceClickListener(v ->
+                Log.d("MainActivity", "Clicked on Backspace")).setOnEmojiClickedListener(emoji ->
+                Log.d("MainActivity", "Clicked on emoji")).setOnEmojiPopupShownListener(() ->
+                imageView.setImageResource(R.mipmap.ic_keyboard_grey600_48dp)).setOnSoftKeyboardOpenListener(keyBoardHeight ->
+                Log.d("MainActivity", "Opened soft keyboard")).setOnEmojiPopupDismissListener(() ->
+                imageView.setImageResource(R.mipmap.ic_tag_faces_grey600_48dp)).setOnSoftKeyboardCloseListener(() ->
+                emojiPopup.dismiss()).build(editText);
     }
 }
