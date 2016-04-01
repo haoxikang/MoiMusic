@@ -25,7 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by qqq34 on 2016/2/19.
+ * Created by 康颢曦 on 2016/2/19.
  */
 public class UserCenterActivityPresenter extends BasePresenterImpl {
     private ApiService api;

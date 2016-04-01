@@ -2,6 +2,7 @@ package com.example.moimusic.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,10 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.moimusic.R;
@@ -28,8 +32,12 @@ import com.example.moimusic.reject.components.DaggerFragmentMuiscListReplysCompo
 import com.example.moimusic.reject.components.DaggerFragmentMusicListComponent;
 import com.example.moimusic.reject.models.FragmentMuiscListReplysModule;
 import com.example.moimusic.reject.models.FragmentMusicListModule;
+import com.example.moimusic.utils.DensityUtil;
+import com.example.moimusic.utils.SoftKeyboardUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rey.material.widget.ProgressView;
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiPopup;
 
 import javax.inject.Inject;
 
@@ -41,11 +49,16 @@ public class FragmentMuiscListReplys extends BaseFragment implements FragmentMui
     @Inject
     FragmentMuiscListReplysPresenter presenter;
     private RecyclerView recyclerView;
-    private EditText editText;
+    private EmojiEditText editText;
     private SimpleDraweeView simpleDraweeView;
     private ProgressView progressView;
     private IReplysData data;
-
+private boolean isFitKeyboard = false;
+    private ImageView imageView;
+    private EmojiPopup emojiPopup;
+    private ViewGroup     rootView;
+    private RelativeLayout layout;
+    private int KeybardHeight;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +69,11 @@ public class FragmentMuiscListReplys extends BaseFragment implements FragmentMui
 
     }
 
-    public void setData(IReplysData data) {
+    public void setFitKeyboard(boolean fitKeyboard) {
+        isFitKeyboard = fitKeyboard;
+    }
+
+    private void setData(IReplysData data) {
         this.data = data;
     }
 
@@ -82,15 +99,34 @@ public class FragmentMuiscListReplys extends BaseFragment implements FragmentMui
     private void initView(View v) {
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        editText = (EditText) v.findViewById(R.id.saySomething);
+        editText = (EmojiEditText) v.findViewById(R.id.saySomething);
         editText.setEnabled(false);
         simpleDraweeView = (SimpleDraweeView) v.findViewById(R.id.sendview);
         simpleDraweeView.setEnabled(false);
         progressView = (ProgressView) v.findViewById(R.id.progress);
         progressView.setVisibility(View.INVISIBLE);
+        imageView = (ImageView)v.findViewById(R.id.imageview);
+        rootView = (ViewGroup) v.findViewById(R.id.root_view);
+        layout = (RelativeLayout)v.findViewById(R.id.layout) ;
+        setUpEmojiPopup();
     }
 
     private void initClick() {
+        imageView.setOnClickListener(v -> emojiPopup.toggle());
+        if (isFitKeyboard){
+            SoftKeyboardUtil.observeSoftKeyboard(getActivity(), (softKeybardHeight, visible) -> {
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(getContext(),48));
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                if (visible) {
+                    params.bottomMargin=  softKeybardHeight - KeybardHeight;
+                } else {
+                    KeybardHeight = softKeybardHeight;
+                }
+                SoftKeyboardUtil.isKeyboardEven = false;
+                layout.setLayoutParams(params);
+                Log.d("键盘", softKeybardHeight + "" + visible);
+            });
+        }
         simpleDraweeView.setOnClickListener(v -> {
             if (!TextUtils.isEmpty(editText.getText()))
                 presenter.sendComment(editText.getText().toString());
@@ -141,12 +177,14 @@ public class FragmentMuiscListReplys extends BaseFragment implements FragmentMui
         }
     }
 
-    public static FragmentMuiscListReplys newInstance(IReplysData data, String id) {
+    public static FragmentMuiscListReplys newInstance(IReplysData data, String id,boolean isFitKeyboard) {
         Bundle args = new Bundle();
         args.putString(EXTRA_LIST_ID, id);
         FragmentMuiscListReplys fragment = new FragmentMuiscListReplys();
         fragment.setArguments(args);
         fragment.setData(data);
+        fragment.setFitKeyboard(isFitKeyboard);
+
         return fragment;
     }
 
@@ -182,4 +220,14 @@ public class FragmentMuiscListReplys extends BaseFragment implements FragmentMui
 
         presenter.onCreate();
     }
+    private void setUpEmojiPopup() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(rootView).setOnEmojiBackspaceClickListener(v ->
+                Log.d("MainActivity", "Clicked on Backspace")).setOnEmojiClickedListener(emoji ->
+                Log.d("MainActivity", "Clicked on emoji")).setOnEmojiPopupShownListener(() ->
+                imageView.setImageResource(R.mipmap.ic_keyboard_grey600_48dp)).setOnSoftKeyboardOpenListener(keyBoardHeight ->
+                Log.d("MainActivity", "Opened soft keyboard")).setOnEmojiPopupDismissListener(() ->
+                imageView.setImageResource(R.mipmap.ic_tag_faces_grey600_48dp)).setOnSoftKeyboardCloseListener(() ->
+                emojiPopup.dismiss()).build(editText);
+    }
+
 }

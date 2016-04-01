@@ -92,11 +92,8 @@ public class FollowBiz extends DataBiz {
     public Observable<String> isFollowed(String id){
         Observable<String> observable = Observable.create(subscriber -> {
             BmobQuery<UserFollow> query = new BmobQuery<UserFollow>();
-//查询playerName叫“比目”的数据
             query.addWhereEqualTo("userId", BmobUser.getCurrentUser(context, MoiUser.class).getObjectId());
             query.addWhereEqualTo("followId", id);
-//返回50条数据，如果不加上这条语句，默认返回10条数据
-//执行查询方法
             query.findObjects(context, new FindListener<UserFollow>() {
                 @Override
                 public void onSuccess(List<UserFollow> object) {
@@ -125,14 +122,12 @@ public class FollowBiz extends DataBiz {
                 @Override
                 public void onSuccess() {
                     // TODO Auto-generated method stub
-                    Log.i("bmob","删除成功");
                     subscriber.onNext(true);
                 }
 
                 @Override
                 public void onFailure(int code, String msg) {
                     // TODO Auto-generated method stub
-                    Log.i("bmob","删除失败："+msg);
                     subscriber.onError(new Throwable(new ErrorList().getErrorMsg(code)));
                 }
             });
@@ -142,7 +137,6 @@ public class FollowBiz extends DataBiz {
     public Observable<String> addFollow(String id){
         Observable<String> observable = Observable.create(subscriber -> {
             UserFollow userFollow = new UserFollow();
-//注意：不能调用gameScore.setObjectId("")方法
             userFollow.setUserId(BmobUser.getCurrentUser(context).getObjectId());
             userFollow.setFollowId(id);
             userFollow.save(context, new SaveListener() {

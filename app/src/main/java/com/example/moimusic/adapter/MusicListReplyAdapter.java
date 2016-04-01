@@ -19,6 +19,7 @@ import com.example.moimusic.mvp.model.entity.MusicListReply;
 import com.example.moimusic.ui.activity.LogActivity;
 import com.example.moimusic.ui.activity.UserCenterActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.vanniktech.emoji.EmojiTextView;
 
 import java.util.List;
 
@@ -82,14 +83,15 @@ public class MusicListReplyAdapter extends RecyclerView.Adapter<MusicListReplyAd
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, time, content;
+        TextView name, time;
+        EmojiTextView content;
         SimpleDraweeView simpleDraweeView;
 
         public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             time = (TextView) view.findViewById(R.id.time);
-            content = (TextView) view.findViewById(R.id.content);
+            content = (EmojiTextView) view.findViewById(R.id.content);
             simpleDraweeView = (SimpleDraweeView) view.findViewById(R.id.userImage);
         }
     }

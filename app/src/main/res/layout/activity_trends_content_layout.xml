@@ -192,48 +192,12 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/layout"
-            android:layout_marginBottom="48dp"></android.support.v7.widget.RecyclerView>
+            android:layout_below="@id/layout"></FrameLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/inputview"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="bottom">
-
-        <LinearLayout
-            android:background="#f1f4f5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp">
-
-            <ImageView
-                android:id="@+id/imageview"
-                android:layout_gravity="bottom"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@mipmap/ic_tag_faces_grey600_48dp" />
-
-            <com.vanniktech.emoji.EmojiEditText
-                app:emojiSize="24sp"
-                android:id="@+id/edit"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-<ImageView
-    android:src="@mipmap/ic_send_grey600_48dp"
-    android:layout_gravity="bottom"
-    android:layout_width="32dp"
-    android:layout_height="32dp" />
-        </LinearLayout>
-    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

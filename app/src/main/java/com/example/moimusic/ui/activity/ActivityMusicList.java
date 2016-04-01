@@ -150,7 +150,7 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
         tabs.addTab(tabs.newTab().setText(titles.get(1)));
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(MusicListContentFragment.newInstance(musicList, "ActivityMusicList"));
-        fragments.add(FragmentMuiscListReplys.newInstance(new DataBizFactory().createBiz(MusicListReplysBiz.class), presenter.getId()));
+        fragments.add(FragmentMuiscListReplys.newInstance(new DataBizFactory().createBiz(MusicListReplysBiz.class), presenter.getId(),true));
         FragmentAdapter adapter =
                 new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager.setAdapter(adapter);

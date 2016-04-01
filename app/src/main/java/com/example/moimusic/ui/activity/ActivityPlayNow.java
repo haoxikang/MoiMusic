@@ -104,7 +104,7 @@ public class ActivityPlayNow extends BaseActivity implements IActivityPlayNowVie
                 if (position == 0) {
                     return MusicListContentFragment.newInstance(PlayListSingleton.INSTANCE.getMusicList(), "ActivityPlayNow");
                 } else if (position == 1) {
-                    return FragmentMuiscListReplys.newInstance(new DataBizFactory().createBiz(MusicReplysBiz.class), PlayListSingleton.INSTANCE.getCurrentMusicId());
+                    return FragmentMuiscListReplys.newInstance(new DataBizFactory().createBiz(MusicReplysBiz.class), PlayListSingleton.INSTANCE.getCurrentMusicId(),false);
                 } else {
                     return null;
                 }

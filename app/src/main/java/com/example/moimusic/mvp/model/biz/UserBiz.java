@@ -2,12 +2,9 @@ package com.example.moimusic.mvp.model.biz;
 
 
 
-import android.content.Context;
 import android.util.Log;
 
-import com.bmob.BTPFileResponse;
-import com.bmob.BmobProFile;
-import com.bmob.btp.callback.UploadListener;
+
 import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.utils.ErrorList;
@@ -15,7 +12,6 @@ import com.example.moimusic.utils.ErrorList;
 
 import java.io.File;
 
-import cn.bmob.v3.BmobACL;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
