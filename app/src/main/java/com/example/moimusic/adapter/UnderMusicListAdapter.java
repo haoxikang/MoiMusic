@@ -17,7 +17,13 @@ import com.example.moimusic.mvp.model.entity.EvenMusicPlay;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.play.PlayListSingleton;
+import com.example.moimusic.utils.Utils;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.List;
 
@@ -58,7 +64,9 @@ public class UnderMusicListAdapter extends RecyclerView.Adapter<UnderMusicListAd
             holder.tv.setTextColor(AppApplication.context.getResources().getColor(R.color.titeleColor));
         }
         if (playListSingleton.getMusicList().get(position).getMusicImageUri()!=null&&!playListSingleton.getMusicList().get(position).getMusicImageUri().equals("")){
-            holder.imageView.setImageURI(Uri.parse(playListSingleton.getMusicList().get(position).getMusicImageUri()));
+            SimpleDraweeView simpleDraweeView =  holder.imageView;
+            Uri uri =Uri.parse(playListSingleton.getMusicList().get(position).getMusicImageUri());
+            Utils.reSizeImage(80,80,uri,simpleDraweeView);
         }
         if (mOnItemClickLitener != null) {
             holder.materialRippleLayout.setOnClickListener(v -> {

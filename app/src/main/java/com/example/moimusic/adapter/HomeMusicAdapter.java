@@ -19,7 +19,14 @@ import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.ui.activity.ActivityPlayNow;
+import com.example.moimusic.utils.Utils;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import java.util.ArrayList;
@@ -119,7 +126,9 @@ public class HomeMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     context.startActivity(new Intent(context, ActivityPlayNow.class));
                 }
             });
-            ((MyViewHolder) holder).imageView.setImageURI(Uri.parse(music.getMusicImageUri()));
+            SimpleDraweeView simpleDraweeView =   ((MyViewHolder) holder).imageView;
+            Uri uri =Uri.parse(music.getMusicImageUri());
+            Utils.reSizeImage(250,250,uri,simpleDraweeView);
             ((MyViewHolder) holder).name.setText(music.getMusicName());
             ((MyViewHolder) holder).singer.setText(music.getSinger());
 

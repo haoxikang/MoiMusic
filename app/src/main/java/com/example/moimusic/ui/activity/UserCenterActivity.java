@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,6 +35,7 @@ import com.example.moimusic.ui.fragment.FragmentGroom;
 import com.example.moimusic.ui.fragment.FragmentMusicList;
 import com.example.moimusic.ui.fragment.FragmentOriginal;
 import com.example.moimusic.ui.fragment.FragmentTrends;
+import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -45,12 +47,15 @@ import javax.inject.Inject;
 /**
  * Created by qqq34 on 2016/2/19.
  */
-public class UserCenterActivity extends BaseActivity implements IUserCenterActivity{
+public class UserCenterActivity extends BaseActivity implements IUserCenterActivity,FragmentMusicList.FragmentListCallbacks,FragmentFavouriteMusicList.FavouriteCallbacks,AppBarLayout.OnOffsetChangedListener{
     private ViewPager viewPager;
     private TabLayout tabs;
     private SimpleDraweeView simpleDraweeView;
     private TextView textName,tvLike,textFollowed;
     private FloatingActionButton button;
+    private SwipeRefreshLayout List,FList;
+    private AppBarLayout appBarLayout;
+    private boolean isFfinish,isLfinishl;
     @Inject
     UserCenterActivityPresenter userCenterActivityPresenter;
 
@@ -90,6 +95,7 @@ userCenterActivityPresenter.attach(this,this);
         button = (FloatingActionButton) findViewById(R.id.floatbutton);
         button.setEnabled(false);
         simpleDraweeView.setEnabled(false);
+        appBarLayout = (AppBarLayout)findViewById(R.id.appbar);
     }
     private void initClick(){
         simpleDraweeView.setOnClickListener(v -> userCenterActivityPresenter.startEditActivity());
@@ -148,7 +154,8 @@ startActivity(intent);
     public void updataView(MoiUser moiUser,int like,int followed) {
         simpleDraweeView.setEnabled(true);
         if (moiUser.getImageFile()!=null){
-            simpleDraweeView.setImageURI(Uri.parse(moiUser.getImageFile().getFileUrl(this)));
+            Uri uri = Uri.parse(moiUser.getImageFile().getFileUrl(this));
+            Utils.reSizeImage(160,160,uri,simpleDraweeView);
         }
        if (moiUser.getName()!=null&&!moiUser.getName().equals("")){
            textName.setText(moiUser.getName());
@@ -181,7 +188,8 @@ startActivity(intent);
             textName.setText("未设置用户名");
         }
         if (uri!=null){
-            simpleDraweeView.setImageURI(Uri.parse(uri));
+            Uri uri1 =Uri.parse(uri);
+            Utils.reSizeImage(160,160,uri1,simpleDraweeView);
         }
     }
 
@@ -217,4 +225,36 @@ startActivity(intent);
             userCenterActivityPresenter.onDestroy();
         }
     }
+
+
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (verticalOffset == 0) {
+            FList.setEnabled(true);
+            List.setEnabled(true);
+        } else {
+            FList.setEnabled(false);
+            List.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onFavouriteViewFinished(SwipeRefreshLayout swipeRefreshLayout) {
+                FList = swipeRefreshLayout;
+                isFfinish = true;
+                if (isFfinish&&isLfinishl){
+                    appBarLayout.addOnOffsetChangedListener(this);
+                }
+    }
+
+    @Override
+    public void onListViewFinished(SwipeRefreshLayout swipeRefreshLayout) {
+            List = swipeRefreshLayout;
+        isLfinishl = true;
+        if (isFfinish&&isLfinishl){
+            appBarLayout.addOnOffsetChangedListener(this);
+        }
+    }
+
 }

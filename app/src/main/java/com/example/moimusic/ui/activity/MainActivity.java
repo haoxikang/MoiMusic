@@ -42,7 +42,13 @@ import com.example.moimusic.ui.fragment.FragmentHistory;
 import com.example.moimusic.ui.fragment.FragmentMsg;
 import com.example.moimusic.ui.fragment.FragmentMusicList;
 import com.example.moimusic.ui.fragment.MainFragment;
+import com.example.moimusic.utils.Utils;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.github.clans.fab.FloatingActionButton;
 import com.lapism.searchview.adapter.SearchAdapter;
 import com.lapism.searchview.adapter.SearchItem;
@@ -328,7 +334,9 @@ public class MainActivity extends BaseActivity implements IMainView {
                 setPlayViewEnable(true);
                 Music music = playListSingleton.getMusicList().get(currentMusic);
                 if (music.getMusicImageUri() != null && !music.getMusicImageUri().equals("")) {
-                    headImageView.setImageURI(Uri.parse(music.getMusicImageUri()));
+
+                    Uri uri =Uri.parse(music.getMusicImageUri());
+                    Utils.reSizeImage(300,400,uri,headImageView);
                 }
                 if (music.getMusicName() != null) {
                     HeadTitletv.setText(music.getMusicName());

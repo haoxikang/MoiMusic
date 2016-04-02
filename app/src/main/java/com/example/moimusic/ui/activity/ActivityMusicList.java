@@ -1,25 +1,15 @@
 package com.example.moimusic.ui.activity;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -36,28 +26,18 @@ import com.example.moimusic.mvp.presenters.ActivityMusicListPresenter;
 import com.example.moimusic.mvp.views.IMusicListView;
 import com.example.moimusic.reject.components.AppComponent;
 import com.example.moimusic.reject.components.DaggerActivityMusicListComponent;
-import com.example.moimusic.reject.components.DaggerMainActivityComponent;
 import com.example.moimusic.reject.models.ActivityMusicListModule;
-import com.example.moimusic.reject.models.MainActivityModule;
 import com.example.moimusic.ui.fragment.FragmentMuiscListReplys;
 import com.example.moimusic.ui.fragment.MusicListContentFragment;
-import com.facebook.binaryresource.FileBinaryResource;
-import com.facebook.cache.common.SimpleCacheKey;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.DraweeView;
+import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.image.ImageInfo;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 /**
- * Created by qqq34 on 2016/2/22.
+ * Created by 康颢曦 on 2016/2/22.
  */
 public class ActivityMusicList extends BaseActivity implements IMusicListView {
     private Toolbar mToolbar;
@@ -173,7 +153,8 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
     public void UpdataImageAndName(MusicList musicList) {
         if (musicList.getListImageUri() != null && !musicList.getListImageUri().equals("")) {
 
-            CoverView.setImageURI(Uri.parse(musicList.getListImageUri()));
+            Uri uri = Uri.parse(musicList.getListImageUri());
+            Utils.reSizeImage(400,350,uri,CoverView);
 
         }
 
@@ -192,8 +173,8 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
     public void showView(MusicList musicList) {
         UserView.setEnabled(true);
         if (musicList.getListImageUri() != null && !musicList.getListImageUri().equals("")) {
-
-            CoverView.setImageURI(Uri.parse(musicList.getListImageUri()));
+            Uri uri = Uri.parse(musicList.getListImageUri());
+            Utils.reSizeImage(400,350,uri,CoverView);
 
         }
 
@@ -201,7 +182,8 @@ public class ActivityMusicList extends BaseActivity implements IMusicListView {
             textName.setText(musicList.getName());
         }
         if (musicList.getMoiUser().getImageFile().getFileUrl(this)!=null){
-            UserView.setImageURI(Uri.parse(musicList.getMoiUser().getImageFile().getFileUrl(this)));
+            Uri uri = Uri.parse(musicList.getMoiUser().getImageFile().getFileUrl(this));
+            Utils.reSizeImage(150,150,uri,UserView);
         }
 
 

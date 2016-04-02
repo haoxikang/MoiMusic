@@ -29,6 +29,7 @@ import com.example.moimusic.ui.activity.ActivityPlayNow;
 import com.example.moimusic.ui.activity.ActivityTrendsContent;
 import com.example.moimusic.ui.activity.LogActivity;
 import com.example.moimusic.ui.activity.UserCenterActivity;
+import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.vanniktech.emoji.EmojiTextView;
 
@@ -180,7 +181,9 @@ areaMusic = (RelativeLayout)itemView.findViewById(R.id.areaMusic);
             context.startActivity(intent);
         });
         if (trends.getUserid().getImageFile() != null) {
-            ((NormalViewHolder) holder).userImage.setImageURI(Uri.parse(trends.getUserid().getImageFile().getFileUrl(context)));
+            SimpleDraweeView simpleDraweeView = ((NormalViewHolder) holder).userImage;
+            Uri uri = Uri.parse(trends.getUserid().getImageFile().getFileUrl(context));
+            Utils.reSizeImage(150,150,uri,simpleDraweeView);
         }else {
             ((NormalViewHolder) holder).userImage.setImageURI(Uri.parse("null"));
         }
@@ -201,7 +204,9 @@ areaMusic = (RelativeLayout)itemView.findViewById(R.id.areaMusic);
                 return;
             }
             Music music = trends.getSongid();
-            ((MusicViewHolder) holder).musicImage.setImageURI(Uri.parse(music.getMusicImageUri()));
+            SimpleDraweeView simpleDraweeView = ((MusicViewHolder) holder).musicImage;
+            Uri uri = Uri.parse(music.getMusicImageUri());
+            Utils.reSizeImage(400,220,uri,simpleDraweeView);
             ((MusicViewHolder) holder).musicName.setText(music.getMusicName());
             ((MusicViewHolder) holder).musicSinger.setText(music.getSinger());
             ((MusicViewHolder) holder).areaMusic.setOnClickListener(v -> {
@@ -230,7 +235,9 @@ areaMusic = (RelativeLayout)itemView.findViewById(R.id.areaMusic);
             }
             MusicList musicList = trends.getListid();
             if (musicList.getListImageUri() != null) {
-                ((ListViewHolder) holder).ListImage.setImageURI(Uri.parse(musicList.getListImageUri()));
+                SimpleDraweeView simpleDraweeView =   ((ListViewHolder) holder).ListImage;
+                Uri uri = Uri.parse(musicList.getListImageUri());
+                Utils.reSizeImage(300,400,uri,simpleDraweeView);
             }
 
             ((ListViewHolder) holder).ListName.setText(musicList.getName());

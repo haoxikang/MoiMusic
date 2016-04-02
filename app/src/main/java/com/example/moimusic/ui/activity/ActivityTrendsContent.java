@@ -21,6 +21,7 @@ import com.example.moimusic.reject.components.AppComponent;
 import com.example.moimusic.reject.components.DaggerActivityTrendsContentComponent;
 import com.example.moimusic.reject.models.ActivityTrendsContentModule;
 import com.example.moimusic.ui.fragment.FragmentMuiscListReplys;
+import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.vanniktech.emoji.EmojiTextView;
 
@@ -113,13 +114,15 @@ public class ActivityTrendsContent extends BaseActivity implements ActivityTrend
 
         }else if (trends.getType().equals("2")){
             ListImage.setVisibility(View.VISIBLE);
-            ListImage.setImageURI(Uri.parse(trends.getImage().getFileUrl(this)));
+            Uri uri = Uri.parse(trends.getImage().getFileUrl(this));
+            Utils.reSizeImage(400,220,uri,ListImage);
         }else if (trends.getType().equals("3")){
             ListName.setVisibility(View.VISIBLE);
             ListSinger.setVisibility(View.VISIBLE);
             ListImage.setVisibility(View.VISIBLE);
             areaMusic.setVisibility(View.VISIBLE);
-            ListImage.setImageURI(Uri.parse(trends.getSongid().getMusicImageUri()));
+            Uri uri = Uri.parse(trends.getSongid().getMusicImageUri());
+            Utils.reSizeImage(400,220,uri,ListImage);
             ListName.setText(trends.getSongid().getMusicName());
             ListSinger.setText(trends.getSongid().getSinger());
         }else if (trends.getType().equals("4")){
@@ -128,7 +131,8 @@ public class ActivityTrendsContent extends BaseActivity implements ActivityTrend
             ListImage.setVisibility(View.VISIBLE);
             areaMusic.setVisibility(View.VISIBLE);
             if (trends.getListid().getListImageUri() != null) {
-              ListImage.setImageURI(Uri.parse(trends.getListid().getListImageUri()));
+                Uri uri = Uri.parse(trends.getListid().getListImageUri());
+                Utils.reSizeImage(400,220,uri,ListImage);
             }
 
       ListName.setText(trends.getListid().getName());

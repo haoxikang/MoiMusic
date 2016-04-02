@@ -1,15 +1,14 @@
 package com.example.moimusic.ui.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,7 @@ import com.example.moimusic.mvp.presenters.FragmentMusicListPresenter;
 import com.example.moimusic.mvp.views.FragmentMusicListView;
 import com.example.moimusic.reject.components.AppComponent;
 import com.example.moimusic.reject.components.DaggerFragmentMusicListComponent;
-import com.example.moimusic.reject.components.DaggerFragmentSignInComponent;
 import com.example.moimusic.reject.models.FragmentMusicListModule;
-import com.example.moimusic.reject.models.FragmentSignInModule;
-import com.rey.material.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -38,6 +34,7 @@ public class FragmentMusicList extends BaseFragment implements FragmentMusicList
     public static final String EXTRA_USER_ID = "com.example.moimusic.Userid";
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FragmentListCallbacks callBacks;
     @Inject
     FragmentMusicListPresenter presenter;
     @Override
@@ -72,6 +69,7 @@ public class FragmentMusicList extends BaseFragment implements FragmentMusicList
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.music_list_swipe);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+        callBacks.onListViewFinished(swipeRefreshLayout);
         v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -173,5 +171,20 @@ swipeRefreshLayout.setRefreshing(!isHide);
         if (presenter!=null){
             presenter.onDestroy();
         }
+    }
+public interface FragmentListCallbacks{
+        void onListViewFinished(SwipeRefreshLayout swipeRefreshLayout);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        callBacks = (FragmentListCallbacks)activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callBacks=null;
     }
 }

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.example.moimusic.R;
 import com.example.moimusic.mvp.model.entity.Recommend;
+import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
@@ -28,7 +29,8 @@ public void attach(List<Recommend> list ){
     public View getView(ViewGroup container, int position) {
         SimpleDraweeView  view = new SimpleDraweeView(container.getContext());
         if (list!=null){
-            view.setImageURI(Uri.parse(list.get(position).getImage().getFileUrl(container.getContext())));
+            Uri uri = Uri.parse(list.get(position).getImage().getFileUrl(container.getContext()));
+            Utils.reSizeImage(500,200,uri,view);
         }
     //    view.setImageURI(Uri.parse(list.get(position).getImage().getFileUrl(container.getContext())));
         return view;

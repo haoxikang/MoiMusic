@@ -100,7 +100,8 @@ holder.imageView.setOnClickListener(v -> {
             holder.tvNum.setText("0");
         }
         if (musicLists.get(position).getListImageUri()!=null){
-            holder.simpleDraweeView.setImageURI(Uri.parse(musicLists.get(position).getListImageUri()));
+            Uri uri = Uri.parse(musicLists.get(position).getListImageUri());
+            Utils.reSizeImage(250,250,uri, holder.simpleDraweeView);
         }
 
 

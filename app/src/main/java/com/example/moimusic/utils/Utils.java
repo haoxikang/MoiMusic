@@ -9,6 +9,12 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import com.example.moimusic.AppApplication;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.File;
 
@@ -58,5 +64,14 @@ public  class Utils {
         }
         return f+":"+M;
     }
-
+    public static void reSizeImage(int width, int height, Uri uri, SimpleDraweeView simpleDraweeView){
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(width, height))
+                .build();
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setOldController(simpleDraweeView.getController())
+                .setImageRequest(request)
+                .build();
+        simpleDraweeView.setController(controller);
+    }
 }

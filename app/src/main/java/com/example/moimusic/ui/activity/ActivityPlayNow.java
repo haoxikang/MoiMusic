@@ -94,7 +94,8 @@ public class ActivityPlayNow extends BaseActivity implements IActivityPlayNowVie
         allText = (TextView)findViewById(R.id.allText);
         slider = (Slider)findViewById(R.id.slider);
         if (PlayListSingleton.INSTANCE.getCurrent().getMusicImageUri()!=null) {
-            simpleDraweeView.setImageURI(Uri.parse(PlayListSingleton.INSTANCE.getCurrent().getMusicImageUri()));
+            Uri uri = Uri.parse(PlayListSingleton.INSTANCE.getCurrent().getMusicImageUri());
+            Utils.reSizeImage(500,500,uri,simpleDraweeView);
         }
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         FragmentManager fm = getSupportFragmentManager();

@@ -13,6 +13,7 @@ import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
+import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
@@ -51,7 +52,8 @@ public class CollectMusicListAdapter extends RecyclerView.Adapter<CollectMusicLi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.tv.setText(lists.get(position).getName());
         if (lists.get(position).getListImageUri()!=null){
-            holder.imageView.setImageURI(Uri.parse(lists.get(position).getListImageUri()));
+            Uri uri = Uri.parse(lists.get(position).getListImageUri());
+            Utils.reSizeImage(80,80,uri,holder.imageView);
         }
         if (mOnItemClickLitener != null) {
             holder.materialRippleLayout.setOnClickListener(v -> {

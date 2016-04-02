@@ -8,6 +8,7 @@ import com.example.moimusic.reject.components.DaggerAppComponent;
 import com.example.moimusic.reject.models.ApiServiceModule;
 import com.example.moimusic.reject.models.AppModule;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.tencent.bugly.crashreport.CrashReport;
 
 
@@ -31,7 +32,8 @@ public class AppApplication extends Application {
                 .apiServiceModule(new ApiServiceModule())
                 .build();
         context = getApplicationContext();
-        Fresco.initialize(context);
+        ImagePipelineConfig pipelineConfig = ImagePipelineConfig.newBuilder(getApplicationContext()).setDownsampleEnabled(true).build();
+        Fresco.initialize(this,pipelineConfig);
         CrashReport.initCrashReport(getApplicationContext(), "900019960", false);
     }
 

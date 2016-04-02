@@ -18,6 +18,7 @@ import com.example.moimusic.mvp.model.entity.IReply;
 import com.example.moimusic.mvp.model.entity.MusicListReply;
 import com.example.moimusic.ui.activity.LogActivity;
 import com.example.moimusic.ui.activity.UserCenterActivity;
+import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.vanniktech.emoji.EmojiTextView;
 
@@ -46,7 +47,8 @@ public class MusicListReplyAdapter extends RecyclerView.Adapter<MusicListReplyAd
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         if (list.get(position).getUser().getImageFile().getFileUrl(fragmentActivity)!=null){
-            holder.simpleDraweeView.setImageURI(Uri.parse(list.get(position).getUser().getImageFile().getFileUrl(fragmentActivity)));
+            Uri uri = Uri.parse(list.get(position).getUser().getImageFile().getFileUrl(fragmentActivity));
+            Utils.reSizeImage(150,150,uri, holder.simpleDraweeView);
         }
 
 

@@ -1,5 +1,6 @@
 package com.example.moimusic.ui.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -30,6 +31,7 @@ import javax.inject.Inject;
 public class FragmentFavouriteMusicList extends BaseFragment implements FragmentFavouriteMusicListView{
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FavouriteCallbacks callbacks;
     @Inject
     FragmentFavouriteMusicListPresenter presenter;
     @Override
@@ -126,6 +128,7 @@ public class FragmentFavouriteMusicList extends BaseFragment implements Fragment
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.music_list_swipe);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+        callbacks.onFavouriteViewFinished(swipeRefreshLayout);
         presenter.getMusicLists();
 
     }
@@ -144,5 +147,20 @@ public class FragmentFavouriteMusicList extends BaseFragment implements Fragment
         if (presenter!=null){
             presenter.onDestroy();
         }
+    }
+    public interface FavouriteCallbacks{
+        void onFavouriteViewFinished(SwipeRefreshLayout swipeRefreshLayout);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        callbacks = (FavouriteCallbacks)activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callbacks=null;
     }
 }

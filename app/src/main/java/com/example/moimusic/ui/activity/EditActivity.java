@@ -21,6 +21,7 @@ import com.example.moimusic.reject.components.AppComponent;
 import com.example.moimusic.reject.components.DaggerEditActivityComponent;
 
 import com.example.moimusic.reject.models.EditActivityModule;
+import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gc.materialdesign.views.ButtonFlat;
 import com.rey.material.widget.ProgressView;
@@ -145,7 +146,8 @@ if (!isEnable){
     @Override
     public void setView(String imageUri,String name,String introduce,String sex) {
         if (imageUri!=null){
-            simpleDraweeView.setImageURI(Uri.parse(imageUri));
+            Uri uri = Uri.parse(imageUri);
+            Utils.reSizeImage(160,160,uri,simpleDraweeView);
         }
         this.name.getEditText().setText(name);
         this.introduce.getEditText().setText(introduce);
@@ -160,7 +162,7 @@ if (!isEnable){
 
     @Override
     public void showImage(Uri uri) {
-        simpleDraweeView.setImageURI(uri);
+        Utils.reSizeImage(160,160,uri,simpleDraweeView);
     }
 
     @Override
