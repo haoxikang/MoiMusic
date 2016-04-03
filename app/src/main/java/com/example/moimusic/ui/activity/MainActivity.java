@@ -1,7 +1,6 @@
 package com.example.moimusic.ui.activity;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,24 +11,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
 import com.example.moimusic.Servers.PlayService;
-import com.example.moimusic.mvp.model.entity.EvenReCall;
-import com.example.moimusic.mvp.model.entity.MoiUser;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.presenters.MainActivityPresenter;
 import com.example.moimusic.mvp.views.IMainView;
@@ -38,17 +30,11 @@ import com.example.moimusic.reject.components.AppComponent;
 import com.example.moimusic.reject.components.DaggerMainActivityComponent;
 import com.example.moimusic.reject.models.MainActivityModule;
 import com.example.moimusic.ui.fragment.FragmentFollow;
-import com.example.moimusic.ui.fragment.FragmentHistory;
+import com.example.moimusic.ui.fragment.FragmentSearch;
 import com.example.moimusic.ui.fragment.FragmentMsg;
-import com.example.moimusic.ui.fragment.FragmentMusicList;
 import com.example.moimusic.ui.fragment.MainFragment;
 import com.example.moimusic.utils.Utils;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.github.clans.fab.FloatingActionButton;
 import com.lapism.searchview.adapter.SearchAdapter;
 import com.lapism.searchview.adapter.SearchItem;
@@ -56,7 +42,6 @@ import com.lapism.searchview.history.SearchHistoryTable;
 import com.lapism.searchview.view.SearchCodes;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.lapism.searchview.view.SearchView;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,13 +65,14 @@ public class MainActivity extends BaseActivity implements IMainView {
     private List<SearchItem> mSuggestionsList;
     private SearchHistoryTable db;
     private FragmentFollow fragmentFollow;
-    private FragmentHistory fragmentHistory;
+    private FragmentSearch fragmentSearch;
     private MainFragment mainFragment;
     private FragmentMsg fragmentMsg;
     private Fragment isFragment; //当前fragment
     private SearchAdapter mSearchAdapter;
     private SearchView searchView;
     private Observable<String> searchObservable;
+    private MenuItem searchItem,homePageItem;
     @Inject
     MainActivityPresenter presenter;
 
@@ -182,6 +168,8 @@ public class MainActivity extends BaseActivity implements IMainView {
         playFloat.setOnClickListener(v -> presenter.musicPlay());
         nextButton.setOnClickListener(v -> presenter.nextMusic());
         prevButton.setOnClickListener(v -> presenter.prevMusic());
+        searchItem = navigationView.getMenu().findItem(R.id.search);
+        homePageItem = navigationView.getMenu().findItem(R.id.home);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             mDrawerLayout.closeDrawers();
             switch (menuItem.getItemId()) {
@@ -197,11 +185,11 @@ public class MainActivity extends BaseActivity implements IMainView {
                     getSupportActionBar().setTitle(menuItem.getTitle());
                     break;
                 }
-                case R.id.history: {
-                    if (fragmentHistory == null) {
-                        fragmentHistory = new FragmentHistory();
+                case R.id.search: {
+                    if (fragmentSearch == null) {
+                        fragmentSearch = new FragmentSearch();
                     }
-                    switchContent(isFragment, fragmentHistory);
+                    switchContent(isFragment, fragmentSearch);
                     getSupportActionBar().setTitle(menuItem.getTitle());
                     break;
                 }
@@ -245,7 +233,12 @@ public class MainActivity extends BaseActivity implements IMainView {
             public boolean onQueryTextSubmit(String query) {
                 searchView.hide(true);
                 db.addItem(new SearchItem(query));
-                Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+                if (fragmentSearch == null) {
+                    fragmentSearch = new FragmentSearch();
+                }
+                switchContent(isFragment, fragmentSearch);
+                getSupportActionBar().setTitle(getResources().getString(R.string.search));
+                searchItem.setChecked(true);
                 return false;
             }
 
@@ -444,7 +437,14 @@ public class MainActivity extends BaseActivity implements IMainView {
     public void onBackPressed() {
         if (searchView.isSearchOpen() && searchView.isSearchOpen()) {
             searchView.hide(true);
-        } else {
+        } else if (!(isFragment instanceof MainFragment)){
+            if (mainFragment == null) {
+                mainFragment = new MainFragment();
+            }
+            switchContent(isFragment, mainFragment);
+            getSupportActionBar().setTitle(getResources().getString(R.string.home_page));
+            homePageItem.setChecked(true);
+        }else {
             moveTaskToBack(true);
             super.onBackPressed();
         }
@@ -455,7 +455,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         // 过滤按键动作
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && !searchView.isSearchOpen()) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && !searchView.isSearchOpen()&&isFragment instanceof MainFragment) {
 
             moveTaskToBack(true);
 

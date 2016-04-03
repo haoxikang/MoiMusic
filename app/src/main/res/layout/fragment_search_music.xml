@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 <TextView
-    android:text="历史"
+    android:text="歌曲"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 </LinearLayout>

@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import com.example.moimusic.R;
 
 /**
- * Created by qqq34 on 2016/2/4.
+ * Created by 康颢曦 on 2016/4/3.
  */
-public class FragmentHistory extends Fragment {
+public class FragmentSearchUser  extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +21,7 @@ public class FragmentHistory extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_history, container, false);
+        View v = inflater.inflate(R.layout.fragment_search_user, container, false);
         return v;
     }
 }

@@ -14,10 +14,10 @@
             android:icon="@mipmap/ic_home_grey600_24dp"
             android:title="@string/home_page" />
         <item
-            android:id="@+id/history"
+            android:id="@+id/search"
             android:checkable="true"
-            android:icon="@mipmap/ic_restore_grey600_24dp"
-            android:title="@string/history" />
+            android:icon="@mipmap/ic_search_grey600_24dp"
+            android:title="@string/search" />
         <item
             android:id="@+id/follow"
             android:checkable="true"
