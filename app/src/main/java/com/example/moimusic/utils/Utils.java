@@ -74,4 +74,12 @@ public  class Utils {
                 .build();
         simpleDraweeView.setController(controller);
     }
+    public static int[] getSimpleStrPosition(String l,String s){
+        int[] i = new int[2];
+        l=l.toLowerCase();
+        s = s.toLowerCase();
+       i[0]=l.indexOf(s);
+        i[1]=i[0]+s.length();
+        return i;
+    }
 }

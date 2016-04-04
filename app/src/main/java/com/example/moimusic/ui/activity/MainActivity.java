@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.example.moimusic.R;
 import com.example.moimusic.Servers.PlayService;
+import com.example.moimusic.mvp.model.entity.EvenSearchCall;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.presenters.MainActivityPresenter;
 import com.example.moimusic.mvp.views.IMainView;
@@ -48,6 +49,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import de.greenrobot.event.EventBus;
 import rx.Observable;
 
 public class MainActivity extends BaseActivity implements IMainView {
@@ -226,19 +228,14 @@ public class MainActivity extends BaseActivity implements IMainView {
             TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
             CharSequence text = textView.getText();
             db.addItem(new SearchItem(text));
-            presenter.searchItemClick(text.toString());
+            onSearchClick(text.toString());
         });
         searchObservable = Observable.create(subscriber -> searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchView.hide(true);
                 db.addItem(new SearchItem(query));
-                if (fragmentSearch == null) {
-                    fragmentSearch = new FragmentSearch();
-                }
-                switchContent(isFragment, fragmentSearch);
-                getSupportActionBar().setTitle(getResources().getString(R.string.search));
-                searchItem.setChecked(true);
+                onSearchClick(query);
                 return false;
             }
 
@@ -485,5 +482,16 @@ public class MainActivity extends BaseActivity implements IMainView {
 
         presenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+    }
+    private void onSearchClick(String query){
+        searchView.hide(true);
+        db.addItem(new SearchItem(query));
+        if (fragmentSearch == null) {
+            fragmentSearch = FragmentSearch.newInstance(query);
+        }
+        switchContent(isFragment, fragmentSearch);
+        getSupportActionBar().setTitle(getResources().getString(R.string.search));
+        searchItem.setChecked(true);
+        EventBus.getDefault().post(new EvenSearchCall(query));
     }
 }

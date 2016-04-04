@@ -87,6 +87,69 @@ public Observable<List<Music>> searchMusic(String name){
     });
     return observable;
 }
+    public Observable<List<Music>> searchMusic(String name,int page){
+        Observable<List<Music>> observable = Observable.create(subscriber -> {
+            BmobQuery<Music> query = new BmobQuery<>();
+            query.addWhereContains("MusicName", name);
+            query.setLimit(15);
+            query.setSkip((page - 1) * 15);
+            query.order("-PlayNum");
+            query.findObjects(context, new FindListener<Music>() {
+                @Override
+                public void onSuccess(List<Music> list) {
+                    subscriber.onNext(list);
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
+        });
+        return observable;
+    }
+    public Observable<List<Music>> searchMusicAni(String name,int page){
+        Observable<List<Music>> observable = Observable.create(subscriber -> {
+            BmobQuery<Music> query = new BmobQuery<>();
+            query.addWhereContains("album", name);
+            query.setLimit(15);
+            query.setSkip((page - 1) * 15);
+            query.order("-PlayNum");
+            query.findObjects(context, new FindListener<Music>() {
+                @Override
+                public void onSuccess(List<Music> list) {
+                    subscriber.onNext(list);
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
+        });
+        return observable;
+    }
+    public Observable<List<Music>> searchMusicSinger(String name,int page){
+        Observable<List<Music>> observable = Observable.create(subscriber -> {
+            BmobQuery<Music> query = new BmobQuery<>();
+            query.addWhereContains("singer", name);
+            query.setLimit(15);
+            query.setSkip((page - 1) * 15);
+            query.order("-PlayNum");
+            query.findObjects(context, new FindListener<Music>() {
+                @Override
+                public void onSuccess(List<Music> list) {
+                    subscriber.onNext(list);
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
+                }
+            });
+        });
+        return observable;
+    }
     public Observable<List<Music>> getHomePageMusic(int sort,int type){
         Observable<List<Music>> observable = Observable.create(subscriber -> {
             BmobQuery<Music> query = new BmobQuery<Music>();
