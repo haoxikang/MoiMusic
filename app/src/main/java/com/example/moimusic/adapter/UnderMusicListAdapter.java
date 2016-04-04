@@ -82,7 +82,13 @@ public class UnderMusicListAdapter extends RecyclerView.Adapter<UnderMusicListAd
 
         }
         holder.simpleDraweeView.setOnClickListener(v -> {
-            if (position==playListSingleton.getCurrentPosition()){
+            if (position==playListSingleton.getMusicList().size()-1){
+                EvenCall evenCall = new EvenCall();
+                evenCall.setCurrentOrder(EvenCall.NEXT);
+                EventBus.getDefault().post(evenCall);
+                EventBus.getDefault().post(new EvenMusicPlay());
+                playListSingleton.getMusicList().remove(position);
+            }else if (position==playListSingleton.getCurrentPosition()){
                 playListSingleton.getMusicList().remove(position);
                 EvenCall evenCall = new EvenCall();
                 evenCall.setCurrentOrder(EvenCall.PLAY);
