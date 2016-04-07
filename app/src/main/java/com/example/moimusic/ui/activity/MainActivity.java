@@ -189,7 +189,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                 }
                 case R.id.search: {
                     if (fragmentSearch == null) {
-                        fragmentSearch = new FragmentSearch();
+                        fragmentSearch = FragmentSearch.newInstance("");
                     }
                     switchContent(isFragment, fragmentSearch);
                     getSupportActionBar().setTitle(menuItem.getTitle());

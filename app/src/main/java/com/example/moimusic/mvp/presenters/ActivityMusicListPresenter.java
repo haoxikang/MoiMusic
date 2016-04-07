@@ -76,8 +76,13 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
                         iMusicListView.showView(musicList);
                         isAnimal = musicList.isAnimal();
                         isReleas = musicList.isRelease();
-                        if (musicList.getMoiUser().getObjectId().equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
-                            isCurrentUser = true;
+                        if(BmobUser.getCurrentUser(context, MoiUser.class)!=null){
+                            if (musicList.getMoiUser().getObjectId().equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
+                                isCurrentUser = true;
+                        }
+
+                        }else {
+                            isCurrentUser = false;
                         }
                     }, throwable1 -> {
                         iMusicListView.ShowSnackBar(throwable1.getMessage());
@@ -85,7 +90,7 @@ public class ActivityMusicListPresenter extends BasePresenterImpl {
             mSubscriptions.add(musicBiz.getMusic(id)
                     .subscribe(musicList -> {
                         iMusicListView.setupViewPager(musicList);
-                        IncreaseBiz.musicListIncreace(id);
+                        IncreaseBiz.musicListIncreace(id, isReleas);
                         EvenActivityMusicListCall evenActivityMusicListCall = new EvenActivityMusicListCall(true, musicList);
                         EventBus.getDefault().post(evenActivityMusicListCall);
                     }, throwable -> {

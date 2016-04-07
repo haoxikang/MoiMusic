@@ -75,7 +75,9 @@ swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe);
         @Override
         public void onGlobalLayout() {
             v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-            swipeRefreshLayout.setRefreshing(true);
+            if (searchStr!=""){
+                swipeRefreshLayout.setRefreshing(true);
+            }
         }
     });
 }

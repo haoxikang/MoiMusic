@@ -3,42 +3,47 @@ package com.example.moimusic.mvp.presenters;
 import android.content.Context;
 
 import com.example.moimusic.adapter.SearchMusicAdapter;
+import com.example.moimusic.adapter.SearchMusicListAdapter;
 import com.example.moimusic.factorys.DataBizFactory;
 import com.example.moimusic.factorys.Factory;
 import com.example.moimusic.mvp.model.ApiService;
 import com.example.moimusic.mvp.model.biz.MusicBiz;
+import com.example.moimusic.mvp.model.biz.MusicListBiz;
 import com.example.moimusic.mvp.model.entity.EvenSearchCall;
-import com.example.moimusic.mvp.views.FragmentSearchSingerView;
+import com.example.moimusic.mvp.model.entity.MusicList;
+import com.example.moimusic.mvp.views.FragmentSearchAniView;
+import com.example.moimusic.mvp.views.FragmentSearchMusicListView;
 
 import de.greenrobot.event.EventBus;
 
 /**
- * Created by 康颢曦 on 2016/4/4.
+ * Created by 康颢曦 on 2016/4/7.
  */
-public class FragmentSearchSingerPresenter extends BasePresenterImpl {
-    private SearchMusicAdapter adapter;
+public class FragmentSearchMusicListPresenter extends BasePresenterImpl{
+    private SearchMusicListAdapter adapter;
     private Factory factory;
     private Context context;
-    private FragmentSearchSingerView view;
+    private FragmentSearchMusicListView view;
     private String s;
     private int page  =1;
-    public FragmentSearchSingerPresenter(ApiService apiService) {
+    public FragmentSearchMusicListPresenter(ApiService apiService) {
+
     }
-    public void attach(Context context,FragmentSearchSingerView view){
+    public void attach(Context context,FragmentSearchMusicListView view){
         EventBus.getDefault().register(this);
         this.context = context;
         this.view = view;
         factory = new DataBizFactory();
     }
-    public void getSearchSinger(){
+    public void getSearchList(){
         if (s!=""){
-            MusicBiz biz = factory.createBiz(MusicBiz.class);
-            mSubscriptions.add(biz.searchMusicSinger(s,page).subscribe(musics -> {
+            MusicListBiz  biz= factory.createBiz(MusicListBiz.class);
+            mSubscriptions.add(biz.searchMusicList(s,page).subscribe(musicLists -> {
                 if (page==1){
-                    adapter = new SearchMusicAdapter(musics,2,s);
+                    adapter = new SearchMusicListAdapter(s,musicLists);
                     view.showList(adapter);
                 }else {
-                    adapter.addAndUpData(musics);
+                    adapter.addAndUpData(musicLists);
                 }
                 page++;
                 view.showAndHideSwip(false);
@@ -54,7 +59,7 @@ public class FragmentSearchSingerPresenter extends BasePresenterImpl {
             view.showAndHideSwip(true);
             page=1;
             s = call.getSearchString();
-            getSearchSinger();
+            getSearchList();
         }
 
     }

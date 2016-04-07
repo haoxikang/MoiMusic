@@ -50,17 +50,23 @@ public class FragmentMusicListPresenter extends BasePresenterImpl {
     }
 
     private boolean isCurrentUser() {
+if (BmobUser.getCurrentUser(fragmentActivity, MoiUser.class)!=null){
+    if (id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId())) {
+        return true;
+    } else{
+        return false;
+    }
 
-        if (id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId())) {
-            return true;
-        } else
-            return false;
+}else {
+    return false;
+}
+
     }
 
     public void getMusicLists() {
 
         MusicListBiz musicListBiz = factory.createBiz(MusicListBiz.class);
-        mSubscriptions.add(musicListBiz.getMyMusic(page, id.equals(BmobUser.getCurrentUser(fragmentActivity, MoiUser.class).getObjectId()), id)
+        mSubscriptions.add(musicListBiz.getMyMusic(page, isCurrentUser(), id)
                 .subscribe(musicLists -> {
                     if (page == 1) {
                         musicListViewAdapter = new MusicListViewAdapter(musicLists, fragmentActivity,isCurrentUser());

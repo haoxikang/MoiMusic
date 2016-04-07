@@ -74,7 +74,10 @@ public class FragmentSearchAni  extends BaseFragment implements FragmentSearchAn
             @Override
             public void onGlobalLayout() {
                 v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                swipeRefreshLayout.setRefreshing(true);
+                if (searchStr!=""){
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+
             }
         });
     }

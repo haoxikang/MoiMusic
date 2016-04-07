@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.moimusic.R;
 import com.example.moimusic.mvp.model.entity.MoiUser;
+import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.utils.ErrorList;
 
@@ -192,6 +193,29 @@ public class MusicListBiz extends DataBiz {
                 public void onFailure(int arg0, String arg1) {
                     // TODO Auto-generated method stub
                     subscriber.onError(new Throwable(new ErrorList().getErrorMsg(arg0)));
+                }
+            });
+        });
+        return observable;
+    }
+    public Observable<List<MusicList>> searchMusicList(String name, int page){
+        Observable<List<MusicList>> observable = Observable.create(subscriber -> {
+            BmobQuery<MusicList> query = new BmobQuery<>();
+            query.addWhereContains("Name", name);
+            query.include("createUser");
+            query.addWhereNotEqualTo("isRelease", false);
+            query.setLimit(15);
+            query.setSkip((page - 1) * 15);
+            query.order("-PlayNum");
+            query.findObjects(context, new FindListener<MusicList>() {
+                @Override
+                public void onSuccess(List<MusicList> list) {
+                    subscriber.onNext(list);
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    subscriber.onError(new Throwable(new ErrorList().getErrorMsg(i)));
                 }
             });
         });

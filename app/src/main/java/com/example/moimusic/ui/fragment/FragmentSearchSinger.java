@@ -72,7 +72,9 @@ public class FragmentSearchSinger  extends BaseFragment implements FragmentSearc
             @Override
             public void onGlobalLayout() {
                 v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                swipeRefreshLayout.setRefreshing(true);
+                if (searchStr!=""){
+                    swipeRefreshLayout.setRefreshing(true);
+                }
             }
         });
     }

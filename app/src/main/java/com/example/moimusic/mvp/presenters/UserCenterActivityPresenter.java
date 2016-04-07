@@ -57,23 +57,28 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
         }
         Intent intent = mView.GetIntent();
         String s = intent.getStringExtra("userID");
-        FollowBiz followBiz = factory.createBiz(FollowBiz.class);
-        mSubscriptions.add(followBiz.isFollowed(s)
-                .subscribe(s1 -> {
-                    if (s1 == null) {
+        if (BmobUser.getCurrentUser(context,MoiUser.class)!=null){
+            FollowBiz followBiz = factory.createBiz(FollowBiz.class);
+            mSubscriptions.add(followBiz.isFollowed(s)
+                    .subscribe(s1 -> {
+                        if (s1 == null) {
 
-                        isFollowed = false;
-                        mView.setButtonBK(false);
-                    } else {
-                        followedId = s1;
-                        isFollowed = true;
-                        mView.setButtonBK(true);
-                    }
-                },throwable -> {
-                    Log.d("ERROR","1");
-                    mView.ShowSnackBar(throwable.getMessage());
-                })
-        );
+                            isFollowed = false;
+                            mView.setButtonBK(false);
+                        } else {
+                            followedId = s1;
+                            isFollowed = true;
+                            mView.setButtonBK(true);
+                        }
+                    },throwable -> {
+                        Log.d("ERROR","1");
+                        mView.ShowSnackBar(throwable.getMessage());
+                    })
+            );
+        }else {
+            mView.hideFloatButton(true);
+        }
+
 
     }
 
@@ -85,10 +90,15 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
             mView.finishActivity();
         }
         Log.d("TAG", "id=" + s);
-        if (s.equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
-            return true;
-        } else
+        if (BmobUser.getCurrentUser(context, MoiUser.class)!=null){
+            if (s.equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
+                return true;
+            } else
+                return false;
+        }else {
             return false;
+        }
+
     }
 
     public String getID() {
@@ -104,7 +114,7 @@ public class UserCenterActivityPresenter extends BasePresenterImpl {
         UserBiz userBiz = factory.createBiz(UserBiz.class);
         mSubscriptions.add(followBiz.getFollowData(s)
                 .subscribe(ints -> {
-                    if (s.equals(BmobUser.getCurrentUser(context, MoiUser.class).getObjectId())) {
+                    if (isCurrentUser()) {
                         User = BmobUser.getCurrentUser(context, MoiUser.class);
                         mView.updataView(BmobUser.getCurrentUser(context, MoiUser.class), ints[0], ints[1]);
                         i = ints;

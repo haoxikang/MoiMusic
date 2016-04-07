@@ -33,19 +33,22 @@ public class FragmentSearchMusicPresenter extends BasePresenterImpl {
     }
     public void getSearchMusic(){
         MusicBiz biz = factory.createBiz(MusicBiz.class);
-        mSubscriptions.add(biz.searchMusic(s,page).subscribe(musics -> {
-            if (page==1){
-                adapter = new SearchMusicAdapter(musics,1,s);
-                view.showList(adapter);
-            }else {
-                adapter.addAndUpData(musics);
-            }
-            page++;
-            view.showAndHideSwip(false);
-        },throwable -> {
-            view.showSnackbar(throwable.getMessage());
-            view.showAndHideSwip(false);
-        }));
+        if (s!=""){
+            mSubscriptions.add(biz.searchMusic(s,page).subscribe(musics -> {
+                if (page==1){
+                    adapter = new SearchMusicAdapter(musics,1,s);
+                    view.showList(adapter);
+                }else {
+                    adapter.addAndUpData(musics);
+                }
+                page++;
+                view.showAndHideSwip(false);
+            },throwable -> {
+                view.showSnackbar(throwable.getMessage());
+                view.showAndHideSwip(false);
+            }));
+        }
+
     }
     public void onEventMainThread(EvenSearchCall call) {
         if (call.getSearchString()!=null&&call.getSearchString()!=""){

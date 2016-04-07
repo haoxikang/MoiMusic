@@ -69,7 +69,11 @@ public class SearchMusicAdapter extends RecyclerView.Adapter<SearchMusicAdapter.
             holder.name.setText(style);
         }else if (type==2){
             holder.singer.setText(music.getSinger());
-            holder.singer.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+            String str = music.getSinger();
+            int[] i = Utils.getSimpleStrPosition(str,searchString);
+            SpannableStringBuilder style=new SpannableStringBuilder(str);
+            style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimary)),i[0],i[1], Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            holder.singer.setText(style);
 
         }else if (type==3){
             String str = music.getAlbum();

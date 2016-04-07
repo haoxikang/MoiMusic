@@ -63,7 +63,7 @@ public class FragmentSearch extends Fragment {
         fragments.add(FragmentSearchMusic.newInstance(searchStr));
         fragments.add(FragmentSearchAni.newInstance(searchStr));
         fragments.add(FragmentSearchSinger.newInstance(searchStr));
-        fragments.add(new FragmentSearchMusicList());
+        fragments.add(FragmentSearchMusicList.newInstance(searchStr));
         fragments.add(new FragmentSearchUser());
         FragmentAdapter adapter =
                 new FragmentAdapter(getActivity().getSupportFragmentManager(), fragments, titles);

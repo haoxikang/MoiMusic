@@ -31,20 +31,23 @@ public class FragmentSearchAniPresenter extends BasePresenterImpl{
         factory = new DataBizFactory();
     }
     public void getSearchAni(){
-        MusicBiz biz = factory.createBiz(MusicBiz.class);
-        mSubscriptions.add(biz.searchMusicAni(s,page).subscribe(musics -> {
-            if (page==1){
-                adapter = new SearchMusicAdapter(musics,3,s);
-                view.showList(adapter);
-            }else {
-                adapter.addAndUpData(musics);
-            }
-            page++;
-            view.showAndHideSwip(false);
-        },throwable -> {
-            view.showSnackbar(throwable.getMessage());
-            view.showAndHideSwip(false);
-        }));
+        if (s!=""){
+            MusicBiz biz = factory.createBiz(MusicBiz.class);
+            mSubscriptions.add(biz.searchMusicAni(s,page).subscribe(musics -> {
+                if (page==1){
+                    adapter = new SearchMusicAdapter(musics,3,s);
+                    view.showList(adapter);
+                }else {
+                    adapter.addAndUpData(musics);
+                }
+                page++;
+                view.showAndHideSwip(false);
+            },throwable -> {
+                view.showSnackbar(throwable.getMessage());
+                view.showAndHideSwip(false);
+            }));
+        }
+
     }
     public void onEventMainThread(EvenSearchCall call) {
         if (call.getSearchString()!=null&&call.getSearchString()!=""){

@@ -25,8 +25,9 @@ public  class IncreaseBiz extends DataBiz {
             }
         });
     }
-    public static void musicListIncreace(String listId){
+    public static void musicListIncreace(String listId,boolean isRelease){
         MusicList musicList = new MusicList();
+        musicList.setRelease(isRelease);
         musicList.increment("PlayNum");
         musicList.update(AppApplication.context, listId, new UpdateListener() {
             @Override

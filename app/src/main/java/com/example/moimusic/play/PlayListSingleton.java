@@ -161,6 +161,7 @@ public enum  PlayListSingleton implements Serializable {
                     e.printStackTrace();
                 }
         }
+
     }
     public boolean saveCurrent(){
         Writer writer = null;
