@@ -15,16 +15,13 @@ import android.widget.TextView;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.example.moimusic.AppApplication;
 import com.example.moimusic.R;
-import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.model.entity.MusicList;
 import com.example.moimusic.ui.activity.ActivityMusicList;
-import com.example.moimusic.ui.activity.UserCenterActivity;
 import com.example.moimusic.utils.Utils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-import javax.inject.Inject;
 
 /**
  * Created by 康颢曦 on 2016/4/7.
@@ -53,7 +50,8 @@ public class SearchMusicListAdapter extends RecyclerView.Adapter<SearchMusicList
         MusicList musicList = musicLists.get(position);
         holder.singer.setText(musicList.getMoiUser().getName());
         if (musicList.getListImageUri()!=null){
-            holder.imageView.setImageURI(Uri.parse(musicList.getListImageUri()));
+            Uri uri = Uri.parse(musicList.getListImageUri());
+            Utils.reSizeImage(100,100,uri,holder.imageView);
         }
         String str = musicList.getName();
         int[] i = Utils.getSimpleStrPosition(str,searchString);
