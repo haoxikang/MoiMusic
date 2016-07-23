@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 
 import com.example.moimusic.R;
 import com.example.moimusic.Servers.PlayService;
+import com.example.moimusic.Servers.UploadService;
 import com.example.moimusic.play.PlayListSingleton;
 import com.example.moimusic.reject.components.AppComponent;
 import com.rey.material.app.Dialog;
@@ -44,6 +45,7 @@ public class StartActivity extends BaseActivity {
             PlayListSingleton.INSTANCE.initPlayList();
         }
             startService(new Intent(this, PlayService.class));
+        //startService(new Intent(this, UploadService.class));
         initview();
             if (Build.VERSION.SDK_INT >= 23) {
                 int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);

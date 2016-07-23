@@ -40,16 +40,10 @@ public class BasePresenterImpl implements BasePresenter {
     @Override
     public void onDestroy() {
         mSubscriptions.unsubscribe();
-        Log.d("TAG","反注册成功");
     }
 
     protected  <T> Observable.Transformer<T, T> applyScheduler() {
-        return new Observable.Transformer<T, T>() {
-            @Override
-            public Observable<T> call(Observable<T> observable) {
-                return observable.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
-            }
-        };
+        return observable -> observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

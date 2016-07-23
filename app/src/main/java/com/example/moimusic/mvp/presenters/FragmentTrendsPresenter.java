@@ -50,6 +50,8 @@ public class FragmentTrendsPresenter extends BasePresenterImpl {
             for (Trends trends:trendses){
                 if (trends.getType()==null){
                     trendses.remove(trends);
+                }else {
+                    Log.d("trends",trends.toString());
                 }
             }
             if (trendses.size()!=0){

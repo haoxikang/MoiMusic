@@ -50,7 +50,7 @@ public class PlayService extends Service implements MediaPlayer.OnErrorListener,
             mediaPlayer = null;
         }
         if (ex!=null&&!ex.isShutdown()){
-ex.shutdown();
+ex.shutdownNow();
             ex=null;
         }
         super.onDestroy();
@@ -239,7 +239,7 @@ ex.shutdown();
         }
     }
     Runnable statusRunnable = ()->{
-        while (true){
+        while (!Thread.interrupted()) {
             if (mediaPlayer!=null&&mediaPlayer.isPlaying()){
                 evenReCall.setMusicSize(mediaPlayer.getDuration());
                 evenReCall.setCurrent(mediaPlayer.getCurrentPosition());
@@ -250,6 +250,8 @@ ex.shutdown();
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                //终结循环
+                Thread.currentThread().interrupt();
             }
         }
     };

@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.example.moimusic.R;
 import com.example.moimusic.Servers.PlayService;
+import com.example.moimusic.Servers.UploadService;
 import com.example.moimusic.mvp.model.entity.EvenSearchCall;
 import com.example.moimusic.mvp.model.entity.Music;
 import com.example.moimusic.mvp.presenters.MainActivityPresenter;
@@ -166,6 +168,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     }
 
     public void initClick() {
+       
         imageButton.setOnClickListener(v1 -> startNextActivity(new Intent(this, ActivityPlayNow.class)));
         playFloat.setOnClickListener(v -> presenter.musicPlay());
         nextButton.setOnClickListener(v -> presenter.nextMusic());
@@ -216,6 +219,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                 }
                 case R.id.exit: {
                     stopService(new Intent(MainActivity.this, PlayService.class));
+                    stopService(new Intent(MainActivity.this, UploadService.class));
                     finish();
                     break;
                 }
@@ -300,6 +304,8 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopService(new Intent(MainActivity.this, PlayService.class));
+        stopService(new Intent(MainActivity.this, UploadService.class));
         if (presenter != null) {
             presenter.onDestroy();
         }

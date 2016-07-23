@@ -69,6 +69,10 @@
             android:name=".Servers.PlayService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".Servers.UploadService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
